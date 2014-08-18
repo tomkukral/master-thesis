@@ -1,0 +1,50 @@
+@INPROCEEDINGS{6735439,
+author={Katsipoulakis, N.R. and Tsakalozos, K. and Delis, A},
+booktitle={Cloud Computing Technology and Science (CloudCom), 2013 IEEE 5th International Conference on},
+title={Adaptive Live VM Migration in Share-Nothing IaaS-Clouds with LiveFS},
+year={2013},
+month={Dec},
+volume={2},
+pages={293-298},
+keywords={cloud computing;virtual machines;FUSE-file system;LiveFS;adaptive live VM migration;share-nothing IaaS-clouds;total migration time reduction;virtual disk segments;Benchmark testing;Delays;Handover;Middleware;Monitoring;Receivers;Cloud Storage;Distributed Systems;Share-Nothing IaaS Cloud;Storage},
+doi={10.1109/CloudCom.2013.151},}
+
+OCEEDINGS{6558130,
+author={Leelipushpam, P.G.J. and Sharmila, J.},
+booktitle={Information Communication Technologies (ICT), 2013 IEEE Conference on},
+title={Live VM migration techniques in cloud environment #x2014; A survey},
+year={2013},
+month={April},
+pages={408-413},
+keywords={cloud computing;software maintenance;virtual machines;cloud computing;cloud data center;cloud environment;computing resource;energy efficiency;live VM migration technique;live migration;load balancing;network resource;physical server;storage resource;system resources memory;virtual machines;virtualization technology;Availability;Bandwidth;Cloud computing;Energy efficiency;Load management;Servers;Virtual machining;Cloud Computing;Energy efficiency;VM Migration},
+doi={10.1109/CICT.2013.6558130},}
+
+@INPROCEEDINGS{5460651,
+author={Xingang Liu and Jinpeng Huai and Qin Li and Tianyu Wo},
+booktitle={Networking and Services (ICNS), 2010 Sixth International Conference on},
+title={No Break of Virtual Network during Live Migration},
+year={2010},
+month={March},
+pages={175-181},
+keywords={computer networks;virtual machines;CIDD;VM;central information management distributed data transmission;efficient and reliable virtual network;live migration;run time memory state;virtual machine;virtual network;Computer network reliability;Computer science;Data communication;Degradation;Hardware;Information management;Runtime;Virtual machining;Virtual manufacturing;Voice mail;live migration;reliability;virtual machine;virtual network},
+doi={10.1109/ICNS.2010.31},}
+
+@INPROCEEDINGS{6725332,
+author={Ahmad, N. and Kanwal, A and Shibli, M.A},
+booktitle={Information Assurance (NCIA), 2013 2nd National Conference on},
+title={Survey on secure live virtual machine (VM) migration in Cloud},
+year={2013},
+month={Dec},
+pages={101-106},
+keywords={cloud computing;risk management;security of data;virtual machines;virtualisation;cloud computing;fault takeover;hardware maintenance;hardware resource virtualization;live VM migration;live migration;live virtual machine migration security;migration process;security requirements;security risks;threats;vulnerabilities;workload balancing;Authentication;Cloud computing;Computational modeling;Protocols;Virtual machine monitors;Virtualization;Cloud Computing;Cloud Security;Infrastructure as a Security (IaaS);Live VM Migration;Virtualization},
+doi={10.1109/NCIA.2013.6725332},}
+
+@INPROCEEDINGS{5305042,
+author={Botero, J.F. and Hesselbach, X.},
+booktitle={Communications, 2009. LATINCOM '09. IEEE Latin-American Conference on},
+title={The bottlenecked virtual network problem in bandwidth allocation for network virtualization},
+year={2009},
+month={Sept},
+pages={1-5},
+keywords={Internet;bandwidth allocation;virtual private networks;Internet service providers;bandwidth allocation;bandwidth distribution;bottlenecked virtual network problem;network ossification;network virtualization;physical nodes;physical resources allocation;virtual nodes;Bandwidth;Channel allocation;Isolation technology;Protocols;Resource management;Resource virtualization;Routing;Telematics;Testing;Web and internet services},
+doi={10.1109/LATINCOM.2009.5305042},}
