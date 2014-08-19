@@ -1,18 +1,11 @@
 Master thesis of Bc. Tomáš Kukrál <kukratom@fel.cvut.cz>
 
 topic: 
-Modern Data Communication Networks In Data Centers
+Measurements of virtual machines migrations
 
-instuctions:
-Analyze and compare methods used for migrating virtual machines in cloud 
-environment. Suggest methodology capable of comparing live and cold migrations 
-based on provided network environment. Discuss differences caused by
-cloud architecture and filesystem sharing approach.
-
-Implement framework for measuring connection to virtual machine during 
-migration. The framework should be able to cooperate with OpenNebula cloud and 
-automaticaly repeat migration in case of any failure. It is beneficial
-to provide 
+instructions:
+Analyze and compare methods used for migrating virtual machines in cloud environment. Suggest methodology capable of comparing live and cold VM migrations based on network topology. Compare various overlay networks and data storage architectures from the perspective of suitability to virtual machine migration.
+Design and implement framework for accurate VM availability measurements during VM migrations. The framework must be able to cooperate with OpenNebula cloud and must be adaptable for operating with another orchestration software. It is beneficial to provide any results visualization.
 
 keywords:
 VM migration
@@ -28,5 +21,6 @@ related work:
 - Leelipushpam, P.G.J.; Sharmila, J., "Live VM migration techniques in cloud environment — A survey," Information & Communication Technologies (ICT), 2013 IEEE Conference on , vol., no., pp.408,413, 11-12 April 2013 doi: 10.1109/CICT.2013.6558130 URL: http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6558130&isnumber=6558050 
 - Xingang Liu; Jinpeng Huai; Qin Li; Tianyu Wo, "No Break of Virtual Network during Live Migration," Networking and Services (ICNS), 2010 Sixth International Conference on , vol., no., pp.175,181, 7-13 March 2010 doi: 10.1109/ICNS.2010.31 URL: http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=5460651&isnumber=5460618
 - Ahmad, N.; Kanwal, A; Shibli, M.A, "Survey on secure live virtual machine (VM) migration in Cloud," Information Assurance (NCIA), 2013 2nd National Conference on , vol., no., pp.101,106, 11-12 Dec. 2013 doi: 10.1109/NCIA.2013.6725332 URL: http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6725332&isnumber=6725308
-- Botero, J.F.; Hesselbach, X., "The bottlenecked virtual network problem in bandwidth allocation for network virtualization," Communications, 2009. LATINCOM '09. IEEE Latin-American Conference on , vol., no., pp.1,5, 10-11 Sept. 2009 doi: 10.1109/LATINCOM.2009.5305042 URL: http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=5305042&isnumber=5304383
+- Botero, J.F.; Hesselbach, X., "The bottlenecked virtual network problem in bandwidth allocation for network virtualization," Communications, 2009. LATINCOM '09. IEEE Latin-American Conference on , vol., no., pp.1,5, 10-11 Sept. 2009
+doi: 10.1109/LATINCOM.2009.5305042 URL: http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=5305042&isnumber=5304383
 
