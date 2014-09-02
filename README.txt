@@ -5,7 +5,7 @@ Measurements of virtual machines migrations
 
 instructions:
 Analyze and compare methods used for migrating virtual machines in cloud environment. Suggest methodology capable of comparing live and cold VM migrations based on network topology. Compare various overlay networks and data storage architectures from the perspective of suitability to virtual machine migration.
-Design and implement framework for accurate VM availability measurements during VM migrations. The framework must be able to cooperate with OpenNebula cloud and must be adaptable for operating with another orchestration software. It is beneficial to provide any results visualization.
+Design and implement framework for accurate VM availability measurements during VM migrations. The framework must be able to cooperate with OpenNebula cloud and must be adaptable for operating with another orchestration software. It is beneficial to provide any visualization of results.
 
 keywords:
 VM migration
