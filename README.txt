@@ -8,7 +8,7 @@ instructions:
 Analyze and compare methods used for migrating virtual machines in cloud environment. Suggest methodology capable of comparing live and cold VM migrations and compare various overlay networks and data storage architectures from the perspective of suitability to virtual machine migration.
 Design and implement framework for accurate VM availability measurements during VM migrations. The framework must be able to cooperate with OpenNebula cloud and must be adaptable for operating with another orchestration software. It is beneficial to provide any visualization of results.
 
-Srovnejte metody migrace virtuálních strojů v prostředí cloudu. Navrhnětě metodiku porovnávání průběhu migrace a porovnejte vhodnost různých způsobů ukládání dat a overlay sítí. Zaměřte se zejména na jejich vhodnosti pro migraci virtuálních strojů.
+Porovnejte metody migrace virtuálních strojů v prostředí cloudu. Navrhnětě metodiku hodnocení průběhu migrace a porovnejte vhodnost různých způsobů ukládání dat a overlay sítí. Zaměřte se zejména na jejich vhodnosti pro migraci virtuálních strojů.
 Naplánujte a realizujte systém, který bude umožňovat měřit dostupnost virtuálních strojů během jejich migrace. Systém bude spolupracovat s OpenNebula orchestrátorem a bude jednoduše upravitelný i pro jiné systémy. 
 
 keywords:
