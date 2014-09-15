@@ -1,0 +1,298 @@
+%pdflatex-this
+% vim:spell spelllang=en_us
+
+\documentclass[12pt,oneside,a4paper]{report} %pdf
+\usepackage[english]{babel}
+\usepackage[top=25mm, bottom=15mm, includefoot, left=30mm, right=20mm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage[unicode=true]{hyperref}
+\usepackage{indentfirst}
+\usepackage{import}
+\usepackage{import}
+\usepackage{moreverb}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage{pdfpages}
+\usepackage{ifthen}
+
+\usepackage[toc,acronym,nonumberlist,style=long,sort=standard]{glossaries}
+\setlength{\glsdescwidth}{0.7\linewidth}
+\renewcommand*{\glsgroupskip}{}
+\makeglossaries
+
+
+% watermark draft version
+\usepackage{draftwatermark}
+\SetWatermarkText{draft \today}
+\SetWatermarkLightness{0.9}
+
+
+% serif font
+%\renewcommand{\familydefault}{cmss}
+
+% image numbering
+\renewcommand{\thefigure}{\thesection.\arabic{figure}}
+\renewcommand{\thetable}{\thesection.\arabic{table}}
+
+
+%\newcommand{\Adresa}[1]{\texttt{#1}}
+%\newcommand{\Cesta}[1]{\texttt{#1}}
+%\newcommand{\Prikaz}[1]{\texttt{#1}}
+%\newcommand{\Rozhrani}[1]{\texttt{#1}}
+%\newcommand{\Nazev}[1]{\it{{#1}}}
+%\newcommand{\Tabth}[1]{\textbf{{#1}}}
+%\newcommand{\B}[1]{\textbf{{#1}}}
+%
+%\newcommand{\Th}[1]{\textbf{#1}}
+%
+%
+\newcommand{\Uv}[1]{"#1"}
+
+%\newcommand{\Preklad}[1]{\emph{(#1)}}
+
+\newcommand{\Acronym}[2]{\newacronym{#1}{#1}{#2}}
+%\newcommand{\Ac}[1]{\acrshort{#1}}
+\newcommand{\Ac}[1]{\acrshort{#1}}
+
+\def \BookType {Master thesis}
+\def \Bookname {Measurements of virtual machines migrations}
+\def \Keywords {Data center, overlay, underlay, OpenNebula, migration}
+\def \Authors {Bc. Tomáš Kukrál}
+\def \Supervisor {doc. Ing. Leoš Boháč, Ph.D.}
+\def \Date {October 2015}
+\def \Datefull {2015-11-11} % ISO8601
+\def \Place {Prague}
+\def \School {Czech Technical University in Prague}
+\def \Faculty {Faculty of Electrical Engineering}
+\def \Department {Department of Telecommunication Engineering}
+\def \Programme {Communication Networks} 
+
+\makeatletter
+\def\@makechapterhead#1{%
+  \vspace*{20\p@}%
+  {\parindent \z@ \raggedright \normalfont
+    %\ifnum \c@secnumdepth >\m@ne
+    %    \huge\bfseries \@chapapp\space \thechapter
+    %    \par\nobreak
+    %    \vskip 20\p@
+    %\fi
+    \interlinepenalty\@M
+    \Huge \bfseries #1\par\nobreak
+    \vskip 40\p@
+  }}
+
+\makeatother
+
+\def \Titulkadesky {
+    \begin{center}
+    {\LARGE \School}\\[2ex]
+
+%    \begin{figure}[h!]
+%    \begin{center}
+%      {\includegraphics[width=35mm]{grafika/cvut-logo-bw-600.png}}
+%    \end{center}
+%    \end{figure}
+    \vfill
+
+%    {\textbf {\Huge \Bookname \\[4ex]}
+        {\LARGE \bf \BookType}
+%	    }
+
+  \vspace{60mm}
+
+    {\large \bf \Date \hfill \Authors}\\[6ex]
+
+    \newpage
+    \end{center}
+    }
+
+\def \Titulka {
+    \begin{center}
+    {\Huge \School}\\[2ex]
+    {\Large \Faculty}\\[2ex]
+    {\Large \Department}\\[2ex]
+
+    \begin{figure}[h]
+    \begin{center}
+      {\includegraphics[width=4cm]{images/cvut-logo-bw-600.png}}
+    \end{center}
+    \end{figure}
+    \vfill
+
+    {\textbf {\Huge \Bookname \\[4ex]}
+        {\LARGE \bf \BookType}
+	    }
+
+    \vfill
+
+    {\large {\bf Author:} \hfill \Authors}\\[3ex]
+    {\large {\bf Supervisor:} \hfill \Supervisor}\\[3ex]
+
+    \newpage
+    \end{center}
+    }
+
+
+
+\hypersetup{
+	pdfauthor={\Authors},
+	pdftitle={\Bookname},
+	pdfsubject={\BookType},
+	pdfkeywords={\Keywords},
+	colorlinks=true,
+%	hidelinks=true,
+}
+
+% environment pro abstract, poděkování a prohlášení
+\newenvironment{spodnitext}[1]{
+	\cleardoublepage
+	\null
+	\vfill
+	\section*{#1}
+	}{
+	\vspace{10mm}
+	}
+
+
+\begin{document}
+% acronyms
+\subimport{./}{acronyms}
+
+
+\catcode`\-=12
+
+%\begin{titlepage}
+%	\Titulkadesky
+%\end{titlepage}
+
+% vypnout watermark
+
+% prázdná stránka
+%\newpage
+%\null
+%\clearpage
+
+\begin{titlepage}
+%	\Titulka
+\end{titlepage}
+\SetWatermarkText{}
+
+\pagenumbering{Roman}
+
+%prohlášení
+\begin{spodnitext}{Statutatory declaration}
+I declare that this thesis was mady by myself with assistance of my supervisor. All parts taken over word by word from literature or other publications are referenced and identified. I approve publishing this thesis or any part of it with referencing author of original text.
+
+\vspace{10mm}
+In~\Place~at~\Datefull \hfill \hbox to 65mm{\tiny\dotfill}
+\end{spodnitext}
+
+% acknowlegement
+%\begin{spodnitext}{Acknowledgement}
+%Tímto bych chtěl poděkovat mému vedoucímu Ing. Pavlovi Bezpalcovi, Ph.D. za pomoc s~realizací práce a za cenné rady k~tématu. Bez jeho pomoci bych nemohl vytvořit tuto práci. Vážím si toho, že mi umožnil pracovat na tomto tématu.
+%\end{spodnitext}
+
+
+%zadání
+%\includepdf[pages=-]{grafika/zadani.pdf}
+
+% abstrakt
+\begin{spodnitext}{Abstract}
+%Práce se zabývá použitím protokolu \Zkratka{IPv6}{Internet Protocol version 6} na sítových prvcích Juniper s~operačním systémem \Zkratka{JUNOS}{Juniper Operating System}, zejména řadě SRX. Zaměřuje se na praktické problémy s~nasazením v~síti a problematikou přidělování \Zkratka{IP}{Internet Protocol} adres a síťových parametrů.\\
+%\textbf{Klíčová slova:} \Zkr{IPv6}, \Zkr{JUNOS}, Juniper, \Zkratka{DHCPv6}{Dynamic Host Configuration Protocol version 6}, \Zkratka{SLAAC}{Stateless Address Autoconfiguration}
+%
+%\vspace{1cm}
+	This master thesis deals with testing data networks in cloud environment. Techniques of inter and intra-cloud networks are described in theoretical part as well as virtual machine migrations.
+	Practical part brings methodology and framework for testing virtual machine migration. Measurements are performed at OpenNebula cloud environment with {KVM} virtual machines.
+\end{spodnitext}
+
+
+%obsah
+\tableofcontents
+\cleardoublepage
+
+\pagestyle{plain}
+\pagenumbering{arabic}
+
+\chapter{Introduction}
+\subimport{./}{introduction}
+
+\chapter{Theoretical}
+	\section{Introduction to cloud computing}
+	\subimport{./theoretical/}{introduction_cloud}
+
+
+	Services in cloud
+	Routing requests to virtual machines
+
+	Network environment
+		overlays
+	Data storage
+
+	Migration
+		cold/live
+			
+	Measurement methods
+	
+
+
+
+\chapter{Practical}
+	Methodology overview
+
+	Framework
+
+	Results
+
+%zdroje
+%	\subimport{/}{zdroje}
+
+
+%seznam obrázků
+\newpage
+\phantomsection \label{listoffig}
+\addcontentsline{toc}{chapter}{List of images}
+\listoffigures
+
+%seznam tabulek
+\newpage
+\phantomsection \label{listoftab}
+\addcontentsline{toc}{chapter}{List of tables}
+\listoftables
+
+%seznam pojmů
+%\printglossary[title=Acronyms,toctitle=Acronyms used]
+
+%seznam zkratek
+\printglossary[type=acronym,title=List of acronyms,toctitle=List of acronyms]
+
+% přílohy
+%\appendix
+%\chapter{Příloha}
+
+%\section{Konfigurace prvků}
+%\label{priloha_konfigurace}
+%{\scriptsize 
+%\subsection{R1}
+%	\verbatimtabinput{prakticka/conf/R1_P2.conf}
+%\subsection{R2}
+%	\verbatimtabinput{prakticka/conf/R2_P2.conf}
+%\subsection{R3}
+%	\verbatimtabinput{prakticka/conf/R3_P2.conf}
+%}
+
+
+%\cleardoublepage
+%\section{Úvod do JUNOSu}
+%\label{priloha_manual}
+%V~následující části je vložen manuál, který popisuje základní ovládání a konfiguraci operačního systému \Zkr{JUNOS}. Slouží k~doplnění praktické části, ve které jsem se soustředil především na samotnou konfiguraci, zatímco základní nastavení zařízení a ovládání je popsáno v~této příloze.
+%\includepdf[pages=-]{../branches/junos_manual/manual_import.pdf}
+
+%\cleardoublepage
+%\section{Address autoconfiguration in IPv6 networks}
+%\includepdf[pages=-]{../branches/clanek/tsp12/clanek_import.pdf}
+
+
+\end{document}
