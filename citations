@@ -9,7 +9,7 @@ pages={293-298},
 keywords={cloud computing;virtual machines;FUSE-file system;LiveFS;adaptive live VM migration;share-nothing IaaS-clouds;total migration time reduction;virtual disk segments;Benchmark testing;Delays;Handover;Middleware;Monitoring;Receivers;Cloud Storage;Distributed Systems;Share-Nothing IaaS Cloud;Storage},
 doi={10.1109/CloudCom.2013.151},}
 
-OCEEDINGS{6558130,
+@INPROCEEDINGS{6558130,
 author={Leelipushpam, P.G.J. and Sharmila, J.},
 booktitle={Information Communication Technologies (ICT), 2013 IEEE Conference on},
 title={Live VM migration techniques in cloud environment #x2014; A survey},
@@ -48,3 +48,5 @@ month={Sept},
 pages={1-5},
 keywords={Internet;bandwidth allocation;virtual private networks;Internet service providers;bandwidth allocation;bandwidth distribution;bottlenecked virtual network problem;network ossification;network virtualization;physical nodes;physical resources allocation;virtual nodes;Bandwidth;Channel allocation;Isolation technology;Protocols;Resource management;Resource virtualization;Routing;Telematics;Testing;Web and internet services},
 doi={10.1109/LATINCOM.2009.5305042},}
+
+
