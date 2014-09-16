@@ -1,0 +1,21 @@
+%pdflatex-../thesis.tex
+% vim:spell spelllang=en_us
+
+It is possible find many services called \Uv{cloud based} and it is important to agree on accurate definition of these services. It is quite clear, that cloud based service will use principle of cloud computing. Definition of cloud computing by \Ac{NIST} says, that \Uv{Cloud computing is a model for enabling ubiquitous, convenient, on-demand network access to a shared pool of configurable computing resources (e.g., networks, servers, storage, applications and services) than can be rapidly provisioned and released with minimal management effort or service provide interaction.} [TODO: cite NIST definition]. This definition clarifies what cloud computing is, but says nothing about parameters and used technologies.
+
+I think, that it would be more convenient to start definition from lower levels, which provides elementary parts, and get to the cloud service afterwards. This definition gives different look at cloud computing than \Ac{NIST}s, but it uses same conditions and therefore results are basically same. It focuses on currently used principles, which may change during time, so it may not be valid after some time, but it provides more technical overview on operation of cloud services.
+
+
+Cloud computing services are nowadays heavily dependent on virtualization, because it allows to replace physical machines with virtual machines (\Ac{VM}s) and brings a lot more flexibility than physical machine can ever provide.
+
+Basic part of cloud computing system is virtual machine. Physical machine can also be part of the cloud system, but it is not able to deliver required rapid provisioning and it is not possible to deploy physical machine without service provider interaction. Virtual machine is elemental resource and also use some additional resources. These resources can be for example networking, which is used for interconnection between \Ac{VM}s as well as for reaching customers, storage used for system internal or customer data. It is important do employ some configuration management and orchestration, because it is able to deliver rapid provisioning of virtual machines and minimizes effort required for administration.
+
+Virtual machines together provides the service, which is exposed to users via any kind of networking. It doesn't matter whether customers access the service directly at virtual machines or via a proxy, but hiding worker \Ac{VM}s brings additional flexibility for migration and scalability. 
+
+Difference between cloud computing and bare virtualization is intelligence included in cloud, because it may be controlled automatically according to events or monitoring observed at cloud system. It is common to supply customers with configuration interface, which allows to tune service parameters and provides user friendly interface for administration.
+Bare virtualization does not offer any intelligence, even if it is equipped with shiny user interfaces with opportunity to scale virtual machines up or down, because all change performed manually.
+
+%Just one \Ac{VM} can be considered cloud based, but it does not allow any scalability. Providing customers with just one \Ac{VM} should not be called cloud computing, but to my way of thinking it is only bare virtualization.
+
+
+
