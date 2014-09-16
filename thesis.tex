@@ -183,7 +183,7 @@
 \pagenumbering{Roman}
 
 %prohlášení
-\begin{spodnitext}{Statutatory declaration}
+\begin{spodnitext}{Proclamation}
 I declare that this thesis was mady by myself with assistance of my supervisor. All parts taken over word by word from literature or other publications are referenced and identified. I approve publishing this thesis or any part of it with referencing author of original text.
 
 \vspace{10mm}
@@ -220,43 +220,45 @@ In~\Place~at~\Datefull \hfill \hbox to 65mm{\tiny\dotfill}
 \chapter{Introduction}
 \subimport{./}{introduction}
 
-\chapter{Theoretical}
-	\section{Introduction to cloud computing}
-	\subimport{./theoretical/}{theoretical/introduction}
+\chapter{Theoretical part}
+	\section{Virtualization}
+		\subsection{Types of virtualization}
+		\subsection{Levels of virtualization}
+			\subimport{./theoretical/}{theoretical/levels}
+		\subsection{Advantages of virtualization}
+	\section{Cloud computing}
+		\subimport{./theoretical/}{theoretical/introduction}
 
-	\section{Levels of virtualization}
-	\subimport{./theoretical/}{theoretical/levels}
+		\subsection{Network in cloud}
+			% overlays
+		\subsection{Storage in cloud}
+			% share-nothing, centralized storage
+
+		\subsection{Orchestration software}
+			\subsubsection{OpenNebula}
+
+		%\section{Migration of VMs}
+
+	\section{Distributed datacenter}
 
 	\pagebreak
 
-	Sharing resources - maximization of effectiveness
+	%Sharing resources - maximization of effectiveness
+	%Public/private/hybrid
+	%metrics
+	%SOA - service oriented architecture
+	%Routing requests to virtual machines
+	%Network environment
+	%	overlays
+	%Data storage
+	%Migration
+	%	cold/live
+	%Measurement methods
+	%Economy
+	%	capex -> opex
+	%	pay as you goo
+\chapter{Practical part}
 
-	Public/private/hybrid
-
-	metrics
-
-	SOA - service oriented architecture
-
-	Routing requests to virtual machines
-
-	Network environment
-		overlays
-
-	Data storage
-
-	Migration
-		cold/live
-			
-	Measurement methods
-
-	Economy
-		capex -> opex
-		pay as you goo
-	
-
-
-
-\chapter{Practical}
 	Methodology overview
 
 	Framework
@@ -270,20 +272,20 @@ In~\Place~at~\Datefull \hfill \hbox to 65mm{\tiny\dotfill}
 %seznam obrázků
 \newpage
 \phantomsection \label{listoffig}
-\addcontentsline{toc}{chapter}{List of images}
+\addcontentsline{toc}{chapter}{List of Figures}
 \listoffigures
 
 %seznam tabulek
 \newpage
 \phantomsection \label{listoftab}
-\addcontentsline{toc}{chapter}{List of tables}
+\addcontentsline{toc}{chapter}{List of Tables}
 \listoftables
 
 %seznam pojmů
 %\printglossary[title=Acronyms,toctitle=Acronyms used]
 
 %seznam zkratek
-\printglossary[type=acronym,title=List of acronyms,toctitle=List of acronyms]
+\printglossary[type=acronym,title=List of Abbreviations,toctitle=List of Abbreviations]
 
 % přílohy
 %\appendix
