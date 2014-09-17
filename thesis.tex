@@ -3,7 +3,7 @@
 
 \documentclass[12pt,oneside,a4paper]{report} %pdf
 \usepackage[english]{babel}
-\usepackage[top=25mm, bottom=15mm, includefoot, left=30mm, right=20mm]{geometry}
+\usepackage[top=25mm, bottom=15mm, includefoot, left=30mm, right=30mm]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage[unicode=true]{hyperref}
@@ -219,21 +219,21 @@ In~\Place~at~\Datefull \hfill \hbox to 65mm{\tiny\dotfill}
 \pagenumbering{arabic}
 
 \chapter{Introduction}
-\subimport{./}{introduction}
+%\subimport{./}{introduction}
 
 \chapter{Theoretical part}
 	\section{Virtualization}
-		\subimport{./theoretical/}{theoretical/virtualization}
+		\subimport{./t/}{t/virtualization}
 
 		\subsection{Types of virtualization}
 			% full, partial, para
 		\subsection{Levels of virtualization}
-			\subimport{./theoretical/}{theoretical/levels}
+			\subimport{./t/}{t/levels}
 			% operating system-level virtualization
 		\subsection{Advantages of virtualization}
 		\label{subsec:advantages-of-virtualization}
 	\section{Cloud computing}
-		\subimport{./theoretical/}{theoretical/introduction}
+		\subimport{./t/}{t/cloud_introduction}
 
 		% IaaS, PaaS, SaaS
 
@@ -268,7 +268,7 @@ In~\Place~at~\Datefull \hfill \hbox to 65mm{\tiny\dotfill}
 \chapter{Practical part}
 
 	Methodology overview
-	\cite{5305042}
+	\cite{6735439}
 
 	Framework
 
@@ -293,7 +293,7 @@ In~\Place~at~\Datefull \hfill \hbox to 65mm{\tiny\dotfill}
 \listoftables
 \cleardoublepage
 
-\bibliography{citations}{Něco}
+\bibliography{citations}{}
 \bibliographystyle{plain}
 
 %seznam pojmů
