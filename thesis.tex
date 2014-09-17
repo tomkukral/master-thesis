@@ -214,6 +214,7 @@ In~\Place~at~\Datefull \hfill \hbox to 65mm{\tiny\dotfill}
 \tableofcontents
 \cleardoublepage
 
+
 \pagestyle{plain}
 \pagenumbering{arabic}
 
@@ -230,6 +231,7 @@ In~\Place~at~\Datefull \hfill \hbox to 65mm{\tiny\dotfill}
 			\subimport{./theoretical/}{theoretical/levels}
 			% operating system-level virtualization
 		\subsection{Advantages of virtualization}
+		\label{subsec:advantages-of-virtualization}
 	\section{Cloud computing}
 		\subimport{./theoretical/}{theoretical/introduction}
 
@@ -266,6 +268,7 @@ In~\Place~at~\Datefull \hfill \hbox to 65mm{\tiny\dotfill}
 \chapter{Practical part}
 
 	Methodology overview
+	\cite{5305042}
 
 	Framework
 
@@ -274,6 +277,8 @@ In~\Place~at~\Datefull \hfill \hbox to 65mm{\tiny\dotfill}
 %zdroje
 %	\subimport{/}{zdroje}
 
+%seznam zkratek
+\printglossary[type=acronym,title=List of Abbreviations,toctitle=List of Abbreviations]
 
 %seznam obrázků
 \newpage
@@ -286,12 +291,14 @@ In~\Place~at~\Datefull \hfill \hbox to 65mm{\tiny\dotfill}
 \phantomsection \label{listoftab}
 \addcontentsline{toc}{chapter}{List of Tables}
 \listoftables
+\cleardoublepage
+
+\bibliography{citations}{Něco}
+\bibliographystyle{plain}
 
 %seznam pojmů
 %\printglossary[title=Acronyms,toctitle=Acronyms used]
 
-%seznam zkratek
-\printglossary[type=acronym,title=List of Abbreviations,toctitle=List of Abbreviations]
 
 % přílohy
 %\appendix
