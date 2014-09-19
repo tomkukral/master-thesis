@@ -1,0 +1,16 @@
+%pdflatex-../thesis.tex
+% vim:spell spelllang=en_us
+
+There are three different virtualization types and they differs by method used to add virtualization layer between host and guests. It it not possible to easily choose better or worse virtualization types, because it depends on intended usage, character of computing tasks and required operating system.
+ 
+Architectures of computers, especially x86, are designed to run on physical devices, thus is in not easy to virtualize them. Access to hardware is controlled by priority levels called rings. Lowest priority is used by userspace applications and highest priority (ring 0) is reserved for operating system. It is necessary to insert virtualization layer between operating system and hardware, but there is not any ring with higher priority than operating system uses. This problem needs to be solved and it is not only one challenge. There are sensitive instructions incompatible with virtualization, because they use different semantics when they are not run in ring 0, as mentioned in \cite{vmware-para}.
+
+\subsubsection{Paravirtualization}
+Paravirtualization is type of virtualization with necessity of modifications in guest kernel. Modifications of kernel are necessary, because operating system uses non-virtualizable instructions that are trying to gain direct access to the hardware. These instruction need to be replaced with hypercalls that communicate directly with virtualization layer of hypervisor. \cite{vmware-para}
+
+\subsubsection{Full Virtualization}
+
+\subsubsection{Hardware Assisted Virtualization}
+
+Hybrid virtualization
+virtio?
