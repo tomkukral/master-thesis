@@ -1,4 +1,4 @@
-Master thesis of Bc. Tomáš Kukrál <kukratom@fel.cvut.cz>
+Master thesis of Bc. Tomáš Kukrál
 
 topic: 
 Přenos virtuálních strojů v distribuovaném datovém centru
