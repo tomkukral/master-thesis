@@ -28,6 +28,8 @@
 \renewcommand{\thetable}{\thesection.\arabic{table}}
 
 \newcommand{\Uv}[1]{"#1"}
+\newcommand{\Th}[1]{\textbf{#1}}
+
 
 \newcommand{\Acronym}[2]{\newacronym{#1}{#1}{#2}}
 \newcommand{\Ac}[1]{\acrshort{#1}}
@@ -125,7 +127,7 @@
 \newenvironment{spodnitext}[1]{
 	\cleardoublepage
 	\null
-	\vfill
+	\vspace{17cm}
 	\section*{#1}
 	}{
 	\vspace{10mm}
@@ -158,27 +160,17 @@
 
 %prohlášení
 \begin{spodnitext}{Proclamation}
-I declare that this thesis was mady by myself with assistance of my supervisor. All parts taken over word by word from literature or other publications are referenced and identified. I approve publishing this thesis or any part of it with referencing author of original text.
+I declare that this thesis was made by myself with assistance of my supervisor. All parts taken over word by word from literature or other publications are referenced and identified. I approve publishing this thesis or any part of it with referencing author of original text.
 
 \vspace{10mm}
 In~\Place~at~\Datefull \hfill \hbox to 65mm{\tiny\dotfill}
 \end{spodnitext}
-
-% acknowlegement
-%\begin{spodnitext}{Acknowledgement}
-%Tímto bych chtěl poděkovat mému vedoucímu Ing. Pavlovi Bezpalcovi, Ph.D. za pomoc s~realizací práce a za cenné rady k~tématu. Bez jeho pomoci bych nemohl vytvořit tuto práci. Vážím si toho, že mi umožnil pracovat na tomto tématu.
-%\end{spodnitext}
-
 
 %zadání
 %\includepdf[pages=-]{grafika/zadani.pdf}
 
 % abstrakt
 \begin{spodnitext}{Abstract}
-%Práce se zabývá použitím protokolu \Zkratka{IPv6}{Internet Protocol version 6} na sítových prvcích Juniper s~operačním systémem \Zkratka{JUNOS}{Juniper Operating System}, zejména řadě SRX. Zaměřuje se na praktické problémy s~nasazením v~síti a problematikou přidělování \Zkratka{IP}{Internet Protocol} adres a síťových parametrů.\\
-%\textbf{Klíčová slova:} \Zkr{IPv6}, \Zkr{JUNOS}, Juniper, \Zkratka{DHCPv6}{Dynamic Host Configuration Protocol version 6}, \Zkratka{SLAAC}{Stateless Address Autoconfiguration}
-%
-%\vspace{1cm}
 	This master thesis deals with testing data networks in cloud environment. Techniques of inter and intra-cloud networks are described in theoretical part as well as virtual machine migrations.
 	Practical part brings methodology and framework for testing virtual machine migration. Measurements are performed at OpenNebula cloud environment with {KVM} virtual machines.
 \end{spodnitext}
