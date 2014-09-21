@@ -1,14 +1,15 @@
 %pdflatex-../thesis.tex
 % vim:spell spelllang=en_us
 
-There are three different virtualization types and they vary by method used to add virtualization layer between guests and physical hardware. It it not possible to easily choose better or worse virtualization types, because it depends on intended usage, character of computing tasks and required operating system.
+There are three different virtualization types and they vary by method used t
+add virtualization layer between guests and physical hardware. It it not possible to easily choose better or worse virtualization types, because it depends on intended usage, character of computing tasks and required operating system.
  
 Architectures of computers, especially x86, are designed to run on physical devices, thus is in not easy to virtualize them. Access to hardware is controlled by priority levels called rings. Lowest priority is used by userspace applications and highest priority (ring 0) is reserved for operating system. It is necessary to insert virtualization layer between operating system and hardware, but there is not any ring with higher priority than operating system uses. This problem needs to be solved and it is not only one challenge. There are sensitive instructions incompatible with virtualization, because they use different semantics when they are not run in ring 0, as mentioned in \cite{vmware-para}.
 
 \subsubsection{Paravirtualization}
 Paravirtualization is type of virtualization with necessity of modifications in guest kernel. Modifications of kernel are necessary, because operating system uses non-virtualizable instructions that are trying to gain direct access to the hardware. These instruction need to be replaced with hypercalls that communicate directly with virtualization layer of hypervisor. \cite{vmware-para} It is obvious, that guest operating system knows it is running virtualized. 
 
-containers?
+containers
 
 Biggest advantage of paravirtualization is lower overhead compared to other types, because it is not necessary to translate instructions before running. However this advantages becomes less significant during time since there are already available processors optimized to run hardware assisted virtualization with less overhead. Main drawback of this type of virtualization is need for modifications done at an operating system, which is not always possible or allowed. Running modified \Ac{OS} also brings additional administration and thus additional cost.
 
@@ -22,28 +23,26 @@ Full virtualization has significant overhead caused by binary translation, so \A
 
 Benefit of this type is quite obvious, because it lowers virtualization overhead and thus provides better performance compared with full virtualization together with elimination of need for guest kernel modifications compared with paravirtualization. It is necessary to have a support in host's \Ac{CPU} is primary drawback of this type, but there is support in almost every processor in the marker.
 
-\subsubsection{Hybrid virtualization}
-virtio?
-
+Running unmodified guest operating system leaves all necessary translations of instructions on hypervisor layer, so I would be good to to introduce small changes to guest's operating system, which will reduce work left for the hypervisor but also do not need any significant changes in guest's kernel. This approach is called hybrid virtualization and it is subset of hardware assisted virtualization. Installation of additional drivers is required, but it is not necessary to apply any changes on whole kernel. These drivers are aware of virtualization and use virtualization layer directly without any translations made by the hypervisor. This method increases driver's \Ac{IOPS} and therefore it is usually used for virtualized network cards and storages. Driver able to deliver hybrid virtualization is \Name{virtio} for \Ac{KVM}, Xen call it \Name{paravirtualized device drivers} and VMWare  \Name{Guest Tools}.
 
 
 \begin{table}[htb]
 \begin{center}
 	\caption{Comparison of virtualization types}
 	\label{tab:virtualization-types}
-	\begin{tabular}{|l|}
+	\begin{tabularx}{\textwidth}{|l|X|c|X|}
 	\hline
-	\Th{Type} \\
+	\Th{Type} & \Th{method}  & \Th{guest modif.} & \Th{usage} \\
 	\hline
-	Paravirtualization \\
+	Paravirtualization & hypercalls by guest kernel & yes & same workloads and same \Ac{OS}\\
 	\hline
-	Full virtualization \\
+	Full & translation of instructions & no & when full abstraction is needed \\
 	\hline
-	Hardware assisted virtualization \\
+	Hardware assisted & translation with help of hardware & no & same as full, but with compatible \Ac{CPU}\\
 	\hline
-	Hybrid virtualization \\
+	Hybrid & translations and driver changes & driver only & when possible to install additional drives\\
 	\hline
-	\end{tabular}
+	\end{tabularx}
 \end{center}
 \end{table}
 
