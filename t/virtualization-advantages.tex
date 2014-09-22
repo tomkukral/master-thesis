@@ -1,0 +1,19 @@
+%pdflatex-../thesis.tex
+% vim:spell spelllang=en_us
+
+% decoupling
+Most important advantages is decoupling software from physical hardware, at least in my opinion. It is possible to migrate virtual machines with running services between physical hosts without significant impact on service behavior. This brings amazing opportunity to adapt service environment on demand and scale the service.
+
+It is possible to perform any hardware and software upgrades, because all running services may be temporarily migrated to other physical host. Virtual machines are much more easier to deploy than physical ones. It takes only a few clicks to create and run \Ac{VM} compared to at least hours to deploy physical machines. These \Uv{clicks} do not have to be performed by persons, because it is possible to employ an orchestration and scale up the service (add virtual machines) automatically.
+Reset of virtual machine actually just software instruction in hypervisor, so it may by done remotely with ease.
+
+Geographical backups or failover is much more easier to accomplish with virtualization approach. You can rent virtual machine from provider in foreign country and start your services in a few moments. It is huge simplification compared with running physical machine at foreign data center.
+
+% utilization
+
+% resource sharing
+
+% disadvantages
+However there are some drawback too. Failure of physical host causes failure of all virtual machines of container running on this host. It is kind of single point of failure, but we can fight it with duplication of service nodes between different hosts, datacenters, providers or continents.
+Another disadvantage is hidden in additional virtualization level, since it is necessary to take care of hypervisors. I is not a real disadvantage, since traditional non-virtualized approach needs to take a care of many virtual machines.
+
