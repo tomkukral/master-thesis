@@ -1,0 +1,27 @@
+%pdflatex-../thesis.tex
+% vim:spell spelllang=en_us
+
+% Networking
+
+Networking is essential part of cloud computing because it is not be possible to access any services without networking. Every service in cloud computing system is accessed via network. Network is usually also used for communication between virtual machines, migrations, storage access and for many other tasks.
+
+
+% L1
+First part of networking to think about is physical layer. Various versions Ethernet are most widely used for physical layer in cloud data centers. There are many versions with different link bandwidth and wiring, but 1G and 10G with twisted pairs or optical fibers is used. There were 100M called Fast Ethernet but it does not make sense to use this for server link today, because limited bandwidth and almost similar price compared to 1G.
+
+% server
+It is common to insert two independent \Ac{NIC}s into every server and connect them into independent \Ac{ToR} switches, because it improves fault-tolerance. There is usually one more \Ac{NIC} for remote management and some additional cards if \Ac{SAN} is uses. Remote management can be connected with detached cable or shared with any of network cards. Separate cable brings more flexibility and fault-tolerance and shared cable reduces cabling effort and thus simplifies maintenance and improves cooling effectiveness. Both solutions is used.
+
+% rack & ToR
+About 40 servers fits into traditional rack and these server need to be connected to network infrastructure. There are different topologies, but most common is variant of (fat) tree with top-of-rack switch. There is also approach called \Uv{fabric} which implies non-block every-to-every mesh connection between switches. However fabric technologies are proprietary and limited by vendor.
+
+Every rack contains about 40 servers and these servers are connected to switch called \Ac{ToR}. This switch is located in the rack and acts as access layer for servers. Servers are connected to at least two \Ac{ToR}s if additional fault-tolerance is needed. Upper network topology layers depends on data center size and scaling requirements. There can be distribution and core layer, collapsed core or some kind of fabric.
+
+Special kind of network topology must be used for distributed data center, because is it necessary to spread one of network layers between two or more datacenter networks. Some solutions 
+
+
+% storage network
+
+% load balancing
+
+% firewall 
