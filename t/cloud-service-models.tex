@@ -6,7 +6,7 @@ Purpose of cloud computing is to deliver the service and provide customers with 
 
 Some of service models leave almost all control of service and responsibility at provider side and other supplies customer with more control. It is necessary to select right service model according to expected service usage and required control level.
 
-\subsubsection{Infrastructure as a Service}
+\subsection{Infrastructure as a Service}
 \Ac{IaaS} is model with the most of configuration tasks left at customer's side. Customer is responsible for virtual machines and it's services, so it gives much more flexibility than other models and it is well-suited for services with extraordinary requirements. 
 
 Customer manages virtual machines as well as running services, so provider is responsible only for virtualization and underneath layers. It is even possible to run custom operating system, but provider usually offers prepared images with different operating systems. Prepared \Ac{OS} images are tested and modified to run well in cloud environment. There can be installed hybrid virtualization drivers, kernel tweaked to run virtualized and it is also good idea to remove useless drivers and software. 
@@ -15,7 +15,7 @@ This model is good choice if special configuration is needed, but service deploy
 
 Typical example of \Ac{IaaS} is Amazon Web Services and Active24's \Uv{Virtuální Privátní servery}.
 
-\subsubsection{Platform as a Service}
+\subsection{Platform as a Service}
 Border of responsibility of \Ac{PaaS} is located two layers higher compared to \Ac{IaaS}. Service provider is responsible for platform and all underlaying layers, thus provider takes care of same layers as in \Ac{IaaS} plus operating system and platform. 
 Leaving operating system maintenance on provider's side may be beneficial, because provider can adjust operating system for virtualization and takes care about software updates. 
 
@@ -26,7 +26,7 @@ Customer using service according to this model runs his own software and does no
 This model is well-suited for running applications without any special requirements. It makes service deployment faster and easier, but is more limited by used platform. 
 Typical example is project Evia and Microsoft Azure.
 
-\subsubsection{Software as a Service}
+\subsection{Software as a Service}
 \Ac{SaaS} is model with none of administration tasks left at customer's responsibility. Software is hosted and maintained by service provider and customer is using the service. Service is accessed remotely via network (usually Internet). It is common mistake to say, that service is accessed as Web service, because any remote access can be used. 
 
 TODO: finish this part
