@@ -7,17 +7,30 @@ Networking is essential part of cloud computing because it is not be possible to
 
 
 % L1
-First part of networking to think about is physical layer. Various versions Ethernet are most widely used for physical layer in cloud data centers. There are many versions with different link bandwidth and wiring, but 1G and 10G with twisted pairs or optical fibers is used. There were 100M called Fast Ethernet but it does not make sense to use this for server link today, because limited bandwidth and almost similar price compared to 1G.
+First part of networking to think about is physical layer. Various Ethernet versions are used for physical layer in cloud data centers. There are many versions with different link bandwidth and wiring, but 1G and 10G with twisted pairs or optical fibers is used most widely. There were 100M called Fast Ethernet but it does not make sense to use this for server link today, because of it's limited bandwidth and almost similar price compared to 1G.
 
 % server
-It is common to insert two independent \Ac{NIC}s into every server and connect them into independent \Ac{ToR} switches, because it improves fault-tolerance. There is usually one more \Ac{NIC} for remote management and some additional cards if \Ac{SAN} is uses. Remote management can be connected with detached cable or shared with any of network cards. Separate cable brings more flexibility and fault-tolerance and shared cable reduces cabling effort and thus simplifies maintenance and improves cooling effectiveness. Both solutions is used.
+It is common to insert two independent \Ac{NIC}s into every server and connect them into independent \Ac{ToR} switches, because it improves fault-tolerance. There is usually one more \Ac{NIC} for remote management and some additional cards if \Ac{SAN} is used. Remote management can be connected with detached cable or shared with any of network cards. Separate cable brings more flexibility and fault-tolerance and shared cable reduces cabling effort and thus simplifies maintenance and improves cooling effectiveness. Both solutions are used. 
 
 % rack & ToR
 About 40 servers fits into traditional rack and these server need to be connected to network infrastructure. There are different topologies, but most common is variant of (fat) tree with top-of-rack switch. There is also approach called \Uv{fabric} which implies non-block every-to-every mesh connection between switches. However fabric technologies are proprietary and limited by vendor.
 
 Every rack contains about 40 servers and these servers are connected to switch called \Ac{ToR}. This switch is located in the rack and acts as access layer for servers. Servers are connected to at least two \Ac{ToR}s if additional fault-tolerance is needed. Upper network topology layers depends on data center size and scaling requirements. There can be distribution and core layer, collapsed core or some kind of fabric.
 
-Special kind of network topology must be used for distributed data center, because is it necessary to spread one of network layers between two or more datacenter networks. Some solutions 
+Physical topology must be adjusted to spread network layers between two or more datacenter networks. It is obviously not possible to spread physical layer, but data link layer and upper layers are possible to spread.
+
+% L3 & address
+Another view on network topology is at network layer. Internet is based on \Ac{TCP}/\Ac{IP} so it is necessary to use this protocol family and assign \Ac{IP} addresses to servers, virtual machines and other network elements. There are two different versions of \Ac{IP} protocol:
+\begin{description}
+	\item[version 4] is the older one, with 32 bit address space. This version is still used more than version 6 even though it's address space is depleted and new version exists for more than 15 years.
+	\item[version 6] is the \Uv{new} one, uses 128 bit address space and different headers, thus it is incompatible with version 4.
+\end{description}
+
+Version used for addressing schema is highly dependent on available addresses.
+
+
+% IPv4 as a service - get rid of dual-stack
+There are solutions how to run \Ac{IPv6}-only network and maintain access to \Ac{IPv4} addresses without using dual-stack. 
 
 
 % storage network
