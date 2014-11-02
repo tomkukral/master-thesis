@@ -32,21 +32,16 @@ However there is a problem with obtaining \Ac{IPv4} addresses, because available
 
 There are different ways how to use both versions concurently:
 \begin{itemize}
-	\item Dual-stack is the simpliest and probably the most used solution. Each inteface gets at least one \Ac{IPv4} and one \Ac{IPv6} address. Use of both versions causes additional maintenance effort because it is necessary to take care of two separate L3 networks.
-	\item Protocol \Ac{IPv6} can be tunneled via \Ac{IPv4} with technologies like 6to4, 6rd or \Ac{ISATAP}. This solution can be used for \Ac{IPv6} deployment in networks with working \Ac{IPv4}, because it is used for transmission of all packets. 
+	\item Dual-stack is the simpliest and probably the most used solution. Each interface gets at least one \Ac{IPv4} and one \Ac{IPv6} address. Use of both versions causes additional maintenance effort because it is necessary to take care of two separate L3 networks.
+	\item Tunelling \Ac{IPv6} via existing \Ac{IPv4} infrastructure with technologies like 6to4, 6rd or \Ac{ISATAP} is another way. This solution can be used for \Ac{IPv6} deployment in networks with working \Ac{IPv4}, because it is used for transmission of all packets. 
 	Tunelling is usually focused on deployment in access networks, but deployment in data center network is also applicable, as described in \cite{draft-sakura-6rd}.
-	\item translate IPv4 addrrs. into 
+	\item Translating \Ac{IPv4} addresses into part of \Ac{IPv6} addressing space is different approach than previous mentinoned, because it operates on \Ac{IPv6}-only networks. This technique does not require every box to have assigned an \Ac{IPv4} address and thus is good for saving address space. Hovewer address translations may not be suitable for data center usage, because it does not preserve original \Ac{IP} addresses and makes customer tracking almost impossible. Further information can be found in \cite{ipv4-jako-sluzba}.
 \end{itemize}
 
+It is beneficial to deploy protocol \Ac{IPv6} as primary one in my opinion, because it will become more and more needed during time. Hardware on current market usually support protocol \Ac{IPv6} at least partialy, but there are still some hidden pitfalls. There may be problem for example with server's remote management, because it may not support \Ac{IPv6} and thus is totally unusable on \Ac{IPv6}-only network. None of servers I have used for practical part of this thesis have support for \Ac{IPv6} on \Ac{IPMI}. 
+However there is currently only small demand and \Ac{IPv6} deployment does not bring any direct profit. Even thought there are many problems and advantages are quite hidden, it is not possible to ignore this protocol and stay with old \Ac{IPv4}.
 
-
-
-
-% IPv4 as a service - get rid of dual-stack
-There are solutions how to run \Ac{IPv6}-only network and maintain access to \Ac{IPv4} addresses without using dual-stack. 
-
-
-
+Virtual machine migration must be taken into account durring addressing schema design, because it plays crucial role in data center. Migrations are performed between hypervisors, i.e. physical servers, and these servers may be locatet in different racks, halls or even in different data centers. It is usually required to preserve \Ac{IP} address of virtual machine during migration process and that way migration must be 
 
 \subsection{Storage network}
 % storage network
