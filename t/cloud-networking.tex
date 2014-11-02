@@ -13,7 +13,7 @@ First part of networking to think about is physical layer. Various Ethernet vers
 It is common to insert two independent \Ac{NIC}s into every server and connect them into independent \Ac{ToR} switches, because it improves fault-tolerance. There is usually one more \Ac{NIC} for remote management and some additional cards if \Ac{SAN} is used. Remote management can be connected with detached cable or shared with any of network cards. Separate cable brings more flexibility and fault-tolerance and shared cable reduces cabling effort and thus simplifies maintenance and improves cooling effectiveness. Both solutions are used. 
 
 % rack & ToR
-About 40 servers fits into traditional rack and these server need to be connected to network infrastructure. There are different topologies, but most common is variant of (fat) tree with top-of-rack switch. There is also approach called \Uv{fabric} which implies non-block every-to-every mesh connection between switches. However fabric technologies are proprietary and limited by vendor.
+About 40 servers fits into traditional rack and these server need to be connected to network infrastructure. There are different topologies, but most common is variant of (fat) tree with top-of-rack switch. There is also approach called \Uv{fabric} which implies non-blocking every-to-every mesh connection between switches. However fabric technologies are proprietary and limited to vendor.
 
 Every rack contains about 40 servers and these servers are connected to switch called \Ac{ToR}. This switch is located in the rack and acts as access layer for servers. Servers are connected to at least two \Ac{ToR}s if additional fault-tolerance is needed. Upper network topology layers depends on data center size and scaling requirements. There can be distribution and core layer, collapsed core or some kind of fabric.
 
@@ -26,15 +26,33 @@ Another view on network topology is at network layer. Internet is based on \Ac{T
 	\item[version 6] is the \Uv{new} one, uses 128 bit address space and different headers, thus it is incompatible with version 4.
 \end{description}
 
-Version used for addressing schema is highly dependent on available addresses.
+Moder data center must provide both versions of \Ac{IP} protocol, because supporting only one versions is a huge limitation and can not be accepted for new services deployment. 
+However there is a problem with obtaining \Ac{IPv4} addresses, because available pool had already been depleted and all available addreses had been divided between \Ac{RIR}s. It is beneficial to make efforts to employ \Ac{IPv6} protocol as primary one and try to limit the amount of required \Ac{IPv4} addresses.
+
+
+There are different ways how to use both versions concurently:
+\begin{itemize}
+	\item Dual-stack is the simpliest and probably the most used solution. Each inteface gets at least one \Ac{IPv4} and one \Ac{IPv6} address. Use of both versions causes additional maintenance effort because it is necessary to take care of two separate L3 networks.
+	\item Protocol \Ac{IPv6} can be tunneled via \Ac{IPv4} with technologies like 6to4, 6rd or \Ac{ISATAP}. This solution can be used for \Ac{IPv6} deployment in networks with working \Ac{IPv4}, because it is used for transmission of all packets. 
+	Tunelling is usually focused on deployment in access networks, but deployment in data center network is also applicable, as described in \cite{draft-sakura-6rd}.
+	\item translate IPv4 addrrs. into 
+\end{itemize}
+
+
+
 
 
 % IPv4 as a service - get rid of dual-stack
 There are solutions how to run \Ac{IPv6}-only network and maintain access to \Ac{IPv4} addresses without using dual-stack. 
 
 
+
+
+\subsection{Storage network}
 % storage network
 
+\subsection{Load balancing}
 % load balancing
 
+\subsection{Firewall}
 % firewall 
