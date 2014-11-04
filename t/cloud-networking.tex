@@ -48,12 +48,23 @@ First solution for unlimited migrations while preserving \Ac{IP} address is L2 s
 
 % routing 
 Another way how to accomplish unlimited \Ac{VM} migrations is to use routinl for machine connectivity. This method uses temporary and fixed \Ac{IP} addresses. Hypervisor do not have to be in same L3 network and there is higher variability in addresses assigned to virtual machines. Temporary address is assigned according to \Ac{VM}'s location and it changes during migration. Fixed address is routed to \Ac{VM} and this address does not change, because changes are made only in routing tables. Any routing protocol can be usel, e.g. \Ac{OSPF}, to provide correct routing of fixed address destination virtual machine. Is is neccesary to insert one record in routing table for every virtual machine, because \textbackslash 32 routes are being advertised. Huge routing table may be problem for data centers with many virtual machines.
-Higher layer is used to get more flexibility than lower level can offer. Main drawback of this solution is additinal complexity caused by routing and longer address swap, because it takes some time to propagate routing to new temporary address. It is not easy to perform live migration, because it is neccesary to change \Ac{IP} address of \Ac{VM}'s interfaca and thus open sessions will terminatel
+Higher layer is used to get more flexibility than lower level can offer. Main drawback of this solution is additinal complexity caused by routing and longer address swap, because it takes some time to propagate routing to new temporary address. It is not easy to perform live migration, because it is neccesary to change \Ac{IP} address of \Ac{VM}'s interface and thus open sessions will terminate.
 
-% VPN
+\subsection{Overlays}
+Virtualization is used heavily these days, therefore it is necessary provide networking solution with at least same flexibility as virtualization offers. Multitenancy, \Ac{VM} migrations, fast reconfiguration and rapid deployment are most missing features of physical networks these days. It is currently possible to migrate virtual machines without interruption of services, but it is quite difficult to carry out same task on network layer. Overlay networking is one of proposed solutions and it is supposed to bring additional abstraction layer capable of decoupling network from physical hardware. 
+Technologies capable to build overlay network are for example \Ac{VXLAN}, \Ac{STT} and \Ac{NVGRE}. 
 
-% SDN
+There is usually used any kind of encapsulation for building overlay network on top of physical one. Encapsulation of course have drawbacks in higher computations demand and packet size problems, but advantages brought by overlay are appreciable:
+\begin{itemize}
+	\item Configuration of physical network is left untouched, so configuration fails are minimized
+	\item Overlay network is only virtual and more flexible than physical network
+	\item It is easy to adjust overlay network since it is only done in software
+	\item Tenant isolation can be done better because overlays are designed to support this
+\end{itemize}
 
+\subsubsection{VXLAN}
+\subsubsection{NVGRE}
+\subsubsection{STT}
 
 \subsection{Storage network}
 % storage network
@@ -63,3 +74,5 @@ Higher layer is used to get more flexibility than lower level can offer. Main dr
 
 \subsection{Firewall}
 % firewall 
+
+\subsection{Software Defined Networks}
