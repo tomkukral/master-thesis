@@ -10,10 +10,10 @@ Networking is essential part of cloud computing because it is not be possible to
 First part of networking to think about is physical layer. Various Ethernet versions are used for physical layer in cloud data centers. There are many versions with different link bandwidth and wiring, but 1G and 10G with twisted pairs or optical fibers is used most widely. There were 100M called Fast Ethernet but it does not make sense to use this for server link today, because of it's limited bandwidth and almost similar price compared to 1G.
 
 % server
-It is common to insert two independent \Ac{NIC}s into every server and connect them into independent \Ac{ToR} switches, because it improves fault-tolerance. There is usually one more \Ac{NIC} for remote management and some additional cards if \Ac{SAN} is used. Remote management can be connected with detached cable or shared with any of network cards. Separate cable brings more flexibility and fault-tolerance and shared cable reduces cabling effort and thus simplifies maintenance and improves cooling effectiveness. Both solutions are used. 
+It is common to insert two independent \Ac{NIC}s into every server and connect them into independent \Ac{ToR} switches, because it improves fault-tolerance. There is usually one more \Ac{NIC} for remote management and some additional cards if \Ac{SAN} is used. Remote management can be connected using detached cable or shared with any of network cards. Separate cable brings more flexibility and fault-tolerance and shared cable reduces cabling effort and thus simplifies maintenance and improves cooling effectiveness. Both solutions are used. 
 
 % rack & ToR
-About 40 servers fits into traditional rack and these server need to be connected to network infrastructure. There are different topologies, but most common is variant of (fat) tree with top-of-rack switch. There is also approach called \Uv{fabric} which implies non-blocking every-to-every mesh connection between switches. However fabric technologies are proprietary and limited to vendor.
+About 40 servers fits into traditional rack and these serverl need to be connected to network infrastructure. There are different topologies, but most common is variant of two or three tier hierarchical structure. \cite{survey-architectures} There is also approach called \Uv{fabric} which implies non-blocking every-to-every mesh connection between switches. However fabric technologies are proprietary and limited to vendor. TODO: doplnit a více ocitovat surver-architectures
 
 Every rack contains about 40 servers and these servers are connected to switch called \Ac{ToR}. This switch is located in the rack and acts as access layer for servers. Servers are connected to at least two \Ac{ToR}s if additional fault-tolerance is needed. Upper network topology layers depends on data center size and scaling requirements. There can be distribution and core layer, collapsed core or some kind of fabric.
 
@@ -41,7 +41,7 @@ There are different ways how to use both versions concurently:
 It is beneficial to deploy protocol \Ac{IPv6} as primary one in my opinion, because it will become more and more needed during time. Hardware on current market usually support protocol \Ac{IPv6} at least partialy, but there are still some hidden pitfalls. There may be problem for example with server's remote management, because it may not support \Ac{IPv6} and thus is totally unusable on \Ac{IPv6}-only network. None of servers I have used for practical part of this thesis have support for \Ac{IPv6} on \Ac{IPMI}. 
 However there is currently only small demand and \Ac{IPv6} deployment does not bring any direct profit. Even thought there are many problems and advantages are quite hidden, it is not possible to ignore this protocol and stay with old \Ac{IPv4}.
 
-Virtual machine migration must be taken into account durring addressing schema design, because it plays crucial role in data center operation. Migrations are performed between hypervisors, i.e. physical servers, and these servers may be located in different racks, halls or even in different data centers. It is usually required to preserve \Ac{IP} address of virtual machine during migration process and thus adressing schema must be prepared to move single \Ac{IP} address around almost whole data center without any significant configuration changes. 
+Virtual machine migration must be taken into account durring addressing schema design, because it plays crucial role in data center operation. Migrations are performed between hypervisors, i.e. physical servers, and these servers may be located in different racks, halls or even in different data centers. It is usually required to preserve \Ac{IP} address of virtual machine during migration process and thus adressing schema must be prepared to move single \Ac{IP} address around almost whole data center nwithout any significant configuration changes. 
 
 % shared L2
 First solution for unlimited migrations while preserving \Ac{IP} address is L2 sharing between hypervisors. Data link layer is shared between all hypervisors and then virtual machine is located in same L2 network before and after migration. This solution does not scale well since it is not recomended to place more than a few hundreds of hosts into single L2 domain, so it may be necessary to divide single big L2 into many smaller networks. It is quite easy to employ this solution for hypervisors in same rack, but it is more difficult with more distant servers and even more when servers are located at different data centers.
@@ -51,18 +51,32 @@ Another way how to accomplish unlimited \Ac{VM} migrations is to use routinl for
 Higher layer is used to get more flexibility than lower level can offer. Main drawback of this solution is additinal complexity caused by routing and longer address swap, because it takes some time to propagate routing to new temporary address. It is not easy to perform live migration, because it is neccesary to change \Ac{IP} address of \Ac{VM}'s interface and thus open sessions will terminate.
 
 \subsection{Overlays}
-Virtualization is used heavily these days, therefore it is necessary provide networking solution with at least same flexibility as virtualization offers. Multitenancy, \Ac{VM} migrations, fast reconfiguration and rapid deployment are most missing features of physical networks these days. It is currently possible to migrate virtual machines without interruption of services, but it is quite difficult to carry out same task on network layer. Overlay networking is one of proposed solutions and it is supposed to bring additional abstraction layer capable of decoupling network from physical hardware. 
-Technologies capable to build overlay network are for example \Ac{VXLAN}, \Ac{STT} and \Ac{NVGRE}. 
+Virtualization is used heavily these days, therefore it is necessary provide networking solution with at least same flexibility as virtualization offers. Multitenancy, \Ac{VM} migrations, fast reconfiguration and rapid deployment are most missing features of physical networks these days. It is currently possible to migrate virtual machines without service interruption, but there is still not clear solution how to perform migration across whole data center with maintaining \Ac{IP} address. Overlay networking is one of proposed solutions and it is supposed to bring additional abstraction layer capable of decoupling network from physical hardware. 
+Technologies capable to build overlay network are \Ac{VXLAN}, \Ac{STT} and \Ac{NVGRE}. 
 
-There is usually used any kind of encapsulation for building overlay network on top of physical one. Encapsulation of course have drawbacks in higher computations demand and packet size problems, but advantages brought by overlay are appreciable:
-\begin{itemize}
-	\item Configuration of physical network is left untouched, so configuration fails are minimized
-	\item Overlay network is only virtual and more flexible than physical network
-	\item It is easy to adjust overlay network since it is only done in software
-	\item Tenant isolation can be done better because overlays are designed to support this
-\end{itemize}
+% STP
+Data center network need to be robust enough so parallel paths are used to provide redundancy and avoid outage caused by single link failure. It is necessary to avoid loops on L2 network because there are loops caused by redundant paths and L2 network does use anything like \Ac{TTL} field.  Spanning Tree Protocol (\Ac{STP}) can be used for avoiding loops in L2 networks, but there are two mayor problems. First is need to adjust \Ac{STP} if \Ac{VLAN}s are used because it is necessary to build special tree for each \Ac{VLAN}. Second problem with using \Ac{STP} is utilization of parallel links. \Ac{STP} keep only one of parallel link running and the others are disables to avoid topology loops. It is not optimal solution because links utilization is low and it is impossible to increase connection bandwidth by adding parallel links. Upgrading to higher link speed is limited and does not make economical sense. 10G cards are becoming affordable, but 40G cards are still expensive.
+
+% Tenant isolation
+Public cloud solutions tend to serve many tenants and it is necessary to avoid unwanted interaction between them. It is quite easy to guarantee this on virtualization layer but much harder to accomplish on network layer. Tenant isolation can be performed on Layer 3 or Layer 2. \Ac{VLAN}s are often used for isolation on Layer 2, but this solution suffer from insufficient scaling issues because only 12 bit \Ac{VLAN} identifier is used and it provides only 4096 different tags. This might be enough for smaller solution but it is not sufficient for huge cloud system. Each physical server can host up to 100 virtual machines/containers\footnote{Server node2.brg/vpsfree.cz is currently running 117 \Ac{VPS}s with hardware: Supermicro \mbox{X9DR3-F}, 2x Xeon E5 2630Lv2, 256GB DDR3, 8x 2TB WD2002FAEX, 2x Intel DC S3700 200GB} owned by different tenants so 1 server can consume about 100 \Ac{VLAN} tags. All available tags can be depleted by 40 high performance servers which can fit in just one rack. Isolation at Layer 3 is does not provide sufficient scaling as well. It is necessary to provide unlimited migration facility between hypervisors in different racks and sometimes is required to spread Layer 2 between all tenant's virtual machines. Layer 3 isolation is not capable of this.
+
+% MAC table at ToRs
+All servers in single rack are usually connected to switch called \Ac{ToR}.
+
+%Some kind of encapsulation is usually used to build overlay network on top of physical network. Encapsulation of course have drawbacks in higher computation demand and packet size problems, but advantages brought by overlay are appreciable:
+%\begin{itemize}
+%	\item Configuration of physical network is left untouched, so configuration fails are minimized
+%	\item Overlay network is only virtual and more flexible than physical network
+%	\item It is easy to adjust overlay network since it is only done in software
+%	\item Tenant isolation can be done better because overlays are designed to support this
+%\end{itemize}
 
 \subsubsection{VXLAN}
+Virtual eXtensible Local Area Network is an overlay scheme on a L3 network. \cite{rfc7348} Aim of \Ac{VXLAN} is to define scalable overlay network with multitenacy and domain isolation. 
+
+% isolation
+VLAN - only 12b - less than 4096
+
 \subsubsection{NVGRE}
 \subsubsection{STT}
 
