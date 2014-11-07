@@ -77,13 +77,26 @@ Virtual eXtensible Local Area Network is an overlay scheme with multitenancy and
 
 Most important think is encapsulation since it provides \Ac{VXLAN} domain isolation and defines overlay network. Block called \Ac{VTEP} is responsible for encapsulation and tunnel organization. It analyzes every packet received from \Ac{VM} and prepend outer header with label. This label is called \Ac{VXLAN} Network Identifier (\Ac{VNI}) and it is used to isolate domains so virtual machines in different domains are not allowed to communicate directly with each other. Encapsulated packet is send to destination \Ac{VTEP} as \Ac{UDP} packet. Destination \Ac{VTEP} unpacks packet, check whether there is any virtual machine in \Ac{VXLAN} domain and deliver this frame.
 
-It is necessary for \Ac{VTEP} to be able to find destination \Ac{VTEP} for every encapsulated packet. This can be solved by data plane learning during forwarding as specified in \cite{rfc7348} or by acquiring this information from orchestrator. Getting information from orchestrator in my opinion much better because it avoids additional actions. Some kind of orchestrator or at least information system must be present in every data center and this system already knows location of all virtual machines as well as addresses of \Ac{VTEP}s. I think that it does not make sense to perform learning during forwarding because required informations are already saved in orchestrator. Orchestrator can directly distribute forwarding rules to all \Ac{VTEP}s or \Ac{VTEP} can ask orchestrator on-demand via any kind of \Ac{API}. Overlay unicast traffic be forwarded directly to destination \Ac{VTEP} without any additional learning or even flooding.
+It is necessary for \Ac{VTEP} to be able to find destination \Ac{VTEP} for every encapsulated packet. This can be solved by data plane learning during forwarding as specified in \cite{rfc7348} or by acquiring this information from orchestrator. Getting information from orchestrator in my opinion much better because it avoids additional actions. Some kind of orchestrator or at least information system must be present in every data center and this system already knows location of all virtual machines as well as addresses of \Ac{VTEP}s. I think that it does not make sense to perform learning during forwarding because required informations are already saved in orchestrator. Orchestrator can directly distribute forwarding rules to all \Ac{VTEP}s or \Ac{VTEP} can ask orchestrator on-demand via any kind of \Ac{API}. Overlay unicast traffic can be forwarded directly to destination \Ac{VTEP} without any additional learning or even flooding.
 
 % BUM traffic
+There is traffic called \Ac{BUM} - Broadcast, Unknown unicast and Multicast which not easy to handle by \Ac{VXLAN}. This kind of traffic needs to be delivered to more than one host in a single \Ac{VXLAN} domain and thus it is necessary to send encapsulated packet to many \Ac{VTEP}s at the same time. Multicast should be used ad described in \cite{rfc7348}, but it needs mapping between \Ac{VXLAN} \Ac{VNI} and multicast address. This mapping should be managed by orchestrated by management layer. 
+It would be beneficial to have technology for delivering \Ac{BUM} traffic without need of multicast because it brings additional complexity and it is not allowed in global Internet. Unknown unicast can be mitigated with getting information about addresses from orchestrator as described in previous paragraph because the orchestrator knows all addresses and there will no longer exists any unknown traffic. 
+Sending encapsulated broadcast and multicast to many \Ac{VTEP}s can be achieved by multicast in underlay network or any advanced delivery methods can be uses. It is possible to send this traffic as unicast between source \Ac{VTEP} and every other \Ac{VTEP}. However this solution is suboptimal thanks to packet duplication and higher network bandwidth usage. Only one advantages is that multicast in underlay network is not required. It is also possible to select on node as \Uv{router} for encapsulated \Ac{VXLAN} traffic between \Ac{VTEP}s but it is technically similar to building multicast tree and thus it might be easier to deploy multicast in underlay.
+There is proprietary technology called IBM DOVE with is very similar to \Ac{VXLAN} but does not require multicast.
 
-% data plane learning
 % network requirements
 
+% VXLAN conclusion
+I think that\Ac{VXLAN} is quite promising technology for network virtualization in data center. It brings much more flexibility that traditional \Ac{VLAN} approach and it can be called as en evolution of \Ac{VLAN}. Principle of overlay network is building virtual network on top of physical infrastructure. Benefits were described in previous articles and main drawback is lack of cooperation between overlay and underlay network. Multicast might be also quite problematical to arrange.
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[width=0.9\textwidth]{vxlan.png}
+	\end{center}
+	\caption{Model of VXLAN topology}
+	\label{img:vxlan-topology}
+\end{figure}
 
 \subsubsection{NVGRE}
 \subsubsection{STT}
