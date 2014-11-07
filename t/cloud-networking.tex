@@ -73,17 +73,14 @@ Public cloud solutions tend to serve many tenants and it is necessary to avoid u
 %\end{itemize}
 
 \subsubsection{VXLAN}
-Virtual eXtensible Local Area Network is an overlay scheme with multitenancy and domain isolation. It is defined on Layer 3 and uses tunnels with encapsulation.
+Virtual eXtensible Local Area Network is an overlay scheme with multitenancy and domain isolation. It is defined on Layer 3 and uses encapsulation as tunneling mechanism.
 
-% VTEP a structure image from linuxdays
-There must be blocks called \Ac{VTEP} responsible for encapsulation and tunnel organization. It acts as translatlaasdfs\Ac{VTEP} is usually located at hypervisor's network layer, but I can be implemented in hardware and there is also an implementation in Linux kernel.
+Most important think is encapsulation since it provides \Ac{VXLAN} domain isolation and defines overlay network. Block called \Ac{VTEP} is responsible for encapsulation and tunnel organization. It analyzes every packet received from \Ac{VM} and prepend outer header with label. This label is called \Ac{VXLAN} Network Identifier (\Ac{VNI}) and it is used to isolate domains so virtual machines in different domains are not allowed to communicate directly with each other. Encapsulated packet is send to destination \Ac{VTEP} as \Ac{UDP} packet. Destination \Ac{VTEP} unpacks packet, check whether there is any virtual machine in \Ac{VXLAN} domain and deliver this frame.
 
+It is necessary for \Ac{VTEP} to be able to find destination \Ac{VTEP} for every encapsulated packet. This can be solved by data plane learning during forwarding as specified in \cite{rfc7348} or by acquiring this information from orchestrator. Getting information from orchestrator in my opinion much better because it avoids additional actions. Some kind of orchestrator or at least information system must be present in every data center and this system already knows location of all virtual machines as well as addresses of \Ac{VTEP}s. I think that it does not make sense to perform learning during forwarding because required informations are already saved in orchestrator. Orchestrator can directly distribute forwarding rules to all \Ac{VTEP}s or \Ac{VTEP} can ask orchestrator on-demand via any kind of \Ac{API}. Overlay unicast traffic be forwarded directly to destination \Ac{VTEP} without any additional learning or even flooding.
 
-% packet format - VNI 24b
-Encapsulation is stateless so each frame is encapsulated separately without any conjunction with other packets. It is undesirable to allow any communication between virtual machines in different \Ac{VXLAN} segments, so each packet is marked with \Ac{VXLAN} Network Identifier - \Ac{VNI}. This label is used by \Ac{VTEP} to decide whether virtual machines are in same segment or not.
-
-% encapsulation
 % BUM traffic
+
 % data plane learning
 % network requirements
 
