@@ -73,11 +73,16 @@ Public cloud solutions tend to serve many tenants and it is necessary to avoid u
 %\end{itemize}
 
 \subsubsection{VXLAN}
-Virtual eXtensible Local Area Network is an overlay scheme on a L3 network. \cite{rfc7348} Aim of \Ac{VXLAN} is to define scalable overlay network with multitenacy and domain isolation. 
+Virtual eXtensible Local Area Network is an overlay scheme with multitenancy and domain isolation. It is defined on Layer 3 and uses tunnels with encapsulation.
+
+% VTEP a structure image from linuxdays
+There must be blocks called \Ac{VTEP} responsible for encapsulation and tunnel organization. It acts as translatlaasdfs\Ac{VTEP} is usually located at hypervisor's network layer, but I can be implemented in hardware and there is also an implementation in Linux kernel.
+
+
+% packet format - VNI 24b
+Encapsulation is stateless so each frame is encapsulated separately without any conjunction with other packets. It is undesirable to allow any communication between virtual machines in different \Ac{VXLAN} segments, so each packet is marked with \Ac{VXLAN} Network Identifier - \Ac{VNI}. This label is used by \Ac{VTEP} to decide whether virtual machines are in same segment or not.
 
 % encapsulation
-% packet format - VNI 24b
-% VTEP a structure image from linuxdays
 % BUM traffic
 % data plane learning
 % network requirements
