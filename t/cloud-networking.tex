@@ -99,11 +99,17 @@ I think that\Ac{VXLAN} is quite promising technology for network virtualization 
 \end{figure}
 
 \subsubsection{NVGRE}
-Network virtualization using \Ac{GRE} is another overlay technology for multi-tenant data centers. It is very similar to previously mentioned \Ac{VXLAN} because it uses same topology scheme with different encapsulation mechanism. I am not going to provide detailed description of protocol as with \Ac{VXLAN} but main differences will be mentioned.
+Network virtualization using \Ac{GRE} is another overlay technology for multi-tenant data centers. It is very similar to previously mentioned \Ac{VXLAN} because it uses same topology scheme with different encapsulation mechanism. I am not going to provide detailed description of protocol as with \Ac{VXLAN} but main differences will be mentioned. Further information and current draft version can be found in \cite{draft-nvgre}\cite{rfc2748}\cite{rfc2890}.
 
-The biggest difference is encapsulation mechanism. \Ac{VXLAN} uses own approach but \Ac{NVGRE} uses \Ac{GRE} encapsulation.  Using quite old encapsulation standard may be beneficial because some boxes already support it and there is no need to make significant changes to physical infrastructure. Further information can be found in \cite{rfc2748} and \cite{rfc2890} describes header extensions used to carry \Ac{VSID}. \Ac{VSID} is identifier for virtual subnet isolation, it is analogue of \Ac{VNI} used by \Ac{VXLAN} with same length of $24~\Jed{b}$.
+The biggest difference is encapsulation mechanism. \Ac{VXLAN} uses own approach but \Ac{NVGRE} uses \Ac{GRE}.  Using quite old encapsulation standard may be beneficial because some boxes already support it and there is no need to make significant changes to physical infrastructure. Details about encapsulation mechanism can be found in \cite{rfc2748} and \cite{rfc2890} describes header extensions used to carry \Ac{VSID}. \Ac{VSID} is identifier for virtual subnet isolation, it is analogue of \Ac{VNI} used by \Ac{VXLAN} with same length of $24~\Jed{b}$.
 
-Outer header of packet with encapsulated payload is sent to destination \Ac{NVE} thus usage of \Ac{ECMP} may be suboptimal. There may be lack of entropy in outer header because destination address is same for all virtual machines residing at single \Ac{NVE}. This problem should be solved in \Ac{ECMP} hashing procedure by integrating \Ac{VSID} into sources for hash generation.
+Outer header of packet with encapsulated payload is sent to destination \Ac{NVE} thus usage of \Ac{ECMP} may be suboptimal. There may be lack of entropy in outer header because destination address is same for all virtual machines residing at same \Ac{NVE}. This problem should be solved in \Ac{ECMP} hashing procedure by integrating \Ac{VSID} into sources for hash generation.
+
+Multicast and broadcast traffic within overlay network is handled using multicast in underlay network. There is also defined N-Way unicast which do not depend on multicast: "In N-Way unicast, the sender NVE would send one encapsulated packet to every NVE in the virtual subnet. The sender NVE can encapsulate and send the packet as described in the Unicast Traffic Section 4.3. This alleviates the need for multicast support in the physical network." \cite{draft-nvgre}
+However this solution is suboptimal because there is unwanted packet duplication and thus it is better to deploy multicast and use it as carrier mechanism.
+
+Definition of \Ac{NVGRE} \cite{draft-nvgre} is still labeled as draft, last version was published on 2014-11-05 and new updates are expected. Proposed draft is  simple and there are still mayor problems waiting to be solved. For example there is not any method how to distribute locations of addresses within overlay network. Document \cite{draft-nvgre} says: "This information can be provisioned via a management plane, or obtained via a combination of control plane distribution or data plane learning approaches. This document assumes that the location information, including VSID, is available to the NVGRE endpoint." It is obvious that this need to be solved before deployment in production use. 
+
 
 
 \subsubsection{STT}
