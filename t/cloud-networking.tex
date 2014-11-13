@@ -110,9 +110,17 @@ However this solution is suboptimal because there is unwanted packet duplication
 
 Definition of \Ac{NVGRE} \cite{draft-nvgre} is still labeled as draft, last version was published on 2014-11-05 and new updates are expected. Proposed draft is  simple and there are still mayor problems waiting to be solved. For example there is not any method how to distribute locations of addresses within overlay network. Document \cite{draft-nvgre} says: "This information can be provisioned via a management plane, or obtained via a combination of control plane distribution or data plane learning approaches. This document assumes that the location information, including VSID, is available to the NVGRE endpoint." It is obvious that this need to be solved before deployment in production use. 
 
-
-
 \subsubsection{STT}
+Last but not least technology used for building overlay network is Stateless Transport Tunneling (\Ac{STT}). It is designed to meet common requirements as allow overlapping of tenant's address space, decouple virtual network from physical infrastructure and allow unlimited virtual machine migration.
+
+Basic principle is still same - some box (usually called \Ac{NVE}) encapsulates packets from overlay network and send it through underlay network to other \Ac{NVE}s. However \Ac{STT} introduces completely new encapsulation method. \Ac{TCP}-like header is used as an encapsulation header but there is no three-way handshake or sessions because packets are processed different way. Header is used only as a storage for metadata about encapsulation. Field called Context Identifier is assigned to every flow and it is used as a generalized form of virtual network identifier. \cite{draft-stt} It is beneficial to use this generalization because there is space for future services. Space reserved for Context Identifier is 64 bits long so there is really enormouns amount of combinations available.
+
+It is important for every overlay technology to support \Ac{ECMP} because efficient flow distribution between multiple paths can be used for underlay network in data center. First important requirement is to route each packet belonging to single flow same way and it is accomplished by using same ports and addresses for these packets. 
+Second requirement is to provide enough of entropy for uniform flow distribution. Packet's source port is function of inner header and thus it provides entropy data for \Ac{ECMP} mechanism.
+
+Using almost standard \Ac{TCP} segmentation for encapsulation is advantageous because it may bring significant performance improvement. Segmentation offloading is heavily used these days so it can be used to speed-up encapsulation process. The most important advantage of \Ac{STT} is providing new functions and using of existent hardware techniques.
+
+However I can see some problems with deploying \Ac{STT}. First and the most important is changing meaning of \Ac{TCP} header field since this will probably cause problems in middle boxes. It will be necessary to adjust configuration of state firewalls to allow \Ac{STT} because \Ac{TCP} headers are expected to behave different than is is used. Defining document \cite{draft-stt} is still in draft version and it is already expired. Last version is \#06 at time of writing this paragraph (2014-13-11) and this version expired on 2014-10-17. It is possible that this technology will be used in future but I do not think it is going to be used as overlay technology very much these days.
 
 \subsection{Storage network}
 % storage network
