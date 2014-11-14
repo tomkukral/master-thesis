@@ -122,6 +122,33 @@ Using almost standard \Ac{TCP} segmentation for encapsulation is advantageous be
 
 However I can see some problems with deploying \Ac{STT}. First and the most important is changing meaning of \Ac{TCP} header field since this will probably cause problems in middle boxes. It will be necessary to adjust configuration of state firewalls to allow \Ac{STT} because \Ac{TCP} headers are expected to behave different than is is used. Defining document \cite{draft-stt} is still in draft version and it is already expired. Last version is \#06 at time of writing this paragraph (2014-13-11) and this version expired on 2014-10-17. It is possible that this technology will be used in future but I do not think it is going to be used as overlay technology very much these days.
 
+\subsection{Hop-by-hop network virtualization}
+It is possible to use new technologies, e.g. \Ac{SDN}, and build different kind of virtual network called hop-by-hop. Hop-by-hop virtual network is totally different than previously described overlay networking since it does not use any encapsulation and data path is established by joining independent links between hops.
+
+Hop is responsible only for forwarding data unit to next hop and whole flow is directed by a controller. Controller is software appliance responsible for communication with physical boxes, distributing routes and analyzing packets received from forwarding plane. It is usually tightly collaborating with orchestrator.
+
+There is different perspective on network since control plane is separated from forwarding plane so physical devices are used only for fast packet transfers and data plane is responsible for network control. Every decision is performed in controller or orchestrator and propagated to forwarding plane through data plane. It is obvious that the orchestrator should not be physically centralized because it would create single point of failure so it is better to use any distributed solution.
+
+Hop-by-hop networks are tightly connected with topic called Software defined networking described in \ref{par:sdn}.
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[width=0.9\textwidth]{overlay.png}
+	\end{center}
+	\caption{Overlay virtual network}
+	\label{img:overlay}
+\end{figure}
+
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[width=0.9\textwidth]{hop-by-hop.png}
+	\end{center}
+	\caption{Hop-by-hop virtual network}
+	\label{img:hop-by-hop}
+\end{figure}
+
+
 \subsection{Storage network}
 % storage network
 
@@ -132,3 +159,4 @@ However I can see some problems with deploying \Ac{STT}. First and the most impo
 % firewall 
 
 \subsection{Software Defined Networks}
+\label{par:sdn}
