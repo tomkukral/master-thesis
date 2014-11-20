@@ -148,12 +148,48 @@ Hop-by-hop networks are tightly connected with topic called Software defined net
 	\label{img:hop-by-hop}
 \end{figure}
 
-
-\subsection{Storage network}
-% storage network
-
-\subsection{Load balancing}
+\subsection{Load balancing and high availability}
 % load balancing
+
+Load balancing is an essential part of service operation because there it is required to improve scalability and availability better than single machine approach can ever achieve. It  quite common in the past that one service had been served just by one machine. However this solution is suboptimal since it is totally unscalable and it is impossible to provide high-availability solution.
+
+It is necessary to employ service load balancing because load and service demand is still increasing and only properly designed load balancing solution can meet all of the requirements. Common requirements are
+	\begin{itemize}
+		\item low latency - request should be processed without any significant delay
+		\item high availability - service should stay up during partial infrastructure failure
+		\item scalability - infrastructure should be ready to increase resource when the load is enormous
+	\end{itemize}
+
+There are many different ways how to deploy load balancing and they differ by flexibility and functions available. We can be say that load balancing performed at higher levels is more flexible, but the best solution are combination between two or more technologies on different layers. Appropriate solution depends also on access method because there are different balancing possibilities for example for \Ac{HTTP} \Ac{API}, remote terminal service and video streaming service. Method presented in following text will be general as well as access method specific, but right use case will be always mentioned.
+
+% session persistance
+Load balancing methods can be divided into two group whether they provide session persistence or not. Session persistence mean that one client is always routed to same computing node. It is required if there is a client's information, called session, available only on this computing node and session would be lost in case of redirecting to another node. Application can be designed with taking load balancing into account and thus it does not require session persistence. However session persistence is usually needed for load balancing of services designed without load balancing capabilities.
+
+\subsubsection{DNS based approach}
+\Ac{DNS} load balancing is first possible solution since it is relative easy to deploy and application redesign may not be necessary. Basic implementation can be round-robin \Ac{DNS} which is carried out by assigning many AAAA or A records for service host name. Client selects one record after resolving host name and use it thus basically performs load balancing already at user's device. This method is really simple but lacks any advanced management options. First problem is with high availability because it is not possible to quickly remove host from zone in case case of failure. There is field called \Ac{TTL} assigned to every record in zone and this field defines how long can be this record cached, maximum time between change in zone and propagation to all client should be \Ac{TTL} a \Ac{SOA}. However there are Internet Service Providers ignoring this standard so it is possible that some client will still get wrong records even after \Ac{TTL} expiration. Sample zone file with AAAA and A records and \Ac{TTL} 6 minutes is in figure \ref{code:zone}.
+
+More advance variant of \Ac{DNS} based load balancing is modification of zone performed by authoritative \Ac{DNS} server. There is usually just one AAAA/A record for service hostname, but returned \Ac{IP} address can be different for every query. This method may use geolocation and return \Ac{IP} address of the nearest server according to user's position, however user can use different recursive servers and geolocation can be very inaccurate. Technically this method is only variation of previously mentioned with better control of distribution and there is still same problem with \Ac{TTL}. This method is used by web portal Seznam.cz for load balancing between primary and secondary data center. They use \Ac{TTL} 5 minutes and also experienced problem with incorrect caching however I am not allowed to publish any detailed information.
+
+
+\begin{figure}[htb]
+\caption{Example zone file for DNS load balancing}
+\label{code:zone}
+\begin{lstlisting}
+app.example.com 	360	IN 	AAAA 	2001:db8::1
+app.example.com 	360	IN 	AAAA	2001:db8::2
+app.example.com 	360	IN 	AAAA	2001:db8::3
+app.example.com		360	IN 	A	192.0.2.1
+app.example.com		360	IN 	A	192.0.2.2
+app.example.com		360	IN 	A	192.0.2.3
+\end{lstlisting}
+\end{figure}
+
+% Application load balancing
+
+% Anycast load balancing
+
+
+
 
 \subsection{Firewall}
 % firewall 
