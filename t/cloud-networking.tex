@@ -173,6 +173,7 @@ Load balancing methods can be divided into two group whether they provide sessio
 
 More advance variant of \Ac{DNS} based load balancing is modification of zone performed by authoritative \Ac{DNS} server. There is usually just one AAAA/A record for service hostname, but returned \Ac{IP} address can be different for every query. This method may use geolocation and return \Ac{IP} address of the nearest server according to user's position, however user can use different recursive servers and geolocation can be very inaccurate. Technically this method is only variation of previously mentioned with better control of distribution and there is still same problem with \Ac{TTL}. This method is used by web portal Seznam.cz for load balancing between primary and secondary data center. They use \Ac{TTL} 5 minutes and also experienced problem with incorrect caching however I am not allowed to publish any detailed information.
 
+Another problem with DNS load balancing, especially failover, is \Ac{DNS} pinning. It is mechanism implemented in web browser to make \Ac{DNS} rebinding attacks more difficult. This attack is based on pushing faked \Ac{DNS} record to client and then forward all traffic to attacker's \Ac{IP} address. Browser with pinning implemented \Uv{pins} first resolved \Ac{IP} address and use it even after \Ac{TTL} expiration so it basically prevent load balancing mechanism to switch client to another computing node. Further information can be found in \cite{dns-pinning}.
 
 \begin{figure}[htb]
 \caption{Example zone file for DNS load balancing}
@@ -201,8 +202,22 @@ Advantage of this method is direct connection between client and computing node,
 	\label{img:balancing-application}
 \end{figure}
 
-% Anycast load balancing
+\subsubsection{Anycast load balancing}
+It is possible to use anycast routing for load balancing and distribute workload between nodes. Model situation is depicted at figure \ref{img:anycast-balancing} Only anycasted \Ac{IP} address is propagated to outside world, so every incoming packet have this destination address. This address is also assigned to local interfaces of computing nodes and advertised to local router using any routing protocol, e.g. \Ac{OSPF}. 
 
+An incoming packet is delivered to local router and this router performs lookup and selects destination address according to it's actual routing table. This is advantageous because it is possible to assign priority to routes propagated by computing nodes and node is almost immediately remove from routing table in case of node failure.
+
+However this solution is not capable to provide session persistence because packet can be routed to different computing node every time. There would be a bottleneck in topology described in figure \ref{img:anycast-balancing} but this method can be adjusted to eliminate this problem and propagate different anycast addresses from different autonomous systems.
+
+Global pool of root \Ac{DNS} servers use exactly this load balancing principle so request should always be delivered to the nearest server and thus almost perfectly distributed around word servers. According to data published in \cite{dns-anycast} up to 80\% of \Ac{DNS} queries are routed to the nearest anycast instance.
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[width=0.7\textwidth]{balancing-anycast.png}
+	\end{center}
+	\caption{Anycast load balancing}
+	\label{img:anycast-balancing}
+\end{figure}
 
 % Load balancers
 
