@@ -219,21 +219,22 @@ Global pool of root \Ac{DNS} servers use exactly this load balancing principle s
 	\label{img:anycast-balancing}
 \end{figure}
 
-% Load balancers
+\subsection{Load balancers}
+Load balancing of \Ac{TCP} flows can be done on network layer using box called load balancer. It does not have to be strictly physical box since there are also software solutions. This box modifies headers and basically translate flows from customer's side to internal and back. 
 
-% packet rewriting
+The simplest solution is rewriting destination address. Packet received on external interface of load balancer is analyzed, destination address is changes to one of the computation nodes and packet is delivered to computation node. Address rewriting must be performed also on packet received from computing node as well as on every related packet. 
 
-% Offloading - http, ssl, 
+Load balancer box must maintain list of available computing nodes and continuously monitor their status because it have to select suitable node for every incoming flow. Monitoring method and node choosing algorithm depends on application. It is also possible to integrate monitoring service into orchestrator and then control load balancer via orchestrator.
 
-% CDN
+It would be probably required to guarantee session persistency so load balancer will keep mapping table between customers and computing nodes. This table provides information about current mappings and thus make it possible to deliver all packets from single flow to same computing node.
 
-% crud mechanism
+There may be additional technologies integrated in load balancer box, for example offloading, deep packet inspection or intrusion prevention. \Ac{SSL} offloading is used sometimes to decouple encryption from application running on computing nodes and to enable header rewriting. It is also possible to terminate \Ac{TCP} session on load balancer and establish new session for communication with computing node with maintaining packet's payload. It is even possible to carry out translation between \Ac{IPv6} and \Ac{IPv6}.
 
-
-
+Load balancer box provide advanced function but is introduce bottleneck and single point of failure. Rewriting of packet headers and maintaining mapping table are even more resource expensive than router described in anycast load balancing. This solution is suitable for legacy application without any possibility of adding load balancing capabilities. 
 
 \subsection{Firewall}
 % firewall 
 
-\subsection{Software Defined Networks}
-\label{par:sdn}
+
+%\subsection{Software Defined Networks}
+%\label{par:sdn}
