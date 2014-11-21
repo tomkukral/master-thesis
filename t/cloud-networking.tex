@@ -162,11 +162,13 @@ It is necessary to employ service load balancing because load and service demand
 
 There are many different ways how to deploy load balancing and they differ by flexibility and functions available. We can be say that load balancing performed at higher levels is more flexible, but the best solution are combination between two or more technologies on different layers. Appropriate solution depends also on access method because there are different balancing possibilities for example for \Ac{HTTP} \Ac{API}, remote terminal service and video streaming service. Method presented in following text will be general as well as access method specific, but right use case will be always mentioned.
 
+% scale-up / scale-out
+
 % session persistance
 Load balancing methods can be divided into two group whether they provide session persistence or not. Session persistence mean that one client is always routed to same computing node. It is required if there is a client's information, called session, available only on this computing node and session would be lost in case of redirecting to another node. Application can be designed with taking load balancing into account and thus it does not require session persistence. However session persistence is usually needed for load balancing of services designed without load balancing capabilities.
 
 \subsubsection{DNS based approach}
-\Ac{DNS} load balancing is first possible solution since it is relative easy to deploy and application redesign may not be necessary. Basic implementation can be round-robin \Ac{DNS} which is carried out by assigning many AAAA or A records for service host name. Client selects one record after resolving host name and use it thus basically performs load balancing already at user's device. This method is really simple but lacks any advanced management options. First problem is with high availability because it is not possible to quickly remove host from zone in case case of failure. There is field called \Ac{TTL} assigned to every record in zone and this field defines how long can be this record cached, maximum time between change in zone and propagation to all client should be \Ac{TTL} a \Ac{SOA}. However there are Internet Service Providers ignoring this standard so it is possible that some client will still get wrong records even after \Ac{TTL} expiration. Sample zone file with AAAA and A records and \Ac{TTL} 6 minutes is in figure \ref{code:zone}.
+\Ac{DNS} load balancing is first possible solution because it is take place before establishing session. It is relative easy to deploy and application redesign may not be necessary. Basic implementation can be round-robin \Ac{DNS} which is carried out by assigning many AAAA or A records for service host name. Client selects one record after resolving host name and use it thus basically performs load balancing already at user's device. This method is really simple but lacks any advanced management options. First problem is with high availability because it is not possible to quickly remove host from zone in case case of failure. There is field called \Ac{TTL} assigned to every record in zone and this field defines how long can be this record cached, maximum time between change in zone and propagation to all client should be \Ac{TTL} a \Ac{SOA}. However there are Internet Service Providers ignoring this standard so it is possible that some client will still get wrong records even after \Ac{TTL} expiration. Sample zone file with AAAA and A records and \Ac{TTL} 6 minutes is in figure \ref{code:zone}.
 
 More advance variant of \Ac{DNS} based load balancing is modification of zone performed by authoritative \Ac{DNS} server. There is usually just one AAAA/A record for service hostname, but returned \Ac{IP} address can be different for every query. This method may use geolocation and return \Ac{IP} address of the nearest server according to user's position, however user can use different recursive servers and geolocation can be very inaccurate. Technically this method is only variation of previously mentioned with better control of distribution and there is still same problem with \Ac{TTL}. This method is used by web portal Seznam.cz for load balancing between primary and secondary data center. They use \Ac{TTL} 5 minutes and also experienced problem with incorrect caching however I am not allowed to publish any detailed information.
 
@@ -184,9 +186,34 @@ app.example.com		360	IN 	A	192.0.2.3
 \end{lstlisting}
 \end{figure}
 
-% Application load balancing
+\subsubsection{Application level load balancing}
+One of the most flexible method is application load balancing. Is is performed on Layer 7 so it is possible to differentiate in all lower layers. This solution is beneficial because application is able to decide on exact mapping between customer connection and working node. 
+Customer is connected to balancing part of application at first. This part (group of nodes) is responsible for redirecting or forwarding request to computing node. It is possible require login before redirecting and then forward request according to information required. Every information about customer is already available, like \Ac{IP} address and login name, so computing node can be selected and it is also very simple to achieve session persistence. Balancing procedure is depicted in figure \ref{img:balancing-application}.
+
+Advantage of this method is direct connection between client and computing node, so balancing part is not overloaded with translating requests between users and computing nodes. Direct connection eliminates bottlenecks because there is not any central authority responsible for load balancing. Technically there is central authority in load balancing part, but it can be redundant and balanced using other method, e.g. \Ac{DNS} load balancing.  However it is necessary to expose computing nodes to users network and thus some may say that is insecure. I think that exposing computing nodes to outside word is not security hazard, because security should be provided by proper application design and network security. Obscurity is not good security approach in my opinion.
+
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[width=0.9\textwidth]{balancing-application.png}
+	\end{center}
+	\caption{Load balancing at application level}
+	\label{img:balancing-application}
+\end{figure}
+
+
 
 % Anycast load balancing
+
+% Load balancers
+
+% packet rewriting
+
+% Offloading - http, ssl, 
+
+% CDN
+
+% crud mechanism
 
 
 
