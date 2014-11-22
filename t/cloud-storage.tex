@@ -1,3 +1,29 @@
+%pdflatex-../thesis.tex
+% vim:spell spelllang=en_us
+
+% Storage
+
+Storage is an essential part of datacenter since it provides space for saving information. We can distinguish between different types of storages and dozens of storage access methods so it is obvious that building one universal solution for all use cases is impossible. 
+
+Storage solution can be divided into layers according to mutual dependency. First layer is physical storage and it is represented by physical hardware used to save data into. It can be physical rotary drive, \Ac{SSD}, tape drive or any other kind of physical storage. It was quite common in pre-virtualization era that this storage was directly connected to servers and used only by this server. However this direct access to physical drive does not agile and thus it is necessary to change this simple solution.
+
+Next layers are blurry because it heavily depends on current solution. Tier storage is used quite often and it introduces three fundamental layers:
+\begin{itemize}
+	\item Tier 1 - \Ac{FC} drives
+	\item Tier 2 - \Ac{SATA} drives
+	\item Tier 3 - magnetic tapes
+\end{itemize}
+Exactly this 3 Tier model is used by CESNET's data storages facilities in Pilsen. However Tier model can be extended with more technologies such flashcache\footnote{https://github.com/facebook/flashcache} capable of increasing drive \Ac{IOPS} by writethrough caching to another faster drive. Another extension layers may be introduced by using different \Ac{RAID} for every tier.
+
+Direct attached storage was common approach in pre-virtualization era but is is not flexible enough, so it is necessary to find better solution. Requirements are strict and sometimes mutually excluding:
+\begin{itemize}
+	\item redundancy is required to provide failover and eliminate data damage in case of failure 
+	\item distribution can help to distribute load between nodes
+	\item agility is necessary to be able to deliver storage for different services with different parameters
+	\item scalability means that storage can be easily extended without any significant architecture changes
+	\item security must be taken into account because it is critical to avoid any unauthorized access or leakage
+\end{itemize}
+
 % file storage / block storage
 
 % share-nothing X centralized
