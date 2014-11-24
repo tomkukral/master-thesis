@@ -5,17 +5,32 @@
 
 Storage is an essential part of datacenter since it provides space for saving information. We can distinguish between different types of storages and dozens of storage access methods so it is obvious that building one universal solution for all use cases is impossible. 
 
-Storage solution can be divided into layers according to mutual dependency. First layer is physical storage and it is represented by physical hardware used to save data into. It can be physical rotary drive, \Ac{SSD}, tape drive or any other kind of physical storage. It was quite common in pre-virtualization era that this storage was directly connected to servers and used only by this server. However this direct access to physical drive does not agile and thus it is necessary to change this simple solution.
+\subsection{Physical storage}
+Storage solution can be divided into layers. First layer is physical storage and it is represented by physical hardware used to save data into. It can be physical rotary drive, \Ac{SSD}, tape drive or any other kind of physical storage. Every server can be equipped with smaller drive at is own physical storage and use it for services running on this node. This approach is called Direct Attached Storages and it is call share-nothing because in connection with data center storage architectures. The advantages of share-nothing is high level of node's independence, but I think that this solution is not flexible enough to be used as main storage scenario for whole data center.
 
-Next layers are blurry because it heavily depends on current solution. Tier storage is used quite often and it introduces three fundamental layers:
+Another way of providing servers with physical storage is using some sort of centralized storage. There is a central box with stuffed with physical storage and other server are using this storage via some standardized protocol like \Ac{FCP} or \Ac{iSCSI}. Shared storage brings better flexibility compared to direct attached storage, because physical storage is not fixed to a single server. 
+
+It is possible pro build separate network dedicated to storage, called \Ac{SAN}, or use existing data network. Isolated \Ac{SAN} can provide better performance but it is obviously more expensive to build. However using convergent network for storage is not as straight solution as it may look because it is necessary to deploy advanced technologies like lossless Ethernet.
+
+Physical storage can be organized into layers called tiers. Tiers are groups of physical storage devices usually organized by their performance, reliability or price. It would be obviously better to uses only high performance and reliable devices, however these are usually the most expensive one with low capacity/price coefficient. Tiered storage can provide high performance and high capacity together but it is necessary to use different tiers and optimize data placement. Storage with 3 tiers can use following drives:
 \begin{itemize}
-	\item Tier 1 - \Ac{FC} drives
-	\item Tier 2 - \Ac{SATA} drives
-	\item Tier 3 - magnetic tapes
+	\item tier 1 - \Ac{FC} drives
+	\item tier 2 - \Ac{SATA} drives
+	\item tier 3 - magnetic tapes
 \end{itemize}
-Exactly this 3 Tier model is used by CESNET's data storages facilities in Pilsen. However Tier model can be extended with more technologies such flashcache\footnote{https://github.com/facebook/flashcache} capable of increasing drive \Ac{IOPS} by writethrough caching to another faster drive. Another extension layers may be introduced by using different \Ac{RAID} for every tier.
+Exactly this 3 tier model is used by CESNET's data storages facilities in Pilsen. However tier model can be extended with more technologies such as flashcache\footnote{https://github.com/facebook/flashcache} capable of increasing drive \Ac{IOPS} by writethrough caching to another faster drive. Another extension layers may be introduced by using different \Ac{RAID} for every tier.
 
-Direct attached storage was common approach in pre-virtualization era but is is not flexible enough, so it is necessary to find better solution. Requirements are strict and sometimes mutually excluding:
+
+\subsection{Virtual storage}
+Providing physical servers with storage withing first storage layer is only first problem, since it is required to split this raw storage and use for another storage layers. There are three fundamental storage types: block storage, file system and object storage. It does not matter if this virtual storage is used directly by physical servers or by virtual servers via any virtualization layer since access method is actually the same.
+
+% block 
+Block storage is used way similar to directly attached. Block device is exposed to operating system and storage is accessed through this device. Storage access is managed directly by the operating system and it is main characteristic of this storage type. Block device can be formated with filesystem, used as physical volume for \Ac{LVM} or used as encrypted storage.
+
+% filesystem
+Filesystem storage is used to save files and it's attributes. Filesystem can be build upon local block device or accessed as \Ac{NAS}.
+
+
 \begin{itemize}
 	\item redundancy is required to provide failover and eliminate data damage in case of failure 
 	\item distribution can help to distribute load between nodes
@@ -23,6 +38,10 @@ Direct attached storage was common approach in pre-virtualization era but is is 
 	\item scalability means that storage can be easily extended without any significant architecture changes
 	\item security must be taken into account because it is critical to avoid any unauthorized access or leakage
 \end{itemize}
+
+% 
+
+
 
 % file storage / block storage
 
@@ -33,6 +52,3 @@ Direct attached storage was common approach in pre-virtualization era but is is 
 % centralized storage
 % NFS mount
 % CEPH
-
-
-
