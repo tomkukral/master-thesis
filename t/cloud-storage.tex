@@ -22,19 +22,21 @@ Exactly this 3 tier model is used by CESNET's data storages facilities in Pilsen
 
 
 \subsection{Virtual storage}
-Providing physical servers with storage withing first storage layer is only first problem, since it is required to split this raw storage and use for another storage layers. There are three fundamental storage types: block storage, file system and object storage. It does not matter if this virtual storage is used directly by physical servers or by virtual servers via any virtualization layer since access method is actually the same.
+To deliver storage for physical server is only the first problem, since it is required to split this raw storage and use for another storage layers. There are three fundamental virtual storage types: block storage, file system and object storage. It does not matter if this virtual storage is used directly by physical servers or by virtual servers via any virtualization layer since access method is actually the same.
 
 % block 
-Block storage is used way similar to directly attached. Block device is exposed to operating system and storage is accessed through this device. Storage access is managed directly by the operating system and it is main characteristic of this storage type. Block device can be formated with filesystem, used as physical volume for \Ac{LVM} or used as encrypted storage.
+Block storage is used way similar to directly attached. Block device is exposed to operating system and storage is accessed through block device. Storage operations are managed directly by the operating system and it is main characteristic of this storage type. Block device can be formated with filesystem, used as physical volume for \Ac{LVM} or used as encrypted storage.
 
 % filesystem
-Filesystem storage is used to save files and it's attributes. Filesystem can be build upon local block device or accessed as \Ac{NAS}. Filesystem on local block device can deliver lower latency and it is easier to connect with local user accounts, but there advantages count only for strictly local filesystem. I think that using \Ac{NAS} is almost required in case when any between user or computer sharing is required. Storage accessed via network will be probably easier to maintain and it is also easier to perform backups. 
+Filesystem storage is used to save files and it's attributes. Filesystem can be build upon local block device or accessed as \Ac{NAS}. Filesystem on local block device can deliver lower latency and it is easier to match permissions with local user accounts, but these advantages count only for strictly local filesystem. I think that using \Ac{NAS} is almost required in case when any between user or computer sharing is required. Storage accessed via network will probably be easier to maintain and it is also easier to perform backups. 
 
 % object storage
-Object storage is something between previously mentioned storage types since it is capable to save objects and access them similar way as accessing files in filesystem. However object storage is more general way of saving data and can be used to store various objects and it is not limited to files. It is even possible to build filesystem upon object storage and it is used for example in CephFS\footnote{\url{https://ceph.com/docs/master/cephfs/}}.
+Object storage is something between previously mentioned storage types since it is capable to save objects and access them similar way as accessing files in filesystem. However object storage is more general way of saving data and can be used to store various objects and it is not limited only to files. It provides very high level of storage abstraction because it is capable to operate on almost any data, access it in standardized way and decouples object from their location.
 
+It is even possible to build filesystem upon object storage and it is used for example in CephFS\footnote{\url{https://ceph.com/docs/master/cephfs/}}. This solution uses two pools of objects for \Uv{emulation} filesystem. Files are saved into ono pool as objects and related metadata are save in other pool. 
 
-\subsection{Cluster storage}
+\subsection{Network access}
+
 
 
 \begin{itemize}
