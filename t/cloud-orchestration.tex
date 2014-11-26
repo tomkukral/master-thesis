@@ -13,10 +13,16 @@ There are common routines in cloud data center administration and these routines
 	\item update monitoring definition
 \end{itemize}
 
-There can be dozens of task similar to mentioned above and it can take negligible amount of time. These task are usually very simple and all necessary information can be generated automatically or loaded from internal information system. It is very favorable to perform these task automatically because it does not need any assistance of human and automated solution is much more faster and strictly deterministic.
+There can be dozens of task similar to mentioned above and it can take negligible amount of time. These task are usually very simple and all necessary information can be generated automatically or loaded from an information system. It is very favorable to perform these task automatically because it does not need any assistance of human and automated solution is much more faster and strictly deterministic.
 
+Orchestration is automated management of services and resources performed according to predefined procedure. An inteligence is implemented into orchestrator so it can make desicions and execute actions without an interaction with human. Orchestrator acts autonomously according to configurated parameters in contrast to remote control interface which only perfroms requested actions.
 
+It is necessary to use orchestration for every cloud solution because it is not possible to cope with manual configuration and management of many cooperating services and resources. Rapid provisioning with minimal management effort is required in cloud computing definition mentioned in the beginning of this chapter and it can not be accomplished withou orchestration.
+
+% configuration management
+There exists actually one more step between completely manual management and orchestration and it defined by using configration management. Configuration management solution is used for uniform management of configuration and executing repetitive task. It is possible to develop own solution or use any software available. For example Ansible, Puppet or SaltStack are well know open-source softwares. Configuration management software can be instegrated into orchestrator and used as a interlayer between orchestrator and performed actions.
+
+Ansible is used for virtual machine configuration used in practical part of this thesis as well as for installation and configuration of OpenNebule IaaS cloud. It creates cloud environemnt with defined parameters and prepare initial configuration so it significantly shorten time required for installation and also eliminates configuration mistakes.
 
 
 \subsection{OpenNebula}
-
