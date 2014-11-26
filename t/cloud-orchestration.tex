@@ -1,0 +1,22 @@
+%pdflatex-../thesis.tex
+% vim:spell spelllang=en_us
+
+There are common routines in cloud data center administration and these routines are repeating very frequently. For example simple workflow for virtual machine creation can involve:
+\begin{itemize}
+	\item clone image with prepared operating system
+	\item log into hypervisor console and create \Ac{VM} definition
+	\item deploy virtual machine 
+	\item configure firewall and router 
+	\item configure vswitch or attach virtual machine into bridge
+	\item set up network interfaces in \Ac{VM}
+	\item set root's password and add authorized keys
+	\item update monitoring definition
+\end{itemize}
+
+There can be dozens of task similar to mentioned above and it can take negligible amount of time. These task are usually very simple and all necessary information can be generated automatically or loaded from internal information system. It is very favorable to perform these task automatically because it does not need any assistance of human and automated solution is much more faster and strictly deterministic.
+
+
+
+
+\subsection{OpenNebula}
+
