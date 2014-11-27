@@ -25,17 +25,46 @@ There exists actually one more step between completely manual management and orc
 Ansible is used for virtual machine configuration used in practical part of this thesis as well as for installation and configuration of OpenNebule IaaS cloud. It creates cloud environemnt with defined parameters and prepare initial configuration so it significantly shorten time required for installation and also eliminates configuration mistakes.
 
 \subsection{OpenNebula}
-OpenNhebula is open source project capable of building IaaS solution, so it is technically an orchestrator. However it is not only an orchestrator but complete solution to build \Ac{IaaS}. It was initially created as an research project in 2005 and the first public release was in 2008. It is currently developed by the community in cooperation with OpenNebula Systems.
+OpenNebula is open source cloud OS capable of building IaaS solution, so it is technically an orchestrator. \cite{opennebula} However it is not only an orchestrator but complete solution for datacenter orchestration capable to build \Ac{IaaS}. It was initially created as an research project in 2005 and the first public release was in 2008. It is currently developed by the community in cooperation with OpenNebula Systems.
 
-It is completely platform agnostics so mayor virtualization techniques can be used, supported is \Ac{KVM}, XEN and VMware at current time but it is possible to develop modules for another virtualization platforms. There is for example driver OneLXC developed by China Mobile and this driver brings support for \Ac{LXC} hosts and containers.
+It is completely platform agnostics so mayor virtualization techniques can be used. \Ac{KVM}, XEN and VMware is supported at current time but it is possible to develop modules for other virtualization platforms. There is for example driver OneLXC developed by China Mobile and this driver brings support for \Ac{LXC} hosts and containers.
+
+Project architecture is module and can be modified according to system requirements. There is one node called frontend which is responsible for orchestration and other nodes are used as computing nodes, i. e. hypervisors. It is not required to dedicated separate hardware node for frontend because it can be deployed on physical server together with computing node. However it is recommended to deployed frontend as a virtual machine in \Ac{HA} since it is more flexible and robust. Sample physical infrastructure is depicted in figure \ref{img:opennebula-arch}.
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[width=0.8\textwidth]{opennebula-arch.png}
+	\end{center}
+	\caption{OpenNebula architecture}
+	\label{img:opennebula-arch}
+\end{figure}
+
+Frontend acts orchestrator and uses additional modules to operate cloud infrastructure. There modules are universal to work with various underlying systems and each module must provide standardized interface for orchestrator. Modules and functions as defined in \cite{opennebula} are:
+\begin{description}
+	\item[Infrastructure and cloud drivers] enable access to infrastructure and cloud providers
+	\item[Virtual machine manager] is used for managing \Ac{VM}s and executing action on them
+	\item[Network manager] provide network configuration and management
+	\item[Storage manager] supply storage for services and customers
+	\item[Image manager] maintain library of \Ac{VM} images
+	\item[Information manager] is collecting runtime information about physical infrastructure, \Ac{VM}s and other devices
+	\item[Authentication and authorization] is used to authenticate users, store information about them, their permission and quotas
+	\item[Accounting and auditing] gather information about resource usage and can be used to generate billing data
+	\item[Federation manager] provide mechanism to access remote cloud providers
+	\item[Scheduler] manages initial placement of new \Ac{VM}s according to scheduling policy
+	\item[Administrative tools] provide interface for users and administrator to perform task on cloud system
+	\item[Service manager] can work with group of interconnected \Ac{VM}s as with one service with defined requirements and deployment rules
+\end{description}
+
+
+% control
+
+% datastore
+
+% networkig
+
 
 -----
 
 
-
-It is infrastructure agnostic so it can manage different hypervisors, storage and networks. It is even hypervisor agnostics because virtualization platform is not limited. Currently supported h
-
-
-It is primary targeted for private and hybrid cloud, but it can be used in every deployment model. OpenNebula is fairly simple, but its architecture is modular and thus it can be extended with many modules.
 
 % hodit nějakou špínu
