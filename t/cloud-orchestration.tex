@@ -21,8 +21,7 @@ It is necessary to use orchestration for every cloud solution because it is not 
 
 % configuration management
 There exists actually one more step between completely manual management and orchestration and it defined by using configration management. Configuration management solution is used for uniform management of configuration and executing repetitive task. It is possible to develop own solution or use any software available. For example Ansible, Puppet or SaltStack are well know open-source softwares. Configuration management software can be instegrated into orchestrator and used as a interlayer between orchestrator and performed actions.
-
-Ansible is used for virtual machine configuration used in practical part of this thesis as well as for installation and configuration of OpenNebule IaaS cloud. It creates cloud environemnt with defined parameters and prepare initial configuration so it significantly shorten time required for installation and also eliminates configuration mistakes.
+Ansible is used for virtual machine configuration used in practical part of this thesis as well as for installation and configuration of OpenNebule IaaS cloud. It creates cloud environemnt with defined parameters and prepare initial configuration so it significantly shorten time required for installation and also eliminates configuration mistakes.  
 
 \subsection{OpenNebula}
 OpenNebula is open source cloud OS capable of building IaaS solution, so it is technically an orchestrator. \cite{opennebula} However it is not only an orchestrator but complete solution for datacenter orchestration capable to build \Ac{IaaS}. It was initially created as an research project in 2005 and the first public release was in 2008. It is currently developed by the community in cooperation with OpenNebula Systems.
@@ -55,15 +54,39 @@ Frontend acts orchestrator and uses additional modules to operate cloud infrastr
 	\item[Service manager] can work with group of interconnected \Ac{VM}s as with one service with defined requirements and deployment rules
 \end{description}
 
-
 % control
+Orchestration is performed by frontend and remote tasks are executed at nodes using \Ac{SSH}. There is a single point of failure because frontend may go down so it is recommended to use \Ac{HA} solution and minimize possibility of frontend unavailability. However frontend failure does not affect running virtual machines since they stay online but monitoring will stop and it will not be possible to execute any action on virtual machines.o
 
 % datastore
+\subsubsection{Datastores}
+Storage part of OpenNebula system is called datastore. It is abstraction of physical storage and is used to store persistent and non-persistent data. Persistent data are preserved during whole \Ac{VM} life cycle and non-persistent objects are restored to default state after virtual machine recreation. There are three types of datastore according to type and format of stored data:
+\begin{description}
+	\item[image] datastore is used to store images of non-running virtual machines
+	\item[system] datastore hold images used of running \Ac{VM}s
+	\item[files] datastore is used to save single files like kernels, contextualization data and files which are stored alone, meaning not as part of image
+\end{description}
 
-% networkig
+The image of virtual machine is cloned from image datatastore to system datatastore during deployment phase and then copied back after shutdown if image is persistent. Non-persistent images are not save back to system datastore so they can be directly destroyed. It is necessary to select technology for transfer to system datastore at nodes. There are options listed below, but it is possible create script for any other method original scripts are located at /var/lib/one/remotes/\{datastore,tm\}/.\footnote{It is necessary to run \Cmd{onehost sync} after changing any remote script at fronend.}
+\begin{description}
+	\item[shared] is filesystem directory and OpenNebula does not care about sharing technology, it just expects directory to be available on every node
+	\item[ssh] can be used to transfer the images, it is always available but also vastly slow
+	\item[vmfs] copies images using vmkfstools (VMware)
+	\item[qcow] driver uses qemu-qcow to handle images
+	\item[ceph] use ceph cluster to store images as \Ac{RBD}s
+	\item[lvm] images are shared using clustered LVM
+\end{description}
 
+% networking
+\subsubsection{Networking}
+OpenNebula provide virtual network to every running \Ac{VM} so networking driver is run during virtual machine deployment and it is connected to virtual network according to virtual network definition. Networking driver can provide virtual machine isolation and basic network configuration. Network manager manages leased \Ac{IP} addresses\footnote{\Ac{IPv6} is supported as well as legacy \Ac{IPv4}} and generates contextualization.
+% dummy
+The simplest network driver is called dummy and only add \Ac{VM}'s interface info bridge using bridge-utils. Destination bridge must be configured in advance. This drive does not provide any additional functionality but it can be used as an example for write customized network drives or customized by hooks.
 
------
+% fw
+Little more advanced driver is fw and it does the same job as dummy driver but it can configure firewall too. Firewall rules are applied at physical host so it is not necessary to install any software into virtual machine. Iptables package must be install on node to use this driver and iptables rules are created after \Ac{VM} deployment and removes after shutdown. \Ac{TCP} and \Ac{UDP} ports can be whitelisted or blacklister and it is also possible to drop incoming \Ac{ICMP} packets. Driver's capabilities can be easily extended by editing scripts located at /var/lib/one/remotes/vnm/fw/\{pre,post,clean\}.
+
+% 801.1Q
+802.1Q driver uses \Ac{VLAN}s to isolate virtual machines. It creates bridge for every virtual network, assigns \Ac{VLAN} id to this bridge and attaches physical interface defined in PHYDEV variable. Physical interface is in trunk mode because it transfers already tagged Ethernet frames. This approach is beneficial because \Ac{VLAN} aware network switch can be used to forward tagged traffic. \Ac{VLAN} support is required on nodes so it is necessary to load kernel module called \Name{8021q} or compile support directly into the kernel. \Ac{VLAN} id is calculating as a sum of $CONF[:start\_vlan]$ from /var/lib/one/remotes/vnm/OpenNebulaNetwork.rb and virtual network id, however both can be edited or course.
 
 
 
