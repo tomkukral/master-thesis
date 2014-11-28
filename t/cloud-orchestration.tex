@@ -78,16 +78,71 @@ The image of virtual machine is cloned from image datatastore to system datatast
 
 % networking
 \subsubsection{Networking}
-OpenNebula provide virtual network to every running \Ac{VM} so networking driver is run during virtual machine deployment and it is connected to virtual network according to virtual network definition. Networking driver can provide virtual machine isolation and basic network configuration. Network manager manages leased \Ac{IP} addresses\footnote{\Ac{IPv6} is supported as well as legacy \Ac{IPv4}} and generates contextualization.
+OpenNebula can assign virtual network to every running \Ac{VM} so networking driver is run during virtual machine deployment and virtual machine is connected to virtual network according to virtual network definition. Networking driver can provide virtual machine isolation and basic network configuration. Network manager takes care about leased \Ac{IP} addresses\footnote{\Ac{IPv6} is supported as well as legacy \Ac{IPv4}} and generates contextualization.
+
 % dummy
-The simplest network driver is called dummy and only add \Ac{VM}'s interface info bridge using bridge-utils. Destination bridge must be configured in advance. This drive does not provide any additional functionality but it can be used as an example for write customized network drives or customized by hooks.
+The simplest network driver is called dummy and \Ac{VM}'s interface is only added info bridge using bridge-utils. Destination bridge must be configured in advance. This drive does not provide any additional functionality but it can be used as an example for writing customized network drives. Every network driver can be extended with hooks too.
 
 % fw
-Little more advanced driver is fw and it does the same job as dummy driver but it can configure firewall too. Firewall rules are applied at physical host so it is not necessary to install any software into virtual machine. Iptables package must be install on node to use this driver and iptables rules are created after \Ac{VM} deployment and removes after shutdown. \Ac{TCP} and \Ac{UDP} ports can be whitelisted or blacklister and it is also possible to drop incoming \Ac{ICMP} packets. Driver's capabilities can be easily extended by editing scripts located at /var/lib/one/remotes/vnm/fw/\{pre,post,clean\}.
+Little more advanced driver is fw and it does the same job as dummy driver but it can configure firewall too. Firewall rules are applied at physical host so it is not necessary to install any software into virtual machine. Iptables package must be install on node to use this driver. Firewall rules described in figure \ref{code:fw} are created after \Ac{VM} deployment and removed after shutdown. \Ac{TCP} and \Ac{UDP} ports can be whitelisted or blacklisted and it is also possible to drop incoming \Ac{ICMP} packets. Driver's capabilities can be easily extended by editing scripts located at /var/lib/one/remotes/vnm/fw/\{pre,post,clean\}.
+
+\begin{figure}[htb]
+\caption{Iptables rules created by fw network driver}
+\label{code:fw}
+\begin{verbatim}
+# Create a new chain for each network interface
+-A FORWARD -m physdev --physdev-out <tap_device> -j one-<vm_id>-<net_id>
+# Accept already established connections
+-A one-<vm_id>-<net_id> -p <protocol> -m state --state ESTABLISHED \
+-j ACCEPT
+# Accept the specified <iprange>
+-A one-<vm_id>-<net_id> -p <protocol> -m multiport --dports <iprange> \
+-j ACCEPT
+# Drop everything else
+-A one-<vm_id>-<net_id> -p <protocol> -j DROP
+
+# Create a new chain for each network interface
+-A FORWARD -m physdev --physdev-out <tap_device> -j one-<vm_id>-<net_id>
+# Drop traffic directed to the iprange ports
+-A one-<vm_id>-<net_id> -p <protocol> -m multiport --dports <iprange> \
+-j DROP
+
+# Create a new chain for each network interface
+-A FORWARD -m physdev --physdev-out <tap_device> -j one-<vm_id>-<net_id>
+# Accept already established ICMP connections
+-A one-<vm_id>-<net_id> -p icmp -m state --state ESTABLISHED -j ACCEPT
+# Drop new ICMP connections
+-A one-<vm_id>-<net_id> -p icmp -j DROP
+\end{verbatim}
+\end{figure}
 
 % 801.1Q
-802.1Q driver uses \Ac{VLAN}s to isolate virtual machines. It creates bridge for every virtual network, assigns \Ac{VLAN} id to this bridge and attaches physical interface defined in PHYDEV variable. Physical interface is in trunk mode because it transfers already tagged Ethernet frames. This approach is beneficial because \Ac{VLAN} aware network switch can be used to forward tagged traffic. \Ac{VLAN} support is required on nodes so it is necessary to load kernel module called \Name{8021q} or compile support directly into the kernel. \Ac{VLAN} id is calculating as a sum of $CONF[:start\_vlan]$ from /var/lib/one/remotes/vnm/OpenNebulaNetwork.rb and virtual network id, however both can be edited or course.
+802.1Q driver uses \Ac{VLAN}s to isolate virtual machines. It creates bridge for every virtual network, assigns \Ac{VLAN} id to this bridge and attaches physical interface defined in PHYDEV variable. Physical interface is in trunk mode because it transfers already tagged Ethernet frames. This approach is beneficial because \Ac{VLAN} aware network switch can be used to forward tagged traffic. \Ac{VLAN} support is required on nodes so it is necessary to load kernel module called \Name{8021q} or compile support directly into the kernel. \Ac{VLAN} id is calculated as a sum of $CONF[:start\_vlan]$ from /var/lib/one/remotes/vnm/OpenNebulaNetwork.rb and virtual network id, however both can be edited or course.
 
+% ebtables
+Driver called ebtables is simple but can be useful is many cases. It uses ebtables package and create ebtables rules described in figure \ref{code:ebtables}. It effectively prevent virtual machine from changing it's assigned \Ac{MAC} address and eliminates possibility of mac spoofing.
 
+\begin{figure}[htb]
+\caption{Ebtables rules uses by ebtables network driver}
+\label{code:ebtables}
+\begin{verbatim}
+-s ! <mac_address>/ff:ff:ff:ff:ff:0 -o <tap_device> -j DROP
+-s ! <mac_address> -i <tap_device> -j DROP
+\end{verbatim}
+\end{figure}
 
-% hodit nějakou špínu
+% openvswitch
+The most advanced driver is is Open vSwitch (\Ac{OVS}). This driver provides same network isolation functionality as 802.1Q driver but also enables to use special functions provided by Open vSwitch, for example OpenFlow rules or using logically centralized network controller.
+
+There are two variants of this Open vSwitch driver:
+\begin{itemize}
+	\item ovswitch can be used only with \Ac{KVM} nodes
+	\item ovswitch\_brcomat can be used with \Ac{KVM} and Xen, however this driver requires compatibility layer for bridging
+\end{itemize}
+
+I think that this driver is the best choice because it provides all functionality of Open vSwitch. It means that is it possible to use advanced filtering, NetFlow, traffic shaping and the most important thing is OpenFlow. OpenFlow is control plane protocol for forwarding plane configuration so it is possible to decouple control plane from switch and let network controller to manage switches remotely. It is possible to manage physical and virtual switches together and create one converged network. I think that Open vSwitch driver is the best choice if advanced configuration is needed apart from use cases when simple bridging is sufficient
+
+However this drive is the most difficult to configure because Open vSwitch must be installed on nodes. It is necessary to have \Ac{OVS} support in kernel and install userspace tools. Last version of \Ac{OVS} is 2.3 and it support linux kernel version 2.6.32 to 3.14 so new kernel version can not be used to run nodes with Open vSwitch. However mayor distribution use compatible kernels, at least version with long term support. For example latest Ubuntu server version 14.04 is using kernel 3.13.0 so there is not any incompatibility problem.
+
+\subsubsection{Templates}
+\subsubsection{Contextualization}
