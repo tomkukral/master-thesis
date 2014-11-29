@@ -184,16 +184,11 @@ OS=[
 \end{figure}
 
 \subsubsection{Contextualization}
-It is common than single virtual machine disk image is running in many instances and it can be used for horizontal scaling or failover. This group of virtual machines is called pool. However it is necessary to clone disk image from image repository to system repository and second even more important task is to adjust configuration parameters. It is not appropriate to run every machine in pool with same configuration since at least \Ac{MAC} address, \Ac{IP} address and hostname should be changed.
+It is common that single virtual disk image is running in many instances and it can be used for horizontal scaling or failover. The group of virtual machines deployed for same purpose is called pool. It is necessary to clone disk image from image repository to system repository and second even more important task is to adjust configuration parameters. It is not applicable to run each machine from single pool with same configuration since at least \Ac{MAC} address, \Ac{IP} address and hostname should be changed.
 
-It would be possible to change above mentioned parameters by editing image before first boot. Hooks can be used to mount disk image, perform required changes, unmount it and then boot virtual machines. However this solution is slow and computation expensive.
+Changing parameters before first boot is another possible solution. Hooks can be used to mount disk image, perform required changes, unmount it and boot virtual machine. However this solution is slow and computation expensive.
 
-Another approach is imperative configuration after boot. Every machine can use same \Ac{IP} address during first boot and it will be changes by any configuration management system, e.g. Ansible or Puppet. There are some problem which are not easy to solve and the most serious is simultaneous booting of multiple virtual machines because it is not possible to share single \Ac{IP} addres preconfigured in disk image. Change of \Ac{IP} address will cause interruption of any ongoing communication including management channel (\Ac{SSH} for example). This approach is not going to scale well because there is central authority which would be responsible for initial configuration.
-
-
-
-
-
+Another approach is performing imperative configuration after initial boot. Every machine can use same \Ac{IP} address during first boot and it will be changed by any configuration management system, e.g. Ansible or Puppet. There are some problems which are not easy to solve and the most serious is simultaneous booting of multiple virtual machines because it is not possible to share single \Ac{IP} address preconfigured in disk image. Change of \Ac{IP} address will cause interruption of any ongoing communication including management channel (\Ac{SSH} for example). This approach will not scale well because there is a central authority responsible for initial configuration.
 
 \begin{figure}[htb]
 \caption{Contextualization file}
