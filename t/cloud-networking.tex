@@ -178,14 +178,14 @@ Another problem with DNS load balancing, especially failover, is \Ac{DNS} pinnin
 \begin{figure}[htb]
 \caption{Example zone file for DNS load balancing}
 \label{code:zone}
-\begin{verbatim}
-app.example.com 360 IN 	AAAA 2001:db8::1
-app.example.com 360 IN 	AAAA 2001:db8::2
-app.example.com 360 IN 	AAAA 2001:db8::3
-app.example.com	360 IN 	A 192.0.2.1
-app.example.com	360 IN 	A 192.0.2.2
-app.example.com	360 IN 	A 192.0.2.3
-\end{verbatim}
+\begin{verbatimtab}
+app.example.com	360	IN	AAAA	2001:db8::1
+app.example.com	360	IN	AAAA	2001:db8::2
+app.example.com	360	IN	AAAA	2001:db8::3
+app.example.com	360	IN	A	192.0.2.1
+app.example.com	360	IN	A	192.0.2.2
+app.example.com	360	IN	A	192.0.2.3
+\end{verbatimtab}
 \end{figure}
 
 \subsubsection{Application level load balancing}

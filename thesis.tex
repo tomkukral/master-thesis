@@ -7,10 +7,8 @@
 \usepackage[utf8]{inputenc}
 %\usepackage{graphicx}
 \usepackage[draft]{graphicx}
-
 \usepackage[unicode=true]{hyperref}
 \usepackage{indentfirst}
-\usepackage{import}
 \usepackage{import}
 \usepackage{moreverb}
 \usepackage{listings}
@@ -21,10 +19,13 @@
 \usepackage{ifthen}
 \usepackage{cite}
 
+%\usepackage{tocloft}
+
 \usepackage[toc,acronym,nonumberlist,style=long,sort=standard]{glossaries}
 \setlength{\glsdescwidth}{0.7\linewidth}
 \renewcommand*{\glsgroupskip}{}
 \makeglossaries
+
 
 % level of table of content
 \setcounter{tocdepth}{1}
@@ -72,6 +73,10 @@
     \Huge \bfseries #1\par\nobreak
     \vskip 40\p@
   }}
+
+
+\renewcommand*\l@figure{\@dottedtocline{1}{1.5em}{3em}}% 3em instead of 2.3em
+\let\l@table\l@figure
 
 \makeatother
 
