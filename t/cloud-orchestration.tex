@@ -184,15 +184,31 @@ OS=[
 \end{figure}
 
 \subsubsection{Contextualization}
-It is common that single virtual disk image is running in many instances and it can be used for horizontal scaling or failover. The group of virtual machines deployed for same purpose is called pool. It is necessary to clone disk image from image repository to system repository and second even more important task is to adjust configuration parameters. It is not applicable to run each machine from single pool with same configuration since at least \Ac{MAC} address, \Ac{IP} address and hostname should be changed.
+It is common that single virtual disk image is running in many instances and it can be used for horizontal scaling or failover. The group of virtual machines deployed for same purpose is called pool. It is necessary to clone disk image from image repository to system repository for every machine and second even more important task is to adjust configuration parameters. It is not applicable to run each machine from single pool with same configuration since at least \Ac{MAC} address, \Ac{IP} address and hostname need to be changed.
 
-Changing parameters before first boot is another possible solution. Hooks can be used to mount disk image, perform required changes, unmount it and boot virtual machine. However this solution is slow and computation expensive.
+Changing parameters before first boot is one of available solutions. Hooks can be used to mount disk image, perform required changes, unmount it and boot virtual machine. However this solution is slow and computation expensive.
 
-Another approach is performing imperative configuration after initial boot. Every machine can use same \Ac{IP} address during first boot and it will be changed by any configuration management system, e.g. Ansible or Puppet. There are some problems which are not easy to solve and the most serious is simultaneous booting of multiple virtual machines because it is not possible to share single \Ac{IP} address preconfigured in disk image. Change of \Ac{IP} address will cause interruption of any ongoing communication including management channel (\Ac{SSH} for example). This approach will not scale well because there is a central authority responsible for initial configuration.
+Another approach is performing imperative configuration after initial boot. Every machine can use same \Ac{IP} address during first boot and it will be changed by a configuration management system, e.g. Ansible or Puppet. There are some problems which are not easy to solve and the most serious is simultaneous booting of multiple virtual machines because it is not possible to duplicate \Ac{IP} within single virtal network. Change of \Ac{IP} address will cause interruption of any ongoing communication including management channel (\Ac{SSH} for example). This approach will not scale well because there is a central authority responsible for initial configuration and it is not possible to boot many virtual machines simultaneously due to \Ac{IP} duplication problem.
+
+Solution used by OpenNebula is called contextualization and it solve all of problems mentioned above. First problem to be solved is how to deliver contextualization information to virtual machine. There are two contextualization mechanisms with totally different approach.
+
+Auto \Ac{IP} assignment is capable to configure only \Ac{IP} address. Hypervisor can assign \Ac{MAC} address of \Ac{VM}'s network interface and this address is used for \Ac{IP} address autogeneration. Virtual machine's disk image need to be updated with file /etc/init.d/vmcontext.sh which is executed during boot in runlevel 2. This \Ac{bash} script parses 3.-6. group of hexadecimal numbers from \Ac{MAC} address, converts each group to decimal base and assigns this as an \Ac{IP} address. It usually just generates configuration and restarts networking script, but it depends on distribution used and can be changed really easily.
+However there is always used 255.255.255.0 network mask thus this contextualization approach can not be used for networks with different mask. Example of \Ac{IP} generation is in equation \ref{eq:macip}. Autogeneration algorithm can be upgraded to work with different network mask by modifying vmcontext.sh script to read mask from first or second group, but first three groups of \Ac{MAC} address are \Ac{OUI} so generated \Ac{MAC} addresses may collide with range already assigned to an existing organization.
+\begin{equation}
+	\label{eq:macip}
+	02:00:\underline{0a}:\underline{68}:\underline{21}:\underline{08} \rightarrow 10.10.33.8
+\end{equation}
+
+Second contextualization approach is called general contextualization and it is more mighty than previous one. File named context.sh is used to save all information and configuration. This file is generated before deployment of virtual machine and it can be easily extended with user defined variables.
+Contextualization file is packed into binary image with ISO 9660 filesystem and configured as disk in virtual machine.
+It is still necessary to provide additional script to read and apply contextualization but it is much more powerful than previous approach. Main script is called vmcontext and it is responsible for mounting image with contextualization, loading contextualization variables and executing scripts /etc/one-context.d/*. 
+
+There are already prepared scripts for configuration of network and dns, generating autorized\_keys file, mounting swap, setting hostname and executing addition script supplied from files datastore. Contextualization file used in practical part is in figure \ref{code:contextualization}. There are two custom variable THEMIS\_TYPE and THEMIS\_USER defined in template and used by middleware. Purpose of other variables is obvious.
+
 
 \begin{figure}[htb]
 \caption{Contextualization file}
-\label{code:template}
+\label{code:contextualization}
 \begin{verbatimtab}
 # Context variables generated by OpenNebula
 CONTEXTUALIZED='1'
