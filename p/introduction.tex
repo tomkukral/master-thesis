@@ -1,0 +1,21 @@
+%pdflatex-../thesis.tex
+% vim:spell spelllang=en_us
+
+The goal of practical part is to develop system capable to measure virtual machine availability during migration. 
+
+% virtualization
+Virtualization is enabling technology for \Ac{VM} migration since it decouples virtual machine from physical server. However there are some dependencies which must be transfered together with virtual machine such as virtual network and disk image. Transfer of disk image can be solved by shared storage or using cold migration, but it is not very clear how will migration affect networking communication.
+
+% network
+Network connected to virtual machine is called virtual network but there need to be physical infrastructure capable to transfer signal between virtual server and other side of communication (usually customer). It is possible to migrate virtual machine to any server almost without any limitations but there may be serious problem with virtual network. 
+
+Virtual machine availability can be performed on many layers. Application layer can be tested by simulating customer requests. There is a program called ApacheBench for example and it is capable to send many parallel request to \Ac{HTTP} servers and measure statistics like time for request, transfered bytes etc. There are other similar benchmarks as dkftpbench or SPECweb99 but they are always limited to one type of service or protocol. I think that this limitation is critical for virtual machine migrations testing and it is necessary to use something more general.
+
+General measurement procedure should be service and platform independent so only one available solution is to perform measurement directly on network layer. Statistics acquired by network measurement may be approximately converted and estimation of service availability can be done. Network measurement can give some information about network during migration as well. Packet loss is the most relevant sign for virtual machine availability during migration but there are other 
+
+% migration time
+
+
+
+%I have developed application called Themis\footnote{Themis is Greek Titaness usually depicted holding scales and it a reason why application is called Themis.} which establish session 
+

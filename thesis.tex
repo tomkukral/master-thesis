@@ -5,8 +5,8 @@
 \usepackage[english]{babel}
 \usepackage[top=25mm, bottom=15mm, includefoot, left=30mm, right=30mm]{geometry}
 \usepackage[utf8]{inputenc}
-\usepackage{graphicx}
-%\usepackage[draft]{graphicx}
+%\usepackage{graphicx}
+\usepackage[draft]{graphicx}
 \usepackage[unicode=true]{hyperref}
 \usepackage{indentfirst}
 \usepackage{import}
@@ -234,38 +234,24 @@ In~\Place~at~\Datefull \hfill \hbox to 65mm{\tiny\dotfill}
 		\section{Orchestration software}
 		\subimport{./t/}{t/cloud-orchestration}
 
-	%chapter{Migration of virtual machines}
+	%\chapter{Migration of virtual machines}
+	%	cold/live
 
 	%\chapter{Distributed data center}
 
 	\pagebreak
 
-	%Sharing resources - maximization of effectiveness
-	%Public/private/hybrid
-	%metrics
-	%SOA - service oriented architecture
-	%Routing requests to virtual machines
-	%Network environment
-	%	overlays
-	%Data storage
-	%Migration
-	%	cold/live
 	%Measurement methods
 	%Economy
 	%	capex -> opex
 	%	pay as you goo
 \part{Practical}
+	\subimport{./p/}{p/introduction}
 	\chapter{Methodology overview}
 
-	\chapter{Framework}
+	\chapter{Themis application}
 
 	\chapter{Results}
-
-	
-
-
-%zdroje
-%	\subimport{/}{zdroje}
 
 %seznam zkratek
 \printglossary[type=acronym,title=List of Abbreviations,toctitle=List of Abbreviations]
