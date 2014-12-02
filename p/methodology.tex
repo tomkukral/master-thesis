@@ -5,16 +5,6 @@ First thing necessary to be defined is methodology used. Testing framework shoul
 
 Primary task of an application is to measure availability of virtual machine during it's live migrations. There are two virtual machines used: \Ac{VM} under test and supervisor. Virtual machine is migrated between hypervisor while measure session between \Ac{VM} and supervisor is established. Supervisor is deployed as a virtual machine because it can be moved to any location and actually change testing parameters, but supervisor is fixed and is not migrating during measurement session. It can deployed as physical machine as well.
 
-Management of \Ac{VM}, supervisor and orchestrator is required to carry out one measurement session. It involves these steps:
-\begin{enumerate}
-	\item load measure session parameters
-	\item launch measurement agents on \Ac{VM} and supervisor
-	\item request migration (\Ac{VM} is migrated, supervisor is fixed)
-	\item wait for migration to finish (e.i \Ac{VM} is in running state)
-	\item end measurement session
-	\item check whether migration was correct
-\end{enumerate}
-
 It is expected that \Ac{VM} retains it's \Ac{IP} address because there is measurement session established and it would break in case of address change. It is possible, however, to measure migration with \Ac{IP} change, but it is necessary to use \Ac{VPN} or advanced routing to provide \Ac{VM}-supervisor connectivity.
 
 Framework is ready to measure cold and live migration. Live migrations can be used without any special configuration, but \Ac{VM} must be prepared to perform cold migration. Machine is powered-off during migration and then booted at destination hypervisor so it is required to start migration agent right after booting. This may be achieved by init script or process monitoring framework, e.g. \href{http://godrb.com/}{God}.
@@ -25,4 +15,28 @@ Session between \Ac{VM} need to be established to obtain data for analysis. Pack
 Traffic generator are investigated and compared in \cite{traffic-generators1} and \cite{traffic-generators2}. I have decided to use iperf because this tool is widely available, runs on many platforms and gives similar results as others without any significant deviation. It really does not matter which tool is used because it is very easy to adjust management module and agent code to use different tool.
 
 \section{Management}
-It is necee
+Managements access is used to orchestrate virtual machines as well as for orchestrating an orchestrator. These steps need to be performed for one session: 
+\begin{enumerate}
+	\item load measure session parameters
+	\item launch measurement agents on \Ac{VM} and supervisor
+	\item request migration (\Ac{VM} is migrated, supervisor is fixed)
+	\item wait for migration to finish (e.i \Ac{VM} is in running state)
+	\item end measurement session
+	\item check whether migration was correct
+\end{enumerate}
+
+Various protocols can be used to run commands on virtual machines but \Ac{SSH} is most common and provide all required features as well as sufficient security level. 
+
+Management module must be able to control OpenNebula orchestrator and acquire information about hosts and virtual machines. There are various methods how to control orchestrator. OpenNebula provides low-level \Ac{API} via \Ac{XML}-\Ac{RPC} with wrappers available in Java and Ruby. There is also an \Ac{OCCI} interface implemented, but \Ac{XML}-\Ac{RPC} interface seems to be better choice because it is tailored for OpenNebula.
+
+Security aspect must be taken into account because it is unacceptable to allow unauthorized access to OpenNebula cloud interface and \Ac{SSH} console of virtual machines. It is also not acceptable to save passwords into source code repository so another methods need to be used. 
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[width=0.9\textwidth]{methodology.png}
+	\end{center}
+	\caption{Methodology overview}
+	\label{img:methodology}
+\end{figure}
+
+
