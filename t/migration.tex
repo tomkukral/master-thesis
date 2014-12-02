@@ -6,5 +6,15 @@
 
 Virtualization is enabling technology for cloud computing and it provides separation of running operating system (\Ac{VM}) from physical machine. Software can be fully decoupled from hardware and located anywhere in datacenter or even migrated between datacenters. 
 
-TODO - finish
+Virtual machines (\Ac{VM}) are running on physical servers called nodes or hypervisors. Migration is process of shifting virtual machine from source hypervisor to destination hypervisor. Migration should be undetectable for virtual machine since software running inside must stay running and remain intact. It can be theoretically possible to detect ongoing migration but detection will be based performance changes so it should not be possible to detect hypervisor \Ac{VM} is running on.
 
+% parameters - downtime, total migration time, requrements
+
+There are two different types of migration - cold and live. Both types migrate virtual machine from source hypervisor to destination, but difference is in migration parameters and method for solving boundary value problem.
+
+\section{Cold migration}
+Procedure of cold migration is simpler than live migration. Virtual machine must be in power-off state before migration so disadvantage of this method is obvious - all running processes need to be terminated and total operating system shutdown is needed.
+
+Service downtime for cold migration is much longer compared to live migration, because is is required to shutdown \Ac{VM} and virtual machine is not running during migration. However complete virtual machine shutdown can be beneficial for virtual machines with intensive memory writes because it significantly decrease total migration time. 
+
+Cold migration is suitable for virtual machines which are part of cluster with working failover since it shutdown of single virtual machine is not going to cause service outage. Another appropriate case is migration without shared storage because sharing disk image between source and destination node is impossible and thus image must be transfered during migration, however disk transfer may be beneficial when it is necessary to change datastore or even virtualization technology.
