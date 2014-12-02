@@ -1,13 +1,13 @@
 %pdflatex-../thesis.tex
 % vim:spell spelllang=en_us
 
-First thing necessary to be defined is methodology used. Testing framework must be universal as much aas possible so I have decided to measure performance network layer since this it the most universal technology used. Same is also applied to used technologies so it should be possible to run an application on many platform. 
+First thing necessary to be defined is methodology used. Testing framework should be universal as much as possible so I have decided to measure performance network layer since this it the most universal technology used. Same is also applied to used technologies so it should be possible to run an application on many platform. 
 
 Primary task of an application is to measure availability of virtual machine during it's live migrations. There are two virtual machines used: \Ac{VM} under test and supervisor. Virtual machine is migrated between hypervisor while measure session between \Ac{VM} and supervisor is established. Supervisor is deployed as a virtual machine because it can be moved to any location and actually change testing parameters, but supervisor is fixed and is not migrating during measurement session. It can deployed as physical machine as well.
 
 Management of \Ac{VM}, supervisor and orchestrator is required to carry out one measurement session. It involves these steps:
 \begin{enumerate}
-	\item load task definition
+	\item load measure session parameters
 	\item launch measurement agents on \Ac{VM} and supervisor
 	\item request migration (\Ac{VM} is migrated, supervisor is fixed)
 	\item wait for migration to finish (e.i \Ac{VM} is in running state)
@@ -15,7 +15,9 @@ Management of \Ac{VM}, supervisor and orchestrator is required to carry out one 
 	\item check whether migration was correct
 \end{enumerate}
 
-It is expected that \Ac{VM} keeps it's \Ac{IP} address because there is established measurement session it would break in case of address change. It is possible, however, to measure migration with \Ac{IP} change, but it is necessary to use \Ac{VPN} or advanced routing to provide \Ac{VM}-supervisor connectivity.
+It is expected that \Ac{VM} retains it's \Ac{IP} address because there is measurement session established and it would break in case of address change. It is possible, however, to measure migration with \Ac{IP} change, but it is necessary to use \Ac{VPN} or advanced routing to provide \Ac{VM}-supervisor connectivity.
+
+Framework is ready to measure cold and live migration. Live migration can be edited without any special configuration, but \Ac{VM} must be prepared to perform cold migration. Machine is powered-off during migration and then booted at destination hypervisor so it is required to start migration agent right after booting. This may be achieved by init script or using process monitoring framework, e.g. \href{http://godrb.com/}{God}.
 
 \section{Measurement session}
 Session between \Ac{VM} need to be established to obtain data for analysis. Packet generator and receiver need to be running on \Ac{VM} and supervisor. I have developed agents for running establishing sessions and exporting results back to the backend.
