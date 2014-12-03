@@ -51,6 +51,7 @@ Another way how to accomplish unlimited \Ac{VM} migrations is to use routinl for
 Higher layer is used to get more flexibility than lower level can offer. Main drawback of this solution is additinal complexity caused by routing and longer address swap, because it takes some time to propagate routing to new temporary address. It is not easy to perform live migration, because it is neccesary to change \Ac{IP} address of \Ac{VM}'s interface and thus open sessions will terminate.
 
 \subsection{Overlays}
+\label{par:overlays}
 Virtualization is used heavily these days, therefore it is necessary provide networking solution with at least same flexibility as virtualization offers. Multitenancy, \Ac{VM} migrations, fast reconfiguration and rapid deployment are most missing features of physical networks these days. It is currently possible to migrate virtual machines without service interruption, but there is still not clear solution how to perform migration across whole data center with maintaining \Ac{IP} address. Overlay networking is one of proposed solutions and it is supposed to bring additional abstraction layer capable of decoupling network from physical hardware. 
 Technologies capable to build overlay network are \Ac{VXLAN}, \Ac{STT} and \Ac{NVGRE}. 
 
@@ -232,7 +233,7 @@ There may be additional technologies integrated in load balancer box, for exampl
 
 Load balancer box provide advanced function but is introduce bottleneck and single point of failure. Rewriting of packet headers and maintaining mapping table are even more resource expensive than router described in anycast load balancing. This solution is suitable for legacy application without any possibility of adding load balancing capabilities. 
 
-\subsection{Firewall}
+%\subsection{Firewall}
 % firewall 
 
 

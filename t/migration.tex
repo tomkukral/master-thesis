@@ -12,6 +12,7 @@ Virtual machines (\Ac{VM}) are running on physical servers called nodes or hyper
 
 There are two different types of migration - cold and live. Both types migrate virtual machine from source hypervisor to destination, but difference is in migration parameters and method for solving boundary value problem.
 
+\section{Migration of resources}
 Virtual machine can be abstracted as a group of mutually cooperating resources. There resource are required for virtual machine operation and thus all of the resource need to be transfered to destination hypervisor during migration. Resources can be
 \begin{itemize}
 	\item \Ac{VM} parameters (e.g. number of \Ac{CPU}, allocated memory, virtual \Ac{NIC})
@@ -21,9 +22,9 @@ Virtual machine can be abstracted as a group of mutually cooperating resources. 
 	\item virtual network
 	\item memory
 \end{itemize}
-Migrating all of these resource may not be trivial because different migration approach must be used. Migration of \Ac{VM} parameters is trivial because it is just very small plain text, \Ac{XML} or \Ac{JSON} file.
+Migrating all of these resource may not be trivial because different migration approach must be used. Migration of \Ac{VM} parameters is easy because it is just very small plain text, \Ac{XML} or \Ac{JSON} file. There are technologies to migrate other resources, except physical devices attached to hypervisor.
 
-\section{Storage}
+\subsection{Storage}
 % images
 Image of system disk, as well as additional images, need to be available for destination hypervisor. Easiest solution is to transfer images during migration but it can take long time, consume all bandwidth available and thus significantly affects service performance as well as other tenant's traffic. Workaround based on dynamic rate-limiting is proposed in \cite{live-migration-of-vms}.
 
@@ -32,10 +33,25 @@ More advanced solution is using shared storage. This storage is shared between a
 
 I think that migration between datacenter (i.e. in distributed datacenter) should combine different technologies. It does not make sense to store all images in inter-datacenter shared storage because there is significant performance penalty caused by \Ac{IO} operations transfered over network. Migration can be realized in two steps. First image can be migrated from inter-datacenter to intra-datacenter storage and then whole virtual machine migration can be carried-out.
 
-
-\section{Network}
+\subsection{Network}
 % network
+Some of tenants may require to maintain Layer 2 connectivity after migration, but this practically mean that Layer 2 connectivity between hypervisors is needed. 
 
+It relative easy to build Layer 2 connectivity between hypervisors in single datacenter, but it gets much more complicated for distributed datacenter. Overlay networks described in \ref{par:overlays} are capable to spread Layer 2 between datacenters, so this technologies can be used if required by tenant. 
+
+However I think that it is better to build application without L2 connectivity between computing nodes, for example by using load-balancing approach on higher layers, because L2 connectivity is quite limiting for moving to another datacenter or cloud-bursting. It is better, at least in my opinion, to use other ways to provide communication between virtual machines than using overlays for geographically large installations.
+
+\subsection{Memory}
+Memory migration is necessary to preserve \Ac{VM} state during migration, i.e. perform live migration. It is not necessary to migrate memory for cold migration because virtual machine is powered-off and thus memory is actually empty during migration and can be easily recreated on destination hypervisor. 
+
+Migration procedure must be able to read \Ac{VM}'s memory at source node and create identical copy on destination node. However virtual machine is still running on source node and memory is constantly changing at source. Transfer mechanism proposed in \cite{live-migration-of-vms} introduce three phases of memory migration:
+\begin{description}
+	\item[push] Memory pages from source to destination and labels pages changed during transfer as \Uv{dirty}. Dirty pages are transfered in next round. However is is not possible to transfer all pages during this phase, because some pages get dirtied faster than they can be transfered.
+	\item[stop-and-copy] Virtual machine is paused and all remaining dirty pages are transfered. This phase is used to transfer remaining quickly dirtied pages as page dirtying is paused.
+	\item[pull] Virtual machine is already running on destination hypervisor but there can be pages which are not copied yet so they are transfered on-demand.
+\end{description}
+
+Serious complication is rapid page dirtying described in \cite{live-migration-of-vms}, caused by rapidly modified pages which are dirtied promptly after their transfer. This is caused by disproportion between memory write speed and network bandwidth because it is possible to write into memory much more faster than transfer dirty pages over network. Only one available solution is to use stop-and-copy phase and stop memory writing during transfer. However memory transmission can take long time and thus it can significantly increase service downtime, but total migration time will be reduced.
 
 \section{Cold migration}
 Procedure of cold migration is simpler than live migration. Virtual machine must be in power-off state before migration, so disadvantage of this method is obvious because all running processes need to be terminated and complete operating system shutdown is needed.
@@ -44,9 +60,10 @@ Service downtime for cold migration is much longer compared to live migration, b
 
 Cold migration is suitable for virtual machines which are part of cluster with working failover and shutdown of single virtual machine is not going to cause service outage. Another appropriate case is migration without shared storage and thus image must be transfered during migration, however disk transfer may be beneficial if it is necessary to change datastore or even virtualization technology.
 
+This type of migration is easier to perform in distributed datacenter than live migration because resources, like disk image, can be converted during transfer and shared storage is not required.
+
 
 \section{Live migration}
 Migration can be performed \Uv{live} almost without service disruption. According to measurements provided in \cite{live-migration-of-vms} can be downtime as low as $60~\Jed{ms}$ but it depends on application and infrastructure parameters.
 
-
-
+TODO: dopsat
