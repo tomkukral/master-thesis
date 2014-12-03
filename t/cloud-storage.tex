@@ -32,13 +32,11 @@ Filesystem storage is used to save files and it's attributes. Filesystem can be 
 
 % object storage
 Object storage is something between previously mentioned storage types since it is capable to save objects and access them similar way as accessing files in filesystem. However object storage is more general way of saving data and can be used to store various objects and it is not limited only to files. It provides very high level of storage abstraction because it is capable to operate on almost any data, access it in standardized way and decouples object from their location.
+\label{par:object-storage}
 
 It is even possible to build filesystem upon object storage and it is used for example in CephFS\footnote{\url{https://ceph.com/docs/master/cephfs/}}. This solution uses two pools of objects for \Uv{emulation} filesystem. Files are saved into ono pool as objects and related metadata are save in other pool. 
 
 \subsection{Network access}
-
-
-
 \begin{itemize}
 	\item redundancy is required to provide failover and eliminate data corruption in case of failure 
 	\item distribution help to spread load between nodes
@@ -47,9 +45,10 @@ It is even possible to build filesystem upon object storage and it is used for e
 	\item security must be taken into account because it is critical to avoid any unauthorized access or leakage
 \end{itemize}
 
+\label{par:storage-network}
 % 
 
-
+TODO finish network attached storage
 
 % file storage / block storage
 
