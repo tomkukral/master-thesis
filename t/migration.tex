@@ -64,6 +64,22 @@ This type of migration is easier to perform in distributed datacenter than live 
 
 
 \section{Live migration}
-Migration can be performed \Uv{live} almost without service disruption. According to measurements provided in \cite{live-migration-of-vms} can be downtime as low as $60~\Jed{ms}$ but it depends on application and infrastructure parameters.
 
-TODO: dopsat
+Migration can be performed \Uv{live} almost without service disruption. According to measurements provided in \cite{live-migration-of-vms} can downtime be as low as $60~\Jed{ms}$ but it depends on application and infrastructure parameters.
+
+Live migration provide administrator with tool for shifting virtual machines between hypervisors without any significant outage. It is beneficial for cloud administration and maintenance because it is possible to move \Ac{VM} as required. It allows to make hardware upgrades since all virtual machines can be migrated to another hypervisor, hypervisor can be upgraded and then \Ac{VM} migrated back. 
+It is extensively used for \Ac{IaaS} because infrastructure administrator can migrate machines without the need of root access into \Ac{VM}. 
+
+It is necessary to make migration in secure way so virtual machine must not stay unusable on both hypervisors. There are 4 basic step which need to be performed:
+\begin{enumerate}
+	\item \Ac{VM} is created on destination node, but it is paused.
+	\item Migration of resources is started. This include disk image migration (or sharing), memory migration and also ensuring that all other resource are available on destination node.
+	\item \Ac{VM} is paused on source node.
+	\item \Ac{VM} is resumed on destination node and deleted on source node.
+\end{enumerate}
+
+Cloud orchestrator usually require shared datastore for live migration of disk images, \Ac{NFS} or any distributed filesystem can be used. Live migration of 
+memory is performed by combination of push and stop-and-copy approach. Push phase is responsible to transfer most of the memory and stop-and-copy is used preferably to quickly move rest of memory. Migration mechanism should monitor duration of migration and memory writes because it may be necessary to switch to stop-and-copy phase even if significant amount of memory pages is still waiting to be transfered. This is cause by rapid page dirtying and necessary to stop virtual machine otherwise it would never finish migration.
+
+
+There are extra tasks which can be executed after successful migration. It is for example necessary to update \Ac{FDB} and \Ac{ARP} table on all intermediate network boxes because virtual machine changed it's location. Obvious solution is to sent gratuitous \Ac{ARP}, but some router may block this kind of \Ac{ARP} message. Virtual machine can send directed \Ac{ARP} messages to all addresses in it's cache as suggested in \cite{live-migration-of-vms}. It effectively bypass blockage and deliver the notification.
