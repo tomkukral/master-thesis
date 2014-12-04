@@ -4,9 +4,9 @@
 \documentclass[12pt,oneside,a4paper]{report} %pdf
 \usepackage[english]{babel}
 \usepackage[top=25mm, bottom=15mm, includefoot, left=30mm, right=30mm]{geometry}
-%\usepackage[utf8]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage[draft]{graphicx}
-\usepackage{graphicx}
+%\usepackage{graphicx}
 \usepackage[unicode=true]{hyperref}
 \usepackage{indentfirst}
 \usepackage{import}
@@ -39,6 +39,8 @@
 \newcommand{\Th}[1]{\textbf{#1}}
 
 \newcommand{\Cmd}[1]{\texttt{#1}}
+
+\newcommand{\Code}[1]{\texttt{#1}}
 
 \newcommand{\Name}[1]{\textit{#1}}
 
@@ -247,14 +249,22 @@ In~\Place~at~\Datefull \hfill \hbox to 65mm{\tiny\dotfill}
 	\subimport{./p/}{p/methodology}
 
 	\chapter{Themis application}
+		\subimport{./p/}{p/themis}
 		\section{Measure session}
+
 		\section{Virtual machines}
+
+		\section{Agent}
+		\subimport{./p/}{p/themis-agent}
+
 		\section{Application}
 			% backend
 			% frontend
 			% orchestrator
 			% database
 			% web server
+
+
 		
 
 	% měření pro elmag

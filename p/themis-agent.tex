@@ -1,0 +1,44 @@
+%pdflatex-../thesis.tex
+% vim:spell spelllang=en_us
+
+It was necessary to develop a script wrapper capable to parse iperf output and upload results to backend module. This script is called agent.rb, it is attached on on the CD and will be published in project repository. It is written in Ruby to be compatible with rest of the project.
+
+Agent script need to be available in virtual machine under test as well as in hypervisor. However distribution is fairly simple because it is just a single file (agent.rb) with a few dependencies. This file can be distributed manually, which is not very usable for large or frequent deployment. Automatic deployment using OpenNebula's contextualization is much more efficient since orchestrator takes care of saving file into \Ac{VM}s. 
+It is also possible to use configuration management system to upload this file and prepare environment to run migration. I have used Ansible to deploy agent.rb because it was necessary to update Ruby version. 
+
+There are two modes of running agent. Modes differ in packet generator parameters and required dependencies. Mode is determined by \Code{ARGV[0]} parameter, which is the first parameter after filename. It is necessary select correct mode and properly configure all parameters from table \ref{tab:agent-parameters} because measure session can not be established otherwise. Generator mode only generates packets and sends them to receiver so it require nothing more than Ruby and iperf available. Receiver mode is more advanced and it uploads results to backend besides receiving packet. Receiver mode require these dependencies
+\begin{itemize}
+	
+\end{itemize}
+
+% dependencies 
+Agent script uses some basic dependencies and it is required to install packages (gems) before first start. Both modes use IO class to read pipeline output from iperf program. This class is, howerve, part of Ruby core so it is not necessary to install it separately. Receriver 
+
+
+Generator mode is simpler and is 
+
+\begin{table}[htb]
+\begin{center}
+	\caption{Agent.rb paramaters}
+	\label{tab:agent-parameters}
+	\begin{tabularx}{\textwidth}{|r|l|l||l|X|}
+	\multicolumn{3}{c}{\Th{Generator mode}} & \multicolumn{2}{c}{\Th{Receiver mode}} \\
+	\hline
+	\# & {Parameter} & {Example}  & {Parameter} & {Example} \\
+	\hline
+	\hline
+	0 & Mode & generator & Mode & receiver \\
+	\hline
+	1 & Destination \Ac{IP} & 192.0.2.1 & Listen \Ac{IP} & 192.0.2.1 \\
+	\hline
+	2 & Destination port & 5004 & Listen port & 5004 \\
+	\hline
+	3 & Bandwidth & 1M & Upload \Ac{URL} & \url{http://backend/measure_transfers/23.json} \\
+	\hline
+	\end{tabularx}
+\end{center}
+\end{table}
+
+
+% iperf
+
