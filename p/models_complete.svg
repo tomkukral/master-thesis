@@ -12,13 +12,16 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="896.41876"
+   width="426.0369"
    height="1017.5"
-   viewBox="0 0 717.13501 814"
+   viewBox="0 0 340.82952 814"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.5 r10040"
-   sodipodi:docname="models_complete.svg">
+   sodipodi:docname="models_complete.svg"
+   inkscape:export-filename="/home/tom/school/predmety/diplomka/text/p/models_complete.png"
+   inkscape:export-xdpi="150.01474"
+   inkscape:export-ydpi="150.01474">
   <metadata
      id="metadata295">
     <rdf:RDF>
@@ -52,7 +55,7 @@
      fit-margin-top="20"
      inkscape:zoom="0.92776413"
      inkscape:cx="310.03024"
-     inkscape:cy="524.02244"
+     inkscape:cy="567.13685"
      inkscape:window-x="0"
      inkscape:window-y="26"
      inkscape:window-maximized="1"
@@ -184,33 +187,6 @@
   </g>
   <g
      class="node"
-     id="node3"
-     transform="translate(-253.365,798.5)">
-    <title
-       id="title70">OneOrchestrator</title>
-    <polygon
-       style="fill:none;stroke:#000000"
-       id="polygon72"
-       points="609,-319 609,-367 743,-367 743,-319 609,-319 " />
-    <text
-       style="font-size:14px;text-anchor:middle;font-family:'Times Roman,serif'"
-       id="text74"
-       font-size="14.00"
-       y="-350.39999"
-       x="676">OneOrchestrator</text>
-    <polyline
-       style="fill:none;stroke:#000000"
-       id="polyline76"
-       points="609,-343 743,-343 " />
-    <text
-       style="font-size:14px;text-anchor:middle;font-family:'Times Roman,serif'"
-       id="text78"
-       font-size="14.00"
-       y="-326.39999"
-       x="676" />
-  </g>
-  <g
-     class="node"
      id="node4"
      transform="translate(-253.365,798.5)">
     <title
@@ -336,73 +312,7 @@
     <polygon
        style="fill:#8404df;stroke:#8404df"
        id="polygon126"
-       points="439,-225.211 439,-230.211 434.5,-225.212 439,-235.211 439,-235.211 439,-235.211 443.5,-225.211 439,-230.211 439,-225.211 439,-225.211 " />
-  </g>
-  <g
-     class="node"
-     id="node5"
-     transform="translate(-253.365,798.5)">
-    <title
-       id="title129">Orchestrator</title>
-    <polygon
-       style="fill:none;stroke:#000000"
-       id="polygon131"
-       points="623.5,-549 623.5,-597 728.5,-597 728.5,-549 623.5,-549 " />
-    <text
-       style="font-size:14px;text-anchor:middle;font-family:'Times Roman,serif'"
-       id="text133"
-       font-size="14.00"
-       y="-580.40002"
-       x="676">Orchestrator</text>
-    <polyline
-       style="fill:none;stroke:#000000"
-       id="polyline135"
-       points="623.5,-573 728.5,-573 " />
-    <text
-       style="font-size:14px;text-anchor:middle;font-family:'Times Roman,serif'"
-       id="text137"
-       font-size="14.00"
-       y="-556.40002"
-       x="676" />
-  </g>
-  <g
-     class="edge"
-     id="edge4"
-     transform="translate(-253.365,798.5)">
-    <title
-       id="title140">Orchestrator-&gt;OneOrchestrator</title>
-    <path
-       style="fill:none;stroke:#000000"
-       inkscape:connector-curvature="0"
-       id="path142"
-       d="m 676,-548.821 c 0,44.174 0,137.431 0,181.621" />
-  </g>
-  <g
-     class="node"
-     id="node6"
-     transform="translate(-253.365,798.5)">
-    <title
-       id="title145">OneVirtualMachine</title>
-    <polygon
-       style="fill:none;stroke:#000000"
-       id="polygon147"
-       points="804,-319 804,-367 954,-367 954,-319 804,-319 " />
-    <text
-       style="font-size:14px;text-anchor:middle;font-family:'Times Roman,serif'"
-       id="text149"
-       font-size="14.00"
-       y="-350.39999"
-       x="879">OneVirtualMachine</text>
-    <polyline
-       style="fill:none;stroke:#000000"
-       id="polyline151"
-       points="804,-343 954,-343 " />
-    <text
-       style="font-size:14px;text-anchor:middle;font-family:'Times Roman,serif'"
-       id="text153"
-       font-size="14.00"
-       y="-326.39999"
-       x="879" />
+       points="439,-235.211 439,-235.211 439,-235.211 443.5,-225.211 439,-230.211 439,-225.211 439,-225.211 439,-225.211 439,-230.211 434.5,-225.212 " />
   </g>
   <g
      class="node"
@@ -543,11 +453,11 @@
     <polygon
        style="fill:#c54b4e;stroke:#c54b4e"
        id="polygon218"
-       points="549.739,-460.939 551.559,-456.282 553.931,-462.577 553.379,-451.625 553.379,-451.625 553.379,-451.625 545.548,-459.302 551.559,-456.282 549.739,-460.939 549.739,-460.939 " />
+       points="553.379,-451.625 553.379,-451.625 553.379,-451.625 545.548,-459.302 551.559,-456.282 549.739,-460.939 549.739,-460.939 549.739,-460.939 551.559,-456.282 553.931,-462.577 " />
     <polygon
        style="fill:#c54b4e;stroke:#c54b4e"
        id="polygon220"
-       points="544.237,-225.257 546.726,-229.593 540.334,-227.497 549.215,-233.93 549.215,-233.93 549.215,-233.93 548.14,-223.017 546.726,-229.593 544.237,-225.257 544.237,-225.257 " />
+       points="549.215,-233.93 549.215,-233.93 549.215,-233.93 548.14,-223.017 546.726,-229.593 544.237,-225.257 544.237,-225.257 544.237,-225.257 546.726,-229.593 540.334,-227.497 " />
   </g>
   <g
      class="edge"
@@ -575,46 +485,7 @@
     <polygon
        style="fill:#a52ee3;stroke:#a52ee3"
        id="polygon229"
-       points="454.692,-423.206 455.653,-428.113 450.276,-424.07 456.613,-433.02 456.613,-433.02 456.613,-433.02 459.109,-422.342 455.653,-428.113 454.692,-423.206 454.692,-423.206 " />
-  </g>
-  <g
-     class="node"
-     id="node9"
-     transform="translate(-253.365,798.5)">
-    <title
-       id="title232">VirtualMachine</title>
-    <polygon
-       style="fill:none;stroke:#000000"
-       id="polygon234"
-       points="818,-549 818,-597 940,-597 940,-549 818,-549 " />
-    <text
-       style="font-size:14px;text-anchor:middle;font-family:'Times Roman,serif'"
-       id="text236"
-       font-size="14.00"
-       y="-580.40002"
-       x="879">VirtualMachine</text>
-    <polyline
-       style="fill:none;stroke:#000000"
-       id="polyline238"
-       points="818,-573 940,-573 " />
-    <text
-       style="font-size:14px;text-anchor:middle;font-family:'Times Roman,serif'"
-       id="text240"
-       font-size="14.00"
-       y="-556.40002"
-       x="879" />
-  </g>
-  <g
-     class="edge"
-     id="edge12"
-     transform="translate(-253.365,798.5)">
-    <title
-       id="title243">VirtualMachine-&gt;OneVirtualMachine</title>
-    <path
-       style="fill:none;stroke:#000000"
-       inkscape:connector-curvature="0"
-       id="path245"
-       d="m 879,-548.821 c 0,44.174 0,137.431 0,181.621" />
+       points="456.613,-433.02 456.613,-433.02 456.613,-433.02 459.109,-422.342 455.653,-428.113 454.692,-423.206 454.692,-423.206 454.692,-423.206 455.653,-428.113 450.276,-424.07 " />
   </g>
   <g
      class="node"
@@ -676,54 +547,5 @@
        inkscape:connector-curvature="0"
        id="path267"
        d="m 382.537,-746.031 c 8.658,14.765 21.724,37.047 35.624,60.753" />
-  </g>
-  <g
-     class="node"
-     id="node15"
-     transform="translate(-253.365,798.5)">
-    <title
-       id="title270">Object</title>
-    <ellipse
-       style="fill:none;stroke:#000000"
-       sodipodi:ry="18"
-       sodipodi:rx="41.089802"
-       sodipodi:cy="-764"
-       sodipodi:cx="773"
-       d="m 814.0898,-764 c 0,9.94113 -18.39653,18 -41.0898,18 -22.69327,0 -41.0898,-8.05887 -41.0898,-18 0,-9.94113 18.39653,-18 41.0898,-18 22.69327,0 41.0898,8.05887 41.0898,18 z"
-       id="ellipse272"
-       ry="18"
-       rx="41.089802"
-       cy="-764"
-       cx="773" />
-    <text
-       style="font-size:14px;text-anchor:middle;font-family:'Times Roman,serif'"
-       id="text274"
-       font-size="14.00"
-       y="-759.40002"
-       x="773">Object</text>
-  </g>
-  <g
-     class="edge"
-     id="edge10"
-     transform="translate(-253.365,798.5)">
-    <title
-       id="title277">Object-&gt;Orchestrator</title>
-    <path
-       style="fill:none;stroke:#000000"
-       inkscape:connector-curvature="0"
-       id="path279"
-       d="m 764.048,-746.374 c -17.447,34.355 -56.021,110.311 -75.812,149.28" />
-  </g>
-  <g
-     class="edge"
-     id="edge22"
-     transform="translate(-253.365,798.5)">
-    <title
-       id="title287">Object-&gt;VirtualMachine</title>
-    <path
-       style="fill:none;stroke:#000000"
-       inkscape:connector-curvature="0"
-       id="path289"
-       d="m 782.782,-746.374 c 19.066,34.355 61.22,110.311 82.847,149.28" />
   </g>
 </svg>
