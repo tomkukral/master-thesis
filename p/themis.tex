@@ -11,9 +11,8 @@ Application is modular and can be adapted for different orchestrator or to perfo
 	\end{center}
 	\caption{Model of Themis application}
 	\label{img:themis-model}
+
 \end{figure}
-
-
 
 % languages
 Application is written in Ruby using Ruby on Rails framework. Ruby is platform independent and can run on every currently used operating system. Ruby on Rails (\Ac{RoR}) is framework providing database abstraction and strictly based on model-view-controller (\Ac{MVC}) architecture. Application is based on object model, outputs are generatied using views and controller is responsible for sending commands to models and forward results to views.
@@ -21,62 +20,92 @@ Application is written in Ruby using Ruby on Rails framework. Ruby is platform i
 I have decided to use this framework because it provides better interaction with system services, e.g. \Ac{SSH} and \Ac{SCP}, than other web frameworks. There are public available classes for interaction with OpenNebula and OpenStack cloud \Ac{API} so it is not necessary to create \mbox{\Ac{XML}-\Ac{RPC}} parsers from scratch.
 
 \section{Measure models}
-There are three models defining measurement tasks and result. Definition, session and transfer. There models are used to describe migration tasks instructions, migration progress and results. 
+There are three models defining measurement tasks and results. Definition, session and transfer. These models are used to describe migration tasks instructions, migration progress and results. 
+Relation between models is depicted in figure \ref{img:themis-models-brief}.
 
-All three models mentioned bellow are descendants of \Name{ActiveRecord::Base} and mapping between objects and tables is handled by this class. It also describes associations and perform validation.
+All measurement models mentioned bellow are descendants of \Name{ActiveRecord::Base} and mapping between objects and tables is handled by this build-in class. It also describes inter-model associations and performs validation. 
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[width=0.6\textwidth]{models_brief.png}
+	\end{center}
+	\caption{Relation between measurement models}
+	\label{img:themis-models-brief}
+\end{figure}
 
 
 \subsection{Definition}
-Definition model, formally MeasureDefinition, is used to save prescription for measurement task. It is possible to crate definition in console or using web interface. Screenshot can be seen in figure \ref{img:web-new-definition}. 
-
-
+Definition class, formally MeasureDefinition, is used to save prescription for measurement task and track time taken. Parameters are listed in table \ref{tab:measuredefinition-params} and their meaning is described bellow.
 
 \begin{description}
-	\item[vm] is virtual machine which is going to be migrated, list of \Ac{VM}s available for migration is loaded on-demand from orchestrator using OneOrchestrator class. Virtual machine must be in running state and variable \Code{THEMIS\_TYPE = 'VM'} need to be present in contextualization settings.
-	\item[source] is source host for virtual machine. \Ac{VM} need to be migrated to this host before starting measurement session. List of hosts is loaded using OneOrchestrator class and hosts status is checked for every hosts.
+	\item[vm] is virtual machine which is going to be migrated. List of \Ac{VM}s available for migration is loaded on-demand from orchestrator using OneOrchestrator class. Virtual machine must be in running state and variable \Code{THEMIS\_TYPE = 'VM'} need to be present in contextualization settings.
+	\item[source] is source host for virtual machine. \Ac{VM} need to be migrated to this host before starting measurement session. List of hosts is loaded using OneOrchestrator class and hosts status is checked for each host.
 	\item[destination] is destination host. \Ac{VM} is migrated to this host during measurement session.
 	\item[bandwidth] is determines packet generation rate passed to agent.
 	\item[cycles] set number of migration repetitions.
-	\item[supervisor] is an \Ac{IP} address of hypervisor node.
+	\item[supervisor] is an \Ac{IP} address of supervisor services, i.e. packet receiver and result exporter
 	\item[description] has an obvious meaning.
 
-	\item[started\_at] is timestamp taken at the beginning of measurement.
+	\item[started\_at] is timestamp taken at the beginning of measurement	\item[finished\_at] is timestamp taken after finishing all migrations.
 	\item[finished\_at] is timestamp taken after finishing all migrations.
 \end{description}
+
+Definition class has one-to-many relation with session class and also one-to-many indirect relation with transfer class connected through sessions. It means that is is possible to load every information from subordinate classes (models) and it is useful for generating exports and web views.
+
+Definition class is the highest class in the hierarchy so it is connected with orchestrator. There is a class variable {@@shared\_orchestrator} which is providing link to orchestrator interface. This variable is shared by all class instances so it it not necessary to initialize more connections at once.
+
+Methods for manipulation with orchestrator resources are declared in definition class. \Name{Host\_source} and \Name{host\_destination} returns host object for source and destination host. Method called \Name{virtual\_machine} returns virtual machine object which is going be used for migration evaluation.
+
+Most important method of definition class is \Name{start} because it executes migration evaluation. It is responsible for generation of sessions and starting all of them. One session object will be prepared for each migration cycle, so number of session objects is same as number stored in cycles parameter. Sessions need to be started one by one so there is an loop which starts new session right after finishing of previous one. Session start is performed by calling \Name{start} of session class. This method is different from previously mentioned method with same name, because this one is defined in session class.
+Finished\_at parameter is set to current timestamp right after finishing of last session, i.e. at the end of migration evaluation. 
+
+Migration evaluation is not very computation expensive, but it can take really long time to perform many migration cycles, in particular for virtual machines under load. It is not possible to run these long running tasks on request from web interface because request will timeout shortly and task would be terminated. I have decided to use Delayed::Job (\Ac{DJ}) to run these task asynchronously.
+\Ac{DJ} can run task in detached process and it can run for a long time without any timeout problems. It is also possible to run \Ac{DJ} worker on separate machine so migration evaluation is executed in completely separated environment. This approach eliminates interference with other processes or network traffic. Security is improved too, since orchestrator interface does not need to be accessible from machine with web interface.
+
+There is one special function called flush and it clears measurement definition and all of it's subordinate objects. It can be used for debugging, because it is sometimes necessary to repeat migration with same parameters. However it is not possible to run migration which was running in the past and all of sessions have already finished.
 
 \begin{table}[htb]
 \begin{center}
 	\caption{MeasureDefinition parameters}
 	\label{tab:measuredefinition-params}
 	\begin{tabular}{|l|l|l|l|l|}
-	\Th{Parameter} & \Th{Required} & \Th{Type} & \Th{User edit.} & \Th{Notes} \\
+	\hline
+	\Th{Parameter} & \Th{Required} & \Th{Type} & \Th{Editable by user} & \Th{Notes} \\
+	\hline
 	vm & yes & string & yes & \\
+	\hline
 	source & yes & integer & yes & \\
+	\hline
 	destination & yes & integer & yes & \\
+	\hline
 	bandwidth & yes & integer & yes & \\
-	cycles & yes & integer & yes & \\
+	\hline
+	cycles & yes & integer & yes & required bigger than 0\\
+	\hline
 	supervisor & yes & string & yes & \Ac{IP} address \\ 
+	\hline
 	description & no & text & yes & \\
+	\hline
 	started\_at & no & timestamp & no & \\
+	\hline
 	finished\_at & no & timestamp & no & \\
+	\hline
 	\end{tabular}
 \end{center}
 \end{table}
 
 
-% connection with orchestrator
-
-
-\begin{figure}[htb]
-	\begin{center}
-	\includegraphics[width=0.9\textwidth]{form_measure_definition_new.png}
-	\end{center}
-	\caption{Web interface - new definition}
-	\label{img:web-new-definition}
-\end{figure}
-
-	
 \subsection{Session}
+
+
+
+
+
+
+
+
+\cleardoublepage
+	
 
 \subsection{Transfer}
 
