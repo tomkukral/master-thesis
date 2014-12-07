@@ -158,7 +158,7 @@ kill -SIGINT "$KILLPID"; fi
 
 Next action performed during first stage is migration to source host. Source and destination hosts are loaded from measure definition and migration must be performed exactly from source to destination, so \Ac{VM} need to be running on source host. Unmeasured migration to source host is requested during this stage if \Ac{VM} is not already running on right host.
 
-Last task in preparation stage is to run agents on supervisor and \Ac{VM} under test. 
+Last task in preparation stage is to run agents. It is necessary to start agents on \Ac{VM} and supervisor and both agents must stay running after \Ac{SSH} disconnection. It is a bit tricky to run Ruby script in remote machine in subshell, because normal behavior it is terminate process after disconnection. I am using \Cmd{screen} software which is able to run detached processes. However situation is even more complicated due to different Ruby installation methods on \Ac{VM} and supervisor. Virtual machine uses standard Ruby version installed via package manager by command \Cmd{apt-get install ruby}, so it easier to run agent.rb because it do not require interactive shell. Rbenv\footnote{\url{https://github.com/sstephenson/rbenv}} is used to install Ruby on supervisor because agent.rb in receiver mode requires newer version than provided by package manager. Rbenv is initialized in file \~/.bashrc so it is necessary to run all Ruby script in interactive shell. Parameters for agent.rb can be found below in table \ref{tab:agent-parameters}.
 
 \begin{figure}[htb]
 \caption{Run remote agents command}
@@ -178,6 +178,18 @@ screen -d -m /bin/bash -li -c '~/themis/agent.rb "receiver" \
 
 \cleardoublepage
 	
+
+
+
+
+
+
+
+
+
+
+
+
 
 \subsection{Transfer}
 
@@ -206,7 +218,7 @@ Both modes use IO class to read pipeline output from iperf program. This class i
 
 \begin{table}[htb]
 \begin{center}
-	\caption{Agent.rb paramaters}
+	\caption{Agent.rb parameters}
 	\label{tab:agent-parameters}
 	\begin{tabularx}{\textwidth}{|r|l|l||l|X|}
 	\multicolumn{3}{c}{\Th{Generator mode}} & \multicolumn{2}{c}{\Th{Receiver mode}} \\
