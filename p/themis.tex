@@ -136,9 +136,44 @@ There are no parameters editable by user because all necessary information about
 \end{table}
 
 
+Most important part of MeasureSession class is \Name{start} method. This method is executed by superior definition, so it is not necessary set asynchronous execution with Delayed::Job, because higher object is already running asynchronously.
 
+It is necessary to load migration parameters, so only an information about supervisor \Ac{IP} is loaded as a string and the rest is loaded as and objects. It is beneficial to work with objects instead of identifiers because it allows to execute commands directly without any additional parsing.
 
+Net::SSH client library is used for connection to virtual machine under test and supervisor. I have implemented authentication with keys because it is necessary to provide password-less login for backend service. It is possible to implement password authentication just by editing client library configuration, but I wanted to avoid storing any password in source code. 
 
+Migration process can be divided into 3 stages. First stage is preparation for migration, second stage is migration and third stage is migration verification and reporting. Tasks must be carried out sequentially because next task always depends on previous one.
+
+First task after loading migration information is clearing previous measurement session. Established session between packet generator and packer receiver can become stale if it was not terminated successfully during previous migration. Packet generator and receiver should be terminated after virtual machine migration, but it may stay running in case of unexpected backend error or unclean shutdown. Command \ref{cmd:killcmd} is executed on \Ac{VM} and supervisor just to be sure there are no stale sessions. This command is optimized for agent.rb and need to be adapted to work with another measurement tools.
+
+\begin{figure}[htb]
+\caption{Clear stale sessions command}
+\label{cmd:killcmd}
+\begin{verbatim}
+KILLPID=$(ps aux | grep -v grep | grep agent\.rb | grep ruby \
+| xargs | cut -d' ' -f2); if [ -n "$KILLPID" ]; then \
+kill -SIGINT "$KILLPID"; fi 
+\end{verbatim}
+\end{figure}
+
+Next action performed during first stage is migration to source host. Source and destination hosts are loaded from measure definition and migration must be performed exactly from source to destination, so \Ac{VM} need to be running on source host. Unmeasured migration to source host is requested during this stage if \Ac{VM} is not already running on right host.
+
+Last task in preparation stage is to run agents on supervisor and \Ac{VM} under test. 
+
+\begin{figure}[htb]
+\caption{Run remote agents command}
+\label{cmd:remote agents}
+\begin{verbatim}
+###  generator - VM
+screen -d -m /bin/bash -c '~/themis/agent.rb "generator" \
+#{supervisor} #{5000 + (id % 1000)} #{measure_definition.bandwidth}M'
+
+### receiver - supervisor
+screen -d -m /bin/bash -li -c '~/themis/agent.rb "receiver" \
+#{supervisor} #{5000 + (id % 1000)} \
+#{measure_transfers_upload_url(:measure_session => id, :format => 'json')}'
+\end{verbatim}
+\end{figure}
 
 
 \cleardoublepage
