@@ -67,6 +67,7 @@ There is one special function called flush and it clears measurement definition 
 \begin{table}[htb]
 \begin{center}
 	\caption{MeasureDefinition parameters}
+
 	\label{tab:measuredefinition-params}
 	\begin{tabular}{|l|l|l|l|l|}
 	\hline
@@ -96,7 +97,43 @@ There is one special function called flush and it clears measurement definition 
 
 
 \subsection{Session}
+Session class, precisely MeasureSession, is a link between definition and transfers. This class is responsible for migration and measurement coordination. Remote management of virtual machines and orchestrator is performed inside this class.
 
+There are no parameters editable by user because all necessary information about migration are inherited from definition. Table \ref{tab:measuresession-params} describes all parameters. There are two timestamp fields with evident purpose, reference to MeasureDefinition and two fields special for this class:
+\begin{description}
+	\item[seq] is sequence number in scope of superior MeasureDefinition. Session with \mbox{$\mathrm{seq} = 0$} is going to be executed first and $\mathrm{seq} = \mathrm{measure\_definition.cycles}$ is the last one.
+	\item[status] determines status of measurement session:
+		\begin{itemize}
+			\item \B{0} - pending - session is waiting for execution, this is default state
+			\item \B{1} - running - session is running right now
+			\item \B{2} - done - migration was finished successfully
+			\item \B{3} - failed - migration was executed and failed to finish
+		\end{itemize}
+\end{description}
+
+\begin{table}[htb]
+\begin{center}
+	\caption{MeasureSession parameters}
+	\label{tab:measuresession-params}
+	\begin{tabularx}{\textwidth}{|l|l|l|l|X|}
+	\hline
+	\Th{Parameter} & \Th{Required} & \Th{Type} & \Th{Edit.} & \Th{Notes} \\
+	\hline
+	status & yes & integer & no & \\ 
+	\hline
+	seq & yes & integer & no & \\
+	\hline
+	started\_at & no & timestamp & no & \\
+	\hline
+	finished\_at & no & timestamp & no & \\
+	\hline
+	\hline
+	measure\_definition\_id & yes & reference & no & reference to MeasureDefinition \\
+
+	\hline
+	\end{tabularx}
+\end{center}
+\end{table}
 
 
 
