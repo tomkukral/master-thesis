@@ -119,6 +119,8 @@ There are no parameters editable by user because all necessary information about
 	\hline
 	\Th{Parameter} & \Th{Required} & \Th{Type} & \Th{Edit.} & \Th{Notes} \\
 	\hline
+	measure\_definition\_id & yes & reference & no & reference to MeasureDefinition \\
+	\hline
 	status & yes & integer & no & \\ 
 	\hline
 	seq & yes & integer & no & \\
@@ -126,10 +128,6 @@ There are no parameters editable by user because all necessary information about
 	started\_at & no & timestamp & no & \\
 	\hline
 	finished\_at & no & timestamp & no & \\
-	\hline
-	\hline
-	measure\_definition\_id & yes & reference & no & reference to MeasureDefinition \\
-
 	\hline
 	\end{tabularx}
 \end{center}
@@ -176,27 +174,57 @@ screen -d -m /bin/bash -li -c '~/themis/agent.rb "receiver" \
 \end{figure}
 
 
-\cleardoublepage
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
 \subsection{Transfer}
+Class MeasureTransfer is used to store information about transfers and it is actually parsed output from packet receiver. There are no user editable fields because objects are uploaded via \Ac{API}. Model parameters are described in table \ref{tab:measuretransfer-params}.
 
-% delayed job
+Themis application use iperf to measure packet flow, so MeasureTransfer class is tailored for output of iperf. Adapting to another measurement software is fairly easy because just one database migration script and small model changes will do the job.
+
+\begin{table}[htb]
+\begin{center}
+	\caption{MeasureTransfer parameters}
+	\label{tab:measuretransfer-params}
+	\begin{tabularx}{\textwidth}{|l|l|l|l|X|}
+	\hline
+	\Th{Parameter} & \Th{Required} & \Th{Type} & \Th{Edit.} & \Th{Notes} \\
+	\hline
+	measure\_session\_id & yes & reference & no & reference to MeasureSession \\
+	\hline
+	timestamp & no & timestamp & no & \\
+	\hline
+	time\_relative & yes & float & no & \\
+	\hline
+	jitter & no & float & no & \\
+	\hline
+	datagrams\_transfered & no & integer & no & \\
+	\hline
+	datagrams\_lost & no & integer & no & \\
+	\hline
+	bits\_transfered & no & integer & no & \\
+	\hline
+	bits\_lost & no & integer & no & \\
+	\hline
+	bandwidth & no & integer & no & bits per second\\
+	\hline
+	\end{tabularx}
+\end{center}
+\end{table}
+
+I it necessary to provide interface for automatic uploading MeasureTransfer objects. \Ac{URL} for uploads is /measure\_transfers/:measure\_session(.:format) and it is routed to measure\_transfers\#upload. This \Ac{URL} need to be passed to packet generator. 
+
+First task is to load superior MeasureSession object and check whether this object actually exists. Transfers without session is not valid and can no be saved.
+
+Upload action of MeasureTranfers controller parses input objects received in \Ac{JSON} format and saves them into database. However it is necessary to make a few changes to every object. Iperf uses different format of timestamp than database and it does not support time zone, so each timestamp received from iperf need to be parsed, converted to native DateTime object and merged with timezone data. 
+
+Parsed DateTime object is used to calculate time\_relative which is time between current time and start of migration session. Relative time is used to align migrations for graphing and exports.
+
+Rails framework implements \Ac{CSRF} prevention mechanism, so it is necessary to create an exception for upload action. I have added exception to ApplicatoinController for all request in \Ac{JSON} format.
 
 
 \section{Virtual machines}
+
+
+\cleardoublepage
+% delayed job
 
 \section{Agent}
 It was necessary to develop a script wrapper capable to parse iperf output and upload results to backend module. This script is called agent.rb, it is attached on on the CD and will be published in project repository. It is written in Ruby to be compatible with rest of the project. Agent script is executed from backend in migration\_session model in start method and \Ac{SSH} is used for remote execution.
@@ -265,7 +293,7 @@ iperf --server --bind 192.0.2.1 --port 5004 --udp --interval \
 \end{figure}
 
 
-\section{Application}
+\section{Frontend}
 	% backend
 	% frontend
 	% orchestrator
