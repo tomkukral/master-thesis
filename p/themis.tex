@@ -217,14 +217,48 @@ Upload action of MeasureTranfers controller parses input objects received in \Ac
 
 Parsed DateTime object is used to calculate time\_relative which is time between current time and start of migration session. Relative time is used to align migrations for graphing and exports.
 
-Rails framework implements \Ac{CSRF} prevention mechanism, so it is necessary to create an exception for upload action. I have added exception to ApplicatoinController for all request in \Ac{JSON} format.
+Rails framework implements \Ac{CSRF} prevention mechanism, so it is necessary to create an exception for upload action. I have added exception to ApplicationController for all request in \Ac{JSON} format.
 
 
 \section{Virtual machines}
+Virtual machine, used for migration testing, needs to be prepared first. It is possible to migrate every virtual machine, but agent.rb wrapper need to be present and working to be able to establish measurement session. Agent is also used to export results from supervisor to the backend.
 
+Agent.rb is expected to exist in path {\~/themis/agent.rb}. It can be copied manually, using OpenNebula contextualization or automation tool, e.g. Ansible. It is also necessary to install Ruby interpreter. I have used package available in distribution for \Ac{VM} under test and rbenv for supervisor.
 
-\cleardoublepage
-% delayed job
+Virtual machines are save on attached disc. Both are already contextualized for OpenNebula, and agent.rb with Ruby is installed. These images can be directly imported into OpenNebula image datastore and used in templates.
+
+\begin{table}[htb]
+\begin{center}
+	\caption{Virtual machines parameters}
+	\label{tab:vm-params}
+	\begin{tabular}{|l|l|l|}
+	\hline
+	\Th{Parameter} & \Th{VM for migration} & \Th{Supervisor} \\
+	\hline
+	Operating system & \multicolumn{2}{c|}{Ubuntu server 14.04.1 LTS} \\
+	\hline
+	Image size & \multicolumn{2}{c|}{5.9G} \\
+	\hline
+	Image type & \multicolumn{2}{c|}{raw} \\
+	\hline
+	Device prefix & \multicolumn{2}{c|}{vd} \\
+	\hline
+	Username & \multicolumn{2}{c|}{root} \\
+	\hline
+	Password & \multicolumn{2}{c|}{none, only \Ac{SSH} keys using contextualization}\\
+	\hline
+	Agent.rb & \multicolumn{2}{c|}{/root/themis/agent.rb}\\
+	\hline
+	Ruby version & 1.9.3p484 & 2.1.3p242 \\
+	\hline
+	Ruby install method & package manager & rbenv \\
+	\hline
+	MD5 hash & 285a5...77a9f8e68bf0cc & 8cf08...83511ce9857a4 \\
+	\hline
+	\end{tabular}
+\end{center}
+\end{table}
+
 
 \section{Agent}
 It was necessary to develop a script wrapper capable to parse iperf output and upload results to backend module. This script is called agent.rb, it is attached on on the CD and will be published in project repository. It is written in Ruby to be compatible with rest of the project. Agent script is executed from backend in migration\_session model in start method and \Ac{SSH} is used for remote execution.
