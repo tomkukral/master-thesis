@@ -77,7 +77,7 @@ Public cloud solutions tend to serve many tenants and it is necessary to avoid u
 \subsubsection{VXLAN}
 Virtual eXtensible Local Area Network is an overlay scheme with multitenancy and domain isolation. It is defined on Layer 3 and uses encapsulation as tunneling mechanism.
 
-Most important think is encapsulation since it provides \Ac{VXLAN} domain isolation and defines overlay network. Block called \Ac{VTEP} is responsible for encapsulation and tunnel organization. It analyzes every packet received from \Ac{VM} and prepend outer header with label. This label is called \Ac{VXLAN} Network Identifier (\Ac{VNI}) and it is used to isolate domains so virtual machines in different domains are not allowed to communicate directly with each other. Encapsulated packet is send to destination \Ac{VTEP} as \Ac{UDP} packet. Destination \Ac{VTEP} unpacks packet, check whether there is any virtual machine in \Ac{VXLAN} domain and deliver this frame. \Ac{NVE} is another term for \Ac{VTEP} and it was introduced in \cite{7365} as part of general network virtualization framework.
+Most important think is encapsulation since it provides \Ac{VXLAN} domain isolation and defines overlay network. Block called \Ac{VTEP} is responsible for encapsulation and tunnel organization. It analyzes every packet received from \Ac{VM} and prepend outer header with label. This label is called \Ac{VXLAN} Network Identifier (\Ac{VNI}) and it is used to isolate domains so virtual machines in different domains are not allowed to communicate directly with each other. Encapsulated packet is send to destination \Ac{VTEP} as \Ac{UDP} packet. Destination \Ac{VTEP} unpacks packet, check whether there is any virtual machine in \Ac{VXLAN} domain and deliver this frame. \Ac{NVE} is another term for \Ac{VTEP} and it was introduced in \cite{rfc7365} as part of general network virtualization framework.
 
 It is necessary for \Ac{VTEP} to be able to find destination \Ac{VTEP} for every encapsulated packet. This can be solved by data plane learning during forwarding as specified in \cite{rfc7348} or by acquiring this information from orchestrator. Getting information from orchestrator in my opinion much better because it avoids additional actions. Some kind of orchestrator or at least information system must be present in every data center and this system already knows location of all virtual machines as well as addresses of \Ac{VTEP}s. I think that it does not make sense to perform learning during forwarding because required informations are already saved in orchestrator. Orchestrator can directly distribute forwarding rules to all \Ac{VTEP}s or \Ac{VTEP} can ask orchestrator on-demand via any kind of \Ac{API}. Overlay unicast traffic can be forwarded directly to destination \Ac{VTEP} without any additional learning or even flooding.
 
@@ -90,7 +90,7 @@ There is proprietary technology called IBM DOVE with is very similar to \Ac{VXLA
 % network requirements
 
 % VXLAN conclusion
-I think that\Ac{VXLAN} is quite promising technology for network virtualization in data center. It brings much more flexibility that traditional \Ac{VLAN} approach and it can be called as en evolution of \Ac{VLAN}. Principle of overlay network is building virtual network on top of physical infrastructure. Benefits were described in previous articles and main drawback is lack of cooperation between overlay and underlay network. Multicast might be also quite problematical to arrange.
+I think that \Ac{VXLAN} is quite promising technology for network virtualization in data center. It brings much more flexibility that traditional \Ac{VLAN} approach and it can be called as en evolution of \Ac{VLAN}. Principle of overlay network is building virtual network on top of physical infrastructure. Benefits were described in previous articles and main drawback is lack of cooperation between overlay and underlay network. Multicast might be also quite problematical to arrange.
 
 \begin{figure}[htb]
 	\begin{center}
@@ -131,7 +131,7 @@ Hop is responsible only for forwarding data unit to next hop and whole flow is d
 
 There is different perspective on network since control plane is separated from forwarding plane so physical devices are used only for fast packet transfers and data plane is responsible for network control. Every decision is performed in controller or orchestrator and propagated to forwarding plane through data plane. It is obvious that the orchestrator should not be physically centralized because it would create single point of failure so it is better to use any distributed solution.
 
-Hop-by-hop networks are tightly connected with topic called Software defined networking described in \ref{par:sdn}.
+%Hop-by-hop networks are tightly connected with topic called Software defined networking described in \ref{par:sdn}.
 
 \begin{figure}[htb]
 	\begin{center}

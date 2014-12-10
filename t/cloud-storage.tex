@@ -56,7 +56,7 @@ Common problem of distributes storages is central gateway, which is used for cli
 
 Cluster build with Ceph consist of two types of nodes \Ac{OSD} and monitor. \Ac{OSD} is used to store objects and monitor is responsible for maintaining placement map and monitoring of other monitors and \Ac{OSD}. It is necessary to design cluster well because performance can be poor otherwise. It is, for example, not recommended to place \Ac{OSD} and monitor on one disk, because many parallel \Ac{IO} operations will be requested.
 
-Object store is base and it can be extended by other services, there is for example \Ac{RBD} providing block devices and CephFS used to store files. Distributed object storage is well suited for distributed datacenter because it can be designed to provide distributed shared storage. However it introduces additional abstraction layer in storage system, so it will probably provide worse performance compared to strictly physical storage. It is tradeoff for flexibility.
+Object store is base and it can be extended by other services, there is for example \Ac{RBD} providing block devices and CephFS used to store files. Distributed object storage is well suited for distributed datacenter because it can be designed to provide shared storage. However it introduces additional abstraction layer in storage system, so it will probably provide worse performance compared to strictly physical storage. It is tradeoff for flexibility.
 
 
 
