@@ -2,7 +2,7 @@
 % vim:spell spelllang=en_us
 
 There are three scenarios possible for deploying cloud solutions. Models differs by ownership and subject responsible by administration of the system. Right solution depends on expected load, available budget as well as on expected classification of data. Public model and private model are mutually contradictory and last model called hybrid is combination of first two mentioned.
-Model are compared in table \ref{tab:deployment-models}.
+%Model are compared in table \ref{tab:deployment-models}.
 
 \subsection{Private}
 Private model defines cloud environment build exclusively for single subject. Typical scenario is to build private cloud in datacenter owner by the subject, but it is not strictly required. There is common misunderstanding of term private, because it means private usage of cloud resources and not private ownership of cloud infrastructure. Private cloud may be leased from third-party provider and it also can be running on third-party hardware.
@@ -25,27 +25,22 @@ Hybrid cloud is model utilizing both, public and private, previous mentioned mod
 
 It is also possible to utilize cloud bursting in which system runs in private cloud and delegates part of load into public cloud. Lets describe it with application for collecting votes - sensitive part responsible for counting votes and generating results report will run in private cloud and public report will be saved to and served from infrastructure of public cloud. High level of security of counting votes is guaranteed and application is also able to deliver results to many subscribers as it can scale up into public cloud.
 
-
-
-
-
-\begin{table}[htb]
-\begin{center}
-	\caption{Comparison of deployment models}
-	\label{tab:deployment-models}
-	\begin{tabularx}{\textwidth}{|X|X|X|X|}
-	\hline
-	model & \Th{private} & \Th{public} & \Th{hybrid} \\
-	\hline
-	initial cost & higher & lower & medium \\
-	\hline
-	operational cost\footnote{depends on load} & higher & lower & medium \\
-	\hline
-	security & higher & lower & medium \\
-	\hline
-	elasticity & lower & high & medium \\
-	\hline
-	\end{tabularx}
-\end{center}
-\end{table}
-
+%\begin{table}[htb]
+%\begin{center}
+%	\caption{Comparison of deployment models}
+%	\label{tab:deployment-models}
+%	\begin{tabularx}{\textwidth}{|X|X|X|X|}
+%	\hline
+%	model & \Th{private} & \Th{public} & \Th{hybrid} \\
+%	\hline
+%	initial cost & higher & lower & medium \\
+%	\hline
+%	operational cost\footnote{depends on load} & higher & lower & medium \\
+%	\hline
+%	security & higher & lower & medium \\
+%	\hline
+%	elasticity & lower & high & medium \\
+%	\hline
+%	\end{tabularx}
+%\end{center}
+%\end{table}

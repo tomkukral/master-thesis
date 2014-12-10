@@ -328,11 +328,41 @@ iperf --server --bind 192.0.2.1 --port 5004 --udp --interval \
 
 
 \section{Frontend}
-	% backend
-	% frontend
-	% orchestrator
-	% database
-	% web server
+I have developed web interface for managing Themis application, because it is easier for users to interact with an application. Although web interface was not main goal of this thesis, I have decided to implement it to provide better information about running migration and simple interface.
 
-	% měření pro elmag
+Web frontend is created in respect with model-view-architecture of Ruby on Rails. Twitter Bootstrap\footnote{\url{https://github.com/twbs/bootstrap}} is used for user interface.
+
+There are three tabs in the main page:
+	\begin{itemize}
+		\item Themis
+		\item Waiting jobs
+		\item Measure definitions
+	\end{itemize}
+
+First tab is just welcome page with elementary information. The most important information on this page is current version. Application is prepared to be deployed using Capistrano\footnote{\url{https://github.com/capistrano/capistrano}} so current running version is loaded from GIT repository.
+
+Waiting jobs tab displays running and pending tasks. All long-running tasks need to be executed asynchronously with Delayed::Job, so task is first saved into database and then executed by worker after some time. Pending and running jobs can be reviewed in this tab. However it is not allowed to perform and changes on running or pending task, because it could break relation between Delayed::Job and running processes.
+
+\subsection{Definitions}
+Most important tab is Measure definitions because all possible actions can be performed here. List of all definitions is displayed first, screenshot is in figure \ref{img:themis-definitions}. User accessible parameters from table \ref{tab:measuredefinition-params} are displayed here for each definition together with basic actions to view, edit and destroy the definition. Editing of already started definitions is not allowed.
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[width=\textwidth]{themis-definitions.png}
+	\end{center}
+	\caption{List of all definitions}
+	\label{img:themis-definitions}
+\end{figure}
+
+More information about definition can be displayed by following \Uv{view} action link. This view displays all information about one definition, all its parameters, sessions and transfers. Screenshot is in figure \ref{img:themis-definition}.
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[width=\textwidth]{themis-definition.png}
+	\end{center}
+	\caption{Definition overview}
+	\label{img:themis-definition}
+\end{figure}
+
+
 
