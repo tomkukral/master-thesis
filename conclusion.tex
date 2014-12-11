@@ -1,25 +1,35 @@
 %pdflatex-thesis.tex
 % vim:spell spelllang=en_us
 
-I have analyzed and compared networking and storage technologies used in distributed (cloud) datacenters. Virtualization is mentioned in the beginning as an enabling technology for cloud computing. Cloud deployment and service models are compared and appropriate use cases are mentioned.
+I have analyzed and compared networking and storage technologies used in distributed (cloud) datacenters. Virtualization is mentioned in the beginning because it is an enabling technology for the cloud computing. Cloud deployment and service models are compared and appropriate use cases are mentioned.
 
-The biggest part is dedicated cloud computing, especially to networking, storage and orchestration technologies. Comparison is made by defining use cases and commenting advantages and disadvantages. All
-
-
-It is not possible to rigorously decide on best solution because there is so many use cases and every use case require individual approach.
+The biggest attention is dedicated to cloud computing, especially to networking, storage and orchestration technologies. Comparison is made by defining use cases and commenting advantages and disadvantages. It is not possible to rigorously decide on best solution because there are many use cases and each require individual approach.
 
 % networking
-
+Networking is essential part of datacenter design and legacy technologies are not able to fulfill current demand. Overlays techniques are supposed to provide required flexibility and network virtualization. \Ac{VXLAN}, \Ac{STT} and \Ac{NVGRE} is discussed. Hop-by-hop network virtualization is mentioned too, but it is tightly tied to \Ac{SDN} and \Ac{SDN} is still kind of sci-fi technology, because it is not widely supported.  
 % load balancing
+I have found out that load balancing is important topic connected with overlay networks and \Ac{VM} migrations so I have included load balancing into networking section too.
 
 % storage
 
 % orchestration
-Orchestration is described in theoretical part and special attention is given to OpenNebula because it is used in practical part. 
+Orchestration is described in theoretical part and special attention is given to OpenNebula because it is used in practical part. I have explained principles of OpenNebula orchestrator with special focus on virtual networks. Contextualization packages prepared to be used in practical part is presented.
+
+I think that virtualization brings so many improvements to data centers that legacy networking technologies are not able to keep pace. Most of technologies currently used in network layer were designed and it is the reason why they are to rigid to meet nowadays requirements. It is common to live migrate virtual machine todays but it was impossible in a few years before.
+
+We are trying to build highly agile technology, like virtualized and distributed datacenter, on top of legacy techniques. This approach is obviously not able to work well so there are two solutions. 
+
+First radical solution is to totally redesign current network stack and take all current requirements into account. However it is very hard to design solution for all use cases and new approaches. It also does not make sense from economical point of view because all network equipment need to be upgraded or replaced. \Ac{SDN} is, in my opinion, typical example of this technology since it brings amazing new features and it is usually can not be used on legacy devices.
+
+
+Second approach is to build new overlay network on top of existing network. This overlay network can provide additional functionality, but also brings some limitations cause by underlaying physical network. I think that overlay networks are suitable temporary solution, but only until \Ac{SDN} will become widely available.
+
 
 
 % different requirements not possible 
 % pros and cons
+
+% what is think about networking technologies
 
 
 % use case for themis
