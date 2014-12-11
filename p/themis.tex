@@ -252,8 +252,8 @@ Virtual machines are save on attached disc. Both are already contextualized for 
 	Ruby version & 1.9.3p484 & 2.1.3p242 \\
 	\hline
 	Ruby install method & package manager & rbenv \\
-	\hline
-	MD5 hash & 285a5...77a9f8e68bf0cc & 8cf08...83511ce9857a4 \\
+	%\hline - image changed - it is necessary to recount hash
+	%MD5 hash & 285a5...77a9f8e68bf0cc & 8cf08...83511ce9857a4 \\
 	\hline
 	\end{tabular}
 \end{center}
@@ -328,9 +328,9 @@ iperf --server --bind 192.0.2.1 --port 5004 --udp --interval \
 
 
 \section{Frontend}
-I have developed web interface for managing Themis application, because it is easier for users to interact with an application. Although web interface was not main goal of this thesis, I have decided to implement it to provide better information about running migration and simple interface.
+I have developed web interface for managing Themis application, because it is easier for users to interact with web interface then configure application using console. Although web interface was not main goal of this thesis, I have decided to implement it to provide better information about running migration and simple interface.
 
-Web frontend is created in respect with model-view-architecture of Ruby on Rails. Twitter Bootstrap\footnote{\url{https://github.com/twbs/bootstrap}} is used for user interface.
+Web frontend is created in respect with model-view-architecture of Ruby on Rails. Twitter Bootstrap\footnote{\url{https://github.com/twbs/bootstrap}} is used for user interface components.
 
 There are three tabs in the main page:
 	\begin{itemize}
@@ -341,10 +341,10 @@ There are three tabs in the main page:
 
 First tab is just welcome page with elementary information. The most important information on this page is current version. Application is prepared to be deployed using Capistrano\footnote{\url{https://github.com/capistrano/capistrano}} so current running version is loaded from GIT repository.
 
-Waiting jobs tab displays running and pending tasks. All long-running tasks need to be executed asynchronously with Delayed::Job, so task is first saved into database and then executed by worker after some time. Pending and running jobs can be reviewed in this tab. However it is not allowed to perform and changes on running or pending task, because it could break relation between Delayed::Job and running processes.
+Waiting jobs tab displays running and pending tasks. All long-running tasks need to be executed asynchronously with Delayed::Job, so task is first saved into the database and then executed by a worker after some time defined in the configuration. Pending and running jobs can be reviewed in this tab. However it is not allowed to perform any changes on running or pending task, because it could break relation between Delayed::Job and running processes.
 
 \subsection{Definitions}
-Most important tab is Measure definitions because all possible actions can be performed here. List of all definitions is displayed first, screenshot is in figure \ref{img:themis-definitions}. User accessible parameters from table \ref{tab:measuredefinition-params} are displayed here for each definition together with basic actions to view, edit and destroy the definition. Editing of already started definitions is not allowed.
+Most important tab is Measure definitions because actions can be performed here. List of all definitions is displayed after clicking the tab, screenshot is in the figure \ref{img:themis-definitions}. User accessible parameters from table \ref{tab:measuredefinition-params} are displayed here. There are also basic actions as view, edit and destroy. Already started definition can not be edited.
 
 \begin{figure}[htb]
 	\begin{center}
@@ -354,7 +354,9 @@ Most important tab is Measure definitions because all possible actions can be pe
 	\label{img:themis-definitions}
 \end{figure}
 
-More information about definition can be displayed by following \Uv{view} action link. This view displays all information about one definition, all its parameters, sessions and transfers. Screenshot is in figure \ref{img:themis-definition}.
+I have decided to print source and destination host only as an id, because each name lookup takes one request send to the orchestrator. I think that listing id is sufficient, because user should already be familiar with OpenNebula hosts. 
+
+More information about definition can be displayed by following \Uv{view} action link on the right side. This page displays all information about selected definition, it's parameters, sessions and transfers. Screenshot is in the figure \ref{img:themis-definition}.
 
 \begin{figure}[htb]
 	\begin{center}
@@ -363,6 +365,26 @@ More information about definition can be displayed by following \Uv{view} action
 	\caption{Definition overview}
 	\label{img:themis-definition}
 \end{figure}
+
+Progress bar represents ratio between finished, failed and pending sessions. First green part is ratio of successfully finished sessions to all migrations, red part is ratio of failed sessions and the rest is percentage of pending. 
+
+There is table of all sessions under the progress bar. Session is one migration from source host to destination host together with network measurement.
+Status, time of start end finish, id and number of rows is displayed for each session.
+
+Information about transfers during session can be displayed as a table or a graph. Graphing library is Chart.js\footnote{\url{https://github.com/nnnick/Chart.js}} so it is necessary to use browser with JavaScript and \Ac{HTML}5 support. Drawing graphs in browser is much slower than using MATLAB, because it is not optimized to work with huge datasets. Graphing in browser is intended to be used for quick overview and more complex visualization can be generated from exported \Ac{CSV} file using MATLAB or matplotlib.
+
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[width=\textwidth]{themis-graph-bw-1457.png}
+	\end{center}
+	\caption{Bandwidth visualization}
+	\label{img:themis-graph}
+\end{figure}
+
+
+
+
 
 
 
