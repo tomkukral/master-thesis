@@ -368,11 +368,10 @@ More information about definition can be displayed by following \Uv{view} action
 
 Progress bar represents ratio between finished, failed and pending sessions. First green part is ratio of successfully finished sessions to all migrations, red part is ratio of failed sessions and the rest is percentage of pending. 
 
-There is table of all sessions under the progress bar. Session is one migration from source host to destination host together with network measurement.
+There is table of all sessions under the progress bar. Session means one migration from source host to destination host together with network measurement.
 Status, time of start end finish, id and number of rows is displayed for each session.
 
-Information about transfers during session can be displayed as a table or a graph. Graphing library is Chart.js\footnote{\url{https://github.com/nnnick/Chart.js}} so it is necessary to use browser with JavaScript and \Ac{HTML}5 support. Drawing graphs in browser is much slower than using MATLAB, because it is not optimized to work with huge datasets. Graphing in browser is intended to be used for quick overview and more complex visualization can be generated from exported \Ac{CSV} file using MATLAB or matplotlib.
-
+Information about transfers during session can be displayed as a table or a graph. Graphing library is Chart.js\footnote{\url{https://github.com/nnnick/Chart.js}} so it is necessary to use browser with JavaScript and \Ac{HTML}5 support. It is much slower to generate graph in browser than using MATLAB, because it is not optimized to work with huge datasets. Graphing in browser is intended to be used for quick overview and more complex visualization can be generated from exported \Ac{CSV} file using MATLAB or matplotlib.
 
 \begin{figure}[htb]
 	\begin{center}
@@ -382,9 +381,4 @@ Information about transfers during session can be displayed as a table or a grap
 	\label{img:themis-graph}
 \end{figure}
 
-
-
-
-
-
-
+Frontend does not implement any kind of authorization and authentication because it is supposed to run on isolated network or as a part of existing system with authorization. Every client gets unlimited access to all migration data and can perform any action. It is necessary to negotiate rules in case of multiuser usage. It is not difficult to implement user access control, but it is beyond the scope of this thesis. Authentication library Authlogic\footnote{\url{https://github.com/binarylogic/authlogic}} can be uses with authorization provided by for example CanCanCan\footnote{\url{https://github.com/CanCanCommunity/cancancan}}.
