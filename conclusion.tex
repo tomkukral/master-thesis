@@ -32,16 +32,8 @@ Typical use case is migration of virtual machine with \Ac{SLA}. It is necessary 
 Migration schema can be defined using console or web interface. Virtual machine availability is then evaluated according to schema. Repetitive migrations are supported as well as configurable bandwidth for packet generator. 
 Application configures virtual machine via \Ac{SSH}, starts measurement session, request migration via orchestrator \Ac{API} and collects results. Whole process is fully automated, so no manual configuration is need. 
 
-
-
-% tool to measure virtual machines migrations
-% network measurement & orchestration & data collection
-% sample data in appendix
-
-% Fork
+Result can be viewed in browser or exported into \Ac{CSV} file. Sample measurement outputs are presented in appendix \ref{appendix:measurement-samples}. Source data were exported from Themis application and processed in MATLAB.
 
 % elmag fork
 Fork of the application is used in Department of Electromagnetic Field, CTU FEE, for automatic measurement of wireless links and monitoring. Migration routines are not used and remote management is replaced by agent responsible for continuous packet generation. I am going to continue in development of this fork and new features will be merged into main branch.
 
-
-Sample measurement outputs are presented in appendix \ref{appendix:measurement-samples}. Source data were exported from Themis application and processed in MATLAB.
