@@ -27,11 +27,9 @@ Overlay networks can immediately bring some significant improvements to datacent
 % practical
 It is possible to migrate virtual machine with really minimal outage so \Ac{VM}s can be moved between hypervisors to optimize performance or minimize energy consumption. It is necessary to think about networking aspect of migration, because transfer degradation will definitely appear during migration. I have developed an application called Themis, which is capable to evaluate virtual machine availability during live migration. It combines network measurements, orchestration and data analysis.
 
-It can be used to measure service interruption during migrations. Typical use case is migration of virtual machine with \Ac{SLA}. It is necessary to measure service disruption before migration because there are limits, for example for packet loss, defined in \Ac{SLA}. Themis can be used to migrate testing virtual machine and check whether service degradation during migration is acceptable.
+Typical use case is migration of virtual machine with \Ac{SLA}. It is necessary to measure service disruption before migration because there are limits, for example for packet loss, defined in \Ac{SLA}. Themis can be used to migrate testing virtual machine and check whether service degradation during migration is acceptable.
 
 Migration schema can be defined using console or web interface. Virtual machine availability is then evaluated according to schema. Repetitive migrations are supported as well as configurable bandwidth for packet generator. 
-
-
 Application configures virtual machine via \Ac{SSH}, starts measurement session, request migration via orchestrator \Ac{API} and collects results. Whole process is fully automated, so no manual configuration is need. 
 
 
@@ -45,3 +43,5 @@ Application configures virtual machine via \Ac{SSH}, starts measurement session,
 % elmag fork
 Fork of the application is used in Department of Electromagnetic Field, CTU FEE, for automatic measurement of wireless links and monitoring. Migration routines are not used and remote management is replaced by agent responsible for continuous packet generation. I am going to continue in development of this fork and new features will be merged into main branch.
 
+
+Sample measurement outputs are presented in appendix \ref{appendix:measurement-samples}. Source data were exported from Themis application and processed in MATLAB.
