@@ -173,6 +173,26 @@ screen -d -m /bin/bash -li -c '~/themis/agent.rb "receiver" \
 \end{verbatim}
 \end{figure}
 
+\subsubsection{Known problems}
+
+Sessions are not atomic because asynchronous \Ac{API} is used and many sequential actions need to be performed. Orchestrator works in \Uv{best effort} manner, so migration request is refused sometimes. It is usually caused by temporary unknown \Ac{VM} state. This behavior can not be solved in application so this kind of session is just marked as failed and next session is started. 
+
+Another problem is virtual machine stuck in migration state. It is caused by hypervisor error (usually deadlock). Orchestrator keeps asking about virtual machine state but never gets an answer, so virtual machine is stuck in actual state. It is necessary to fix this error manually in orchestrator, because application will get stuck in waiting for migration to finish. It is necessary to fix faulty hypervisor, delete \Ac{VM} and recreate it.
+Measurement task will continue after \Ac{VM} under test is back in running state.
+
+Most serious problem is caused by zombie \Ac{VM}s. Zombie is virtual machine running on hypervisor, although it should not. Even worse is that OpenNebula orchestrator does not display zombies in list of virtual machines and it is possible to deploy virtual machine with same id on different host. This situation is depicted in figure \ref{img:themis-zombie}. It is obviously not possible to migrate \Name{one-247} between hosts, because it already exists on both of them. I am working on modification of OpenNebula scheduler to stop deployment of virtual machine in case of zombie with same name already exists.
+
+\begin{figure}[htb]
+	\begin{center}
+	\includegraphics[scale=0.8]{zombie.png}
+	\end{center}
+	\caption{Zombie \Ac{VM}}
+	\label{img:themis-zombie}
+\end{figure}
+
+All of these errors are cause by incorrect orchestrator behavior, so it is necessary to solve them in orchestrator. Application will wait for problem to be fixed or labels session as failed.
+
+
 
 \subsection{Transfer}
 Class MeasureTransfer is used to store information about transfers and it is actually parsed output from packet receiver. There are no user editable fields because objects are uploaded via \Ac{API}. Model parameters are described in table \ref{tab:measuretransfer-params}.
@@ -326,8 +346,6 @@ iperf --server --bind 192.0.2.1 --port 5004 --udp --interval \
 \end{verbatim}
 \end{figure}
 
-
-\textbf{TODO: explain orchestrator errors}
 
 
 \section{Frontend}
