@@ -55,13 +55,13 @@ Definition class is the highest class in the hierarchy so it is connected with o
 
 Methods for manipulation with orchestrator resources are declared in definition class. \Name{Host\_source} and \Name{host\_destination} returns host object for source and destination host. Method called \Name{virtual\_machine} returns virtual machine object which is going be used for migration evaluation and control.
 
-Most important method of the definition class is \Name{start} because it executes migration evaluation. It is responsible for generation of sessions and starting all of them. One session object will be prepared for each migration cycle, so number of session objects is the same as number stored in cycles parameter. Sessions need to be started one by one so there is an loop which starts new session right after finishing the previous one. Session start is performed by calling \Name{start} of session class. This method is different from previously mentioned method with same name, because this one is defined in session class.
+Most important method of the definition class is \Name{start} because it executes migration evaluation. It is responsible for generation of sessions and starting all of them. One session object will be prepared for each migration cycle, so number of session objects is the same as number stored in cycles parameter. Sessions need to be started one by one so there is an loop which starts new session right after finishing the previous one. Session start is performed by calling \Name{start} of session class. This method is different from previously mentioned method with same name because this one is defined in session class.
 Finished\_at parameter is set to current timestamp right after finishing of last session, i.e. at the end of migration evaluation. 
 
 Migration evaluation is not very computation expensive, but it can take really long time to perform many migration cycles, in particular for virtual machines under load. It is not possible to run these long running tasks on request from web interface because request will timeout shortly and task would be terminated. I have decided to use Delayed::Job (\Ac{DJ}) to run these task asynchronously.
 \Ac{DJ} can run task in detached process and it can run for a long time without any timeout problems. It is also possible to run \Ac{DJ} worker on separate machine so migration evaluation is executed in completely separated environment. This approach eliminates interference with other processes or network traffic. Security is improved too, since the orchestrator interface does not need to be accessible from machine serving web interface.
 
-There is one special function called flush and it clears measurement definition and all of it's subordinate objects. It can be used for debugging, because it is sometimes necessary to repeat the migration with same parameters. However it is not possible to run migration which was running in the past and all of sessions have already finished.
+There is one special function called flush and it clears measurement definition and all of it's subordinate objects. It can be used for debugging because it is sometimes necessary to repeat the migration with same parameters. However it is not possible to run migration which was running in the past and all of sessions have already finished.
 
 \begin{table}[htb]
 \begin{center}
@@ -133,7 +133,7 @@ There are no parameters editable by a user because all necessary information abo
 \end{table}
 
 
-Most important part of MeasureSession class is \Name{start} method. This method is executed by superior definition, so it is not necessary to set an asynchronous execution with Delayed::Job, because higher object is already running asynchronously.
+Most important part of MeasureSession class is \Name{start} method. This method is executed by superior definition, so it is not necessary to set an asynchronous execution with Delayed::Job because higher object is already running asynchronously.
 
 It is necessary to load migration parameters, so only an information about supervisor \Ac{IP} is loaded as a string and the rest is loaded as objects. It is beneficial to work with objects instead of identifiers because it allows to execute commands directly without any additional parsing.
 
@@ -155,7 +155,7 @@ kill -SIGINT "$KILLPID"; fi
 
 Next action performed during the first stage is migration to the source host. Source and destination hosts are loaded from the measure definition and the migration must be performed exactly from the source to the destination, so the \Ac{VM} need to be running on the source host. Unmeasured migration to source host is requested during this stage if \Ac{VM} is not already running on right host.
 
-Last task in preparation stage is to run agents. It is necessary to start agents on \Ac{VM} and supervisor. Both agents must stay running after \Ac{SSH} disconnection. It is a bit tricky to run a Ruby script on a remote machine in a subshell, because normal behavior it is to terminate process after disconnection. I am using \Cmd{screen} software which is able to run detached processes. However situation is even more complicated due to different Ruby installation methods on \Ac{VM} and supervisor. Virtual machine uses standard Ruby version installed via package manager by command \Cmd{apt-get install ruby}, so it easier to run agent.rb because it does not require interactive shell. Rbenv\footnote{\url{https://github.com/sstephenson/rbenv}} is used to install Ruby on supervisor because agent.rb in receiver mode requires newer version than provided by package manager. Rbenv is initialized in file \~/.bashrc so it is necessary to run all Ruby scripts in interactive shell. Parameters for agent.rb can be found below in the table \ref{tab:agent-parameters}.
+Last task in preparation stage is to run agents. It is necessary to start agents on \Ac{VM} and supervisor. Both agents must stay running after \Ac{SSH} disconnection. It is a bit tricky to run a Ruby script on a remote machine in a subshell because normal behavior it is to terminate process after disconnection. I am using \Cmd{screen} software which is able to run detached processes. However situation is even more complicated due to different Ruby installation methods on \Ac{VM} and supervisor. Virtual machine uses standard Ruby version installed via package manager by command \Cmd{apt-get install ruby}, so it easier to run agent.rb because it does not require interactive shell. Rbenv\footnote{\url{https://github.com/sstephenson/rbenv}} is used to install Ruby on supervisor because agent.rb in receiver mode requires newer version than provided by package manager. Rbenv is initialized in file \~/.bashrc so it is necessary to run all Ruby scripts in interactive shell. Parameters for agent.rb can be found below in the table \ref{tab:agent-parameters}.
 
 \begin{figure}[htb]
 \caption{Run remote agents command}
@@ -176,10 +176,10 @@ screen -d -m /bin/bash -li -c '~/themis/agent.rb "receiver" \
 
 Sessions are not atomic because asynchronous \Ac{API} is used and many sequential actions need to be performed. Orchestrator works in \Uv{best effort} manner, so migration request is refused sometimes. It is usually caused by temporary unknown \Ac{VM} state. This behavior can not be solved in application so this kind of session is just marked as failed and next session is started. 
 
-Another problem is virtual machine stuck in migration state. It is caused by hypervisor error (usually deadlock). Orchestrator keeps asking about virtual machine state but never gets an answer, so virtual machine is stuck in actual state. It is necessary to fix this error manually in orchestrator, because application will get stuck in waiting for migration to finish. It is necessary to fix faulty hypervisor, delete \Ac{VM} and recreate it.
+Another problem is virtual machine stuck in migration state. It is caused by hypervisor error (usually deadlock). Orchestrator keeps asking about virtual machine state but never gets an answer, so virtual machine is stuck in actual state. It is necessary to fix this error manually in orchestrator because application will get stuck in waiting for migration to finish. It is necessary to fix faulty hypervisor, delete \Ac{VM} and recreate it.
 Measurement task will continue after \Ac{VM} under test is back in running state.
 
-Most serious problem is caused by zombie \Ac{VM}s. Zombie is virtual machine running on hypervisor, although it should not. Even worse is that OpenNebula orchestrator does not display zombies in list of virtual machines and it is possible to deploy virtual machine with same id on different host. This situation is depicted in figure \ref{img:themis-zombie}. It is obviously not possible to migrate \Name{one-247} between hosts, because it already exists on both of them. I am working on modification of OpenNebula scheduler to stop deployment of virtual machine in case of zombie with same name already exists.
+Most serious problem is caused by zombie \Ac{VM}s. Zombie is virtual machine running on hypervisor, although it should not. Even worse is that OpenNebula orchestrator does not display zombies in list of virtual machines and it is possible to deploy virtual machine with same id on different host. This situation is depicted in figure \ref{img:themis-zombie}. It is obviously not possible to migrate \Name{one-247} between hosts because it already exists on both of them. I am working on modification of OpenNebula scheduler to stop deployment of virtual machine in case of zombie with same name already exists.
 
 \begin{figure}[htb]
 	\begin{center}
@@ -350,7 +350,7 @@ iperf --server --bind 192.0.2.1 --port 5004 --udp --interval \
 
 
 \section{Frontend}
-I have developed web interface for managing Themis application, because it is easier for users to interact with web interface then configure application using console. Although web interface was not main goal of this thesis, I have decided to implement it to provide better information about running migration and simple interface.
+I have developed web interface for managing Themis application because it is easier for users to interact with web interface then configure application using console. Although web interface was not main goal of this thesis, I have decided to implement it to provide better information about running migration and simple interface.
 
 Web frontend is created in respect with model-view-architecture of Ruby on Rails. Twitter Bootstrap\footnote{\url{https://github.com/twbs/bootstrap}} is used for user interface components.
 
@@ -363,7 +363,7 @@ There are three tabs in the main page:
 
 First tab is just welcome page with elementary information. The most important information on this page is current version. Application is prepared to be deployed using Capistrano\footnote{\url{https://github.com/capistrano/capistrano}} so current running version is loaded from GIT repository.
 
-Waiting jobs tab displays running and pending tasks. All long-running tasks need to be executed asynchronously with Delayed::Job, so task is first saved into the database and then executed by a worker after some time defined in the configuration. Pending and running jobs can be reviewed in this tab. However it is not allowed to perform any changes on running or pending task, because it could break relation between Delayed::Job and running processes.
+Waiting jobs tab displays running and pending tasks. All long-running tasks need to be executed asynchronously with Delayed::Job, so task is first saved into the database and then executed by a worker after some time defined in the configuration. Pending and running jobs can be reviewed in this tab. However it is not allowed to perform any changes on running or pending task because it could break relation between Delayed::Job and running processes.
 
 \subsection{Definitions}
 Most important tab is Measure definitions because actions can be performed here. List of all definitions is displayed after clicking the tab, screenshot is in the figure \ref{img:themis-definitions}. User accessible parameters from table \ref{tab:measuredefinition-params} are displayed here. There are also basic actions as view, edit and destroy. Already started definition can not be edited.
@@ -376,7 +376,7 @@ Most important tab is Measure definitions because actions can be performed here.
 	\label{img:themis-definitions}
 \end{figure}
 
-I have decided to print source and destination host only as an id, because each name lookup takes one request send to the orchestrator. I think that listing id is sufficient, because user should already be familiar with OpenNebula hosts. 
+I have decided to print source and destination host only as an id because each name lookup takes one request send to the orchestrator. I think that listing id is sufficient because user should already be familiar with OpenNebula hosts. 
 
 More information about definition can be displayed by following \Uv{view} action link on the right side. This page displays all information about selected definition, it's parameters, sessions and transfers. Screenshot is in the figure \ref{img:themis-definition}.
 
@@ -393,7 +393,7 @@ Progress bar represents ratio between finished, failed and pending sessions. Fir
 There is table of all sessions under the progress bar. Session means one migration from source host to destination host together with network measurement.
 Status, time of start end finish, id and number of rows is displayed for each session.
 
-Information about transfers during session can be displayed as a table or a graph. Graphing library is Chart.js\footnote{\url{https://github.com/nnnick/Chart.js}} so it is necessary to use browser with JavaScript and \Ac{HTML}5 support. It is much slower to generate graph in browser than using MATLAB, because it is not optimized to work with huge datasets. Graphing in browser is intended to be used for quick overview and more complex visualization can be generated from exported \Ac{CSV} file using MATLAB or matplotlib.
+Information about transfers during session can be displayed as a table or a graph. Graphing library is Chart.js\footnote{\url{https://github.com/nnnick/Chart.js}} so it is necessary to use browser with JavaScript and \Ac{HTML}5 support. It is much slower to generate graph in browser than using MATLAB because it is not optimized to work with huge datasets. Graphing in browser is intended to be used for quick overview and more complex visualization can be generated from exported \Ac{CSV} file using MATLAB or matplotlib.
 
 \begin{figure}[htb]
 	\begin{center}
