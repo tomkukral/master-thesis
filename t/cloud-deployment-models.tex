@@ -1,29 +1,29 @@
 %pdflatex-../thesis.tex
 % vim:spell spelllang=en_us
 
-There are three scenarios possible for deploying cloud solutions. Models differs by ownership and subject responsible by administration of the system. Right solution depends on expected load, available budget as well as on expected classification of data. Public model and private model are mutually contradictory and last model called hybrid is combination of first two mentioned.
+There are three scenarios possible for deploying cloud solutions. Models differs by ownership and subject responsible by administration of the system. Right solution depends on expected load, available budget as well as on expected classification of data. Public model and private model are mutually contradictory and last model, called hybrid, is combination of first two mentioned.
 %Model are compared in table \ref{tab:deployment-models}.
 
 \subsection{Private}
-Private model defines cloud environment build exclusively for single subject. Typical scenario is to build private cloud in datacenter owner by the subject, but it is not strictly required. There is common misunderstanding of term private, because it means private usage of cloud resources and not private ownership of cloud infrastructure. Private cloud may be leased from third-party provider and it also can be running on third-party hardware.
+Private model defines cloud environment build exclusively for single subject. Typical scenario is to build private cloud in datacenter owner by the subject, but it is not strictly required. There is common misunderstanding of term private, because it means private usage of cloud resources and not private ownership of cloud infrastructure. Private cloud may be leased from third-party provider and it can also be running on a third-party hardware.
 
-Running private cloud gives an advantage in elimination of any inter-tenant isolation problems and it is possible to adapt configuration to fit owner needs. There is a law, which forces sensitive data to be stored internally and with limited access, so it is necessary to build private or hybrid cloud for this kind of usage. It is not clear how to handle clouds and especially storages with law, because it this topic is wide and it is not possible to define rigid rules. There is currently running case with \Ac{US} judge ordering Microsort to provide data stored in Ireland. \cite{wp-microsoft-ireland}
+Running private cloud gives an advantage in an elimination of any inter-tenant isolation problems and it is possible to adapt configuration to fit the tenant needs. There is a law, which forces sensitive data to be stored internally and with limited access, so it is necessary to build private or hybrid cloud for this kind of usage. It is not clear how to handle clouds and especially storages with law, because this topic is wide and it is not possible to define rigid rules. There is currently running case with \Ac{US} judge ordering Microsort to provide data stored in Ireland. \cite{wp-microsoft-ireland}
 
-Drawback of private cloud is higher initial cost and probably also higher operational costs, but it depends on expected usage.
+Drawback of private cloud is higher initial cost and probably also higher operational costs, but it depends on the expected usage.
 
 \subsection{Public}
-Public cloud deployment model is based on resource sharing between the tenants. There is usually one subject called cloud provider and many customers (tenants) and these tenants buy resources and rights to use them. Resources are usually charged according to it's usage.
+Public cloud deployment model is based on a resource sharing between tenants. There is usually one subject called cloud provider and many customers (tenants). These tenants buy resources and rights to use them. Resources are usually charged according to it's usage.
 
-Billing per resource usage is called pay-per-use and it is interesting method of shifting costs between initial and operational. There are usually plans with various \Ac{CPU}, memory and storage options and final cost depends on real usage of resource. Pricing plan based on pay-per-use is favourable to services with low load with occasional peaks. Service under constant high load is not well suited for this payment model, because it does not bring any benefits. It is also to run scalable application, since unscalable will not be able to 
+Billing per resource usage is called pay-per-use and it is interesting method of shifting costs between initial and operational. There are usually plans with various \Ac{CPU}, memory and storage options and final cost depends on real usage. Pricing plan based on pay-per-use is favourable to services with low load with occasional peaks. Service under constant high load is not well suited for this payment model, because it does not bring any benefits.
 
-Infrastructure is not dedicated and it is shared between tenants. Resources are shared, but must be strictly isolated, because it is unacceptable to allow any interference between tenants, unless they make an explicit request to allow it.
+The infrastructure is not dedicated and it is shared between tenants. Resources are shared, but must be strictly isolated, because it is unacceptable to allow any interference between tenants, unless they make an explicit request to allow it.
 
-It is common to provide services with flexible parameters, for example Amazon calls it EC2 - Elastic Compute Cloud. Elasticity of provided services allows tenant to use more resources when needed and fall back to usual amount. 
+It is common to provide services with flexible parameters, for example Amazon calls it EC2 - Elastic Compute Cloud. Elasticity allows tenant to use more resources when needed and fall back to usual amount. 
 
 \subsection{Hybrid}
-Hybrid cloud is model utilizing both, public and private, previous mentioned models. The goal is to combine advantages of both model and eliminate drawbacks. Public cloud is usually more cost effective, but may not be able to meet the security requirements and on the other hand private cloud can be designed to comply with users requests, but it is expensive. Hybrid designed solution can use private cloud part for confidential data and public cloud for less sensitive ones. 
+Hybrid cloud is model utilizing both previous mentioned models. The goal is to combine advantages of models and eliminate drawbacks. Public cloud is usually more cost effective, but may not be able to meet the security requirements and on the other hand private cloud can be designed to comply with users requests, but it is more expensive. Hybrid designed solution can use private cloud part for confidential data and public cloud for less sensitive ones. 
 
-It is also possible to utilize cloud bursting in which system runs in private cloud and delegates part of load into public cloud. Lets describe it with application for collecting votes - sensitive part responsible for counting votes and generating results report will run in private cloud and public report will be saved to and served from infrastructure of public cloud. High level of security of counting votes is guaranteed and application is also able to deliver results to many subscribers as it can scale up into public cloud.
+It is also possible to utilize cloud bursting in which system runs in private cloud and delegates part of load into public cloud. Lets describe it with application for collecting votes - sensitive part responsible for counting votes and generating results will run in private cloud and public report will be saved to and served from infrastructure of public cloud. High level of security of counting votes is guaranteed and application is also able to deliver results to many subscribers as it can scale out into public cloud.
 
 %\begin{table}[htb]
 %\begin{center}
