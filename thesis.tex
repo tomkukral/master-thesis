@@ -184,7 +184,7 @@
 
 %prohlášení
 \begin{spodnitext}{Proclamation}
-I declare that this thesis was made by myself with assistance of my supervisor. All parts taken over word by word from literature or other publications are referenced. I approve publishing this thesis or any part of it with referencing author of original text.
+I declare that I worked out the presented thesis independently and I quoted all used sources of information accord with Methodical instructions about ethical principles for writing academical thesis.
 
 \vspace{10mm}
 In~\Place~at~\Datefull \hfill \hbox to 65mm{\tiny\dotfill}
@@ -195,8 +195,11 @@ In~\Place~at~\Datefull \hfill \hbox to 65mm{\tiny\dotfill}
 
 % abstrakt
 \begin{spodnitext}{Abstract}
-%	This master thesis deals with testing data networks in cloud environment. Techniques of inter and intra-cloud networks are described in theoretical part as well as virtual machine migrations.
-% 	Practical part brings methodology and framework for testing virtual machine migration. Measurements are performed at OpenNebula cloud environment with {KVM} virtual machines.
+This thesis deals with the evaluation of virtual machine migrations. Distributed datacenter technologies are described in theoretical part with special focus on the virtual networks and the storage methods.
+
+Practical part introduced an application for testing virtual machine availability during the migration. 
+It can perform repetitive migration according and collects the results.
+The application is prepared to work with OpenNebula orchestrator.
 \end{spodnitext}
 
 
@@ -211,7 +214,7 @@ In~\Place~at~\Datefull \hfill \hbox to 65mm{\tiny\dotfill}
 %\section{Introduction}
 %\subimport{./}{introduction}
 
-\part{Theoretical}
+\part[Theoretical part]{Theoretical}
 	\chapter{Virtualization}
 		\subimport{./t/}{t/virtualization}
 
@@ -246,7 +249,7 @@ In~\Place~at~\Datefull \hfill \hbox to 65mm{\tiny\dotfill}
 	\chapter{Migration of virtual machines}
 		\subimport{./t/}{t/migration}
 
-\part{Practical}
+\part[Practical part]{Practical}
 	\subimport{./p/}{p/introduction}
 	\chapter{Methodology overview}
 	\subimport{./p/}{p/methodology}
