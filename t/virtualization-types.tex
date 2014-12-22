@@ -1,7 +1,7 @@
 %pdflatex-../thesis.tex
 % vim:spell spelllang=en_us
 
-There are three different virtualization types and they vary by method used t
+There are three different computer virtualization types and they vary by method used t
 add virtualization layer between guests and physical hardware. It it not possible to easily choose better or worse virtualization types because it depends on intended usage, character of computing tasks and required operating system.
  
 Common computer architectures are designed to run on the physical harware, so is in not easy to virtualize these architectures. Access to hardware is controlled by priority levels called rings. Lowest priority is assigned to the userspace applications and highest priority (ring 0) is reserved for operating system. It is necessary to insert virtualization layer between operating system and hardware, but there is not any ring with higher priority than operating system uses. This problem needs to be solved and it is not the only one. There are sensitive instructions incompatible with virtualization because they use different semantics if they are not run in ring 0, as mentioned in \cite{vmware-para}.

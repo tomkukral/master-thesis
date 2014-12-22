@@ -13,10 +13,10 @@ Geographical backups or failover is much more easier to accomplish with virtuali
 Virtualization brings also economical and environmental advantages. Economical advantages are fairly obvious as it is no longer necessary to purchase physical servers. Non-virtualizational approach requires one physical machine for every running server, but that is not longer necessary with virtualization. It is possible to run many virtual servers or containers on single physical machine. It is also possible to move even to the higher level of \Ac{CAPEX} cutting and rent virtual machine from provider and absolutely eliminate need for running any server machine. Renting virtual server increases \Ac{OPEX}, but they are more flexible and easier to control.
 Electrical consumption should also be taken into account because single physical machine, even under higher load, will definitely consume less power compared with two or more similar machines. 
 
-I asked Petr Hodač, technical manager at SiliconHill and he stated, that they managed to reduce electricity consumption of whole server room by 19\% iter alia due to deployment of virtualization. It produced also additional saving because they need less \Ac{UPS} batteries and less cooling capacity, but savings on cooling are not included in mentioned savings.
+I asked Petr Hodač, technical manager at SiliconHill and he stated, that they managed to reduce electricity consumption of whole server room by 19\%  due to deployment of virtualization. It produced also additional saving because they need less \Ac{UPS} batteries and less cooling capacity, but savings on cooling are not included in mentioned savings.
 
 % disadvantages
-However there are some drawback too. Failure of physical host causes failure of all virtual machines or containers running on this host. It it can look as a single point of failure, but we can fight it bu duplication of service nodes between different hosts, datacenters, providers or continents.
+However there are some drawback too. Failure of physical host causes failure of all virtual machines or containers running on this host. It it can look as a single point of failure, but we can fight it by duplication of service nodes between different hosts, datacenters, providers or continents.
 Another disadvantage is hidden in additional virtualization level, since it is necessary to take care of hypervisors. I think that is not a real disadvantage, since traditional non-virtualized approach needs to take a care of many physical machines.
 
 % final note
