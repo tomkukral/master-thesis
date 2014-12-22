@@ -87,7 +87,6 @@ The simplest network driver is called dummy and \Ac{VM}'s interface is only adde
 Little more advanced driver is fw and it does the same job as dummy driver but it can configure a firewall too. Firewall rules are applied at physical host so it is not necessary to install any software into the virtual machine. Iptables package must be install on node to use this driver. Firewall rules described in the figure \ref{code:fw} are added after \Ac{VM} deployment and removed after a shutdown. \Ac{TCP} and \Ac{UDP} ports can be whitelisted or blacklisted and it is also possible to drop an incoming \Ac{ICMP} packets. Driver's capabilities can be easily extended by editing scripts located at /var/lib/one/remotes/vnm/fw/\{pre,post,clean\}.
 
 \begin{figure}[htb]
-\caption{Iptables rules created by fw network driver}
 \label{code:fw}
 \begin{verbatim}
 # Create a new chain for each network interface
@@ -114,6 +113,7 @@ Little more advanced driver is fw and it does the same job as dummy driver but i
 # Drop new ICMP connections
 -A one-<vm_id>-<net_id> -p icmp -j DROP
 \end{verbatim}
+\caption{Iptables rules created by fw network driver}
 \end{figure}
 
 % 801.1Q

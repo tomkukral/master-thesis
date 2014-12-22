@@ -14,7 +14,7 @@ Application is modular and can be adapted for different orchestrator than OpenNe
 \end{figure}
 
 % languages
-Application is written in Ruby using Ruby on Rails framework. Ruby is platform independent and can run on almost every currently used operating system. Ruby on Rails (\Ac{RoR}) is framework providing database abstraction and it is strictly based on model-view-controller (\Ac{MVC}) architecture. Application defined by an object model, outputs are generatied using views and controller is responsible for sending commands to models and forward results to views.
+Application is written in Ruby using Ruby on Rails framework. Ruby is platform independent and can run on almost every currently used operating system. Ruby on Rails (\Ac{RoR}) is framework providing database abstraction and it is strictly based on model-view-controller (\Ac{MVC}) architecture. Application defined by an object model, outputs are generated using views and controller is responsible for sending commands to models and forward results to views.
 
 I have decided to use this framework because it provides better interaction with system services, e.g. \Ac{SSH} and \Ac{SCP}, than other web frameworks. There are public available classes for interaction with OpenNebula and OpenStack cloud \Ac{API} so it is not necessary to create \mbox{\Ac{XML}-\Ac{RPC}} parsers from scratch.
 
@@ -144,18 +144,18 @@ Migration process can be divided into 3 stages. First stage is preparation for m
 First task after loading migration information is clearing previous measurement session. Established session between packet generator and packer receiver can become stale if it was not terminated successfully after previous migration. Packet generator and receiver should be terminated after virtual machine migration, but it may stay running in case of unexpected backend error or unclean shutdown. Command in the figure \ref{cmd:killcmd} is executed on \Ac{VM} and supervisor just to be sure there are no stale sessions. This command is optimized for agent.rb and need to be adapted to work with another measurement tools.
 
 \begin{figure}[htb]
-\caption{Clear stale sessions command}
 \label{cmd:killcmd}
 \begin{verbatim}
 KILLPID=$(ps aux | grep -v grep | grep agent\.rb | grep ruby \
 | xargs | cut -d' ' -f2); if [ -n "$KILLPID" ]; then \
 kill -SIGINT "$KILLPID"; fi 
 \end{verbatim}
+\caption{Clear stale sessions command}
 \end{figure}
 
 Next action performed during the first stage is migration to the source host. Source and destination hosts are loaded from the measure definition and the migration must be performed exactly from the source to the destination, so the \Ac{VM} need to be running on the source host. Unmeasured migration to source host is requested during this stage if \Ac{VM} is not already running on right host.
 
-Last task in preparation stage is to run agents. It is necessary to start agents on \Ac{VM} and supervisor. Both agents must stay running after \Ac{SSH} disconnection. It is a bit tricky to run a Ruby script on a remote machine in a subshell because normal behavior it is to terminate process after disconnection. I am using \Cmd{screen} software which is able to run detached processes. However situation is even more complicated due to different Ruby installation methods on \Ac{VM} and supervisor. Virtual machine uses standard Ruby version installed via package manager by command \Cmd{apt-get install ruby}, so it easier to run agent.rb because it does not require interactive shell. Rbenv\footnote{\url{https://github.com/sstephenson/rbenv}} is used to install Ruby on supervisor because agent.rb in receiver mode requires newer version than provided by package manager. Rbenv is initialized in file \~/.bashrc so it is necessary to run all Ruby scripts in interactive shell. Parameters for agent.rb can be found below in the table \ref{tab:agent-parameters}.
+Last task in preparation stage is to run agents. It is necessary to start agents on \Ac{VM} and supervisor. Both agents must stay running after \Ac{SSH} disconnection. It is difficult to run a Ruby script on a remote machine in a subshell because normal behavior it is to terminate process after disconnection. I am using \Cmd{screen} software which is able to run detached processes. However situation is even more complicated due to different Ruby installation methods on \Ac{VM} and supervisor. Virtual machine uses standard Ruby version installed via package manager by command \Cmd{apt-get install ruby}, so it easier to run agent.rb because it does not require interactive shell. Rbenv\footnote{\url{https://github.com/sstephenson/rbenv}} is used to install Ruby on supervisor because agent.rb in receiver mode requires newer version than provided by package manager. Rbenv is initialized in file \~/.bashrc so it is necessary to run all Ruby scripts in interactive shell. Parameters for agent.rb can be found below in the table \ref{tab:agent-parameters}.
 
 \begin{figure}[htb]
 \caption{Run remote agents command}
@@ -189,12 +189,10 @@ Most serious problem is caused by zombie \Ac{VM}s. Zombie is virtual machine run
 	\label{img:themis-zombie}
 \end{figure}
 
-All of these errors are cause by incorrect orchestrator behavior, so it is necessary to solve them in orchestrator. Application will wait for problem to be fixed or labels session as failed.
-
-
+All of these errors are caused by incorrect orchestrator behavior, so it is necessary to solve them in orchestrator. Application will wait for problem to be fixed or labels session as failed.
 
 \subsection{Transfer}
-Class MeasureTransfer is used to store information about the transfers and it is actually parsed output from packet receiver. There are no user editable fields because objects are uploaded via \Ac{API}. Model parameters are described in the table \ref{tab:measuretransfer-params}.
+Class MeasureTransfer is used to store information about the transfers and it actually parses output from packet receiver. There are no user editable fields because objects are uploaded via \Ac{API}. Model parameters are described in the table \ref{tab:measuretransfer-params}.
 
 Themis application use iperf to measure packet flow, so MeasureTransfer class is tailored for output of the iperf. Adapting to another measurement software is fairly easy because just one database migration script and small model changes will do the job.
 
