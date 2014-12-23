@@ -3,12 +3,12 @@
 
 % Storage
 
-Storage is an essential part of a datacenter since it provides space for saving information. We can distinguish between different types of storages and dozens of storage access methods, so it is obvious that building one universal solution for all use cases is impossible. 
+Storage is an essential part of a datacenter since it provides space for saving information. We can distinguish among different types of storages and dozens of storage access methods, so it is obvious that building one universal solution for all use cases is impossible. 
 
 \subsection{Physical storage}
 Storage can be divided into layers. First layer is a physical storage and it is represented by a physical hardware used to save data. It is, for example, physical rotary drive, \Ac{SSD}, tape drive or any other kind of physical storage. Each server can be equipped with a small drive which is used as a local storage. This approach is called Direct Attached Storages and it is connected with share-nothing architecture. The advantages of share-nothing is high level of node's independence, but I think that this solution is not flexible enough to be used as main storage scenario for a whole data center.
 
-Another way of providing servers with a semi-physical storage is using some sort of shared storage. There is a box stuffed with a physical storage and other servers are using this storage via some standardized protocol like \Ac{FCP} or \Ac{iSCSI}. Shared storage brings better flexibility compared to direct attached storage because physical storage is not fixed to a single server. However shared storages is usually centralized too and it is a bottleneck and a single point of failure.
+Another way of providing servers with a semi-physical storage is using some sort of shared storage. There is a box stuffed with a physical storage and other servers are using this storage via some standardized protocol like \Ac{FCP} or \Ac{iSCSI}. Shared storage brings better flexibility compared to direct attached storage because physical storage is not fixed to a single server. However, shared storages are usually centralized too and it is a bottleneck and a single point of failure.
 
 The physical storage can be organized into layers called tiers. Tiers are groups of a physical storage devices usually organized by their performance, reliability or price. It is obviously better to uses only high performance and reliable devices, however these are usually the most expensive ones with low capacity/price coefficient. Tiered storage can provide high performance and capacity together but it is necessary to use different tiers and optimize data placement. Storage with 3 tiers can use following drives:
 \begin{itemize}
@@ -46,7 +46,7 @@ I think that traditional approach with separate block and file storage is becomi
 	\item[inteoperabilty] between different technologies and vendors
 \end{description}
 
-Distributed storages is a solution which can fulfill all of these requirements. This kind of storage can not referred as neither block nor storage because it is necessary to use different storage element. These elements are stored on storage nodes according to storage map and rules. It is possible to define how many time should be each element saved, on how many nodes or on which type of physical storage.
+Distributed storages are a solution which can fulfill all of these requirements. This kind of storage can not referred as neither block nor storage because it is necessary to use different storage element. These elements are stored on storage nodes according to storage map and rules. It is possible to define how much time should be each element saved, on how many nodes or on which type of physical storage.
 
 Element mentioned in the paragraph above can be easily referred as an object, so an object storage can be build in a distributed way. However not every object storage is distributed storage because object storages can be local too.
 
