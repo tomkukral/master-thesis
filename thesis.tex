@@ -23,6 +23,7 @@
 \usepackage{caption}
 
 %\usepackage{tocloft}
+%\setlength{\cftbeforesecskip}{-0.5pt}
 
 \usepackage[toc,acronym,nonumberlist,style=long,sort=standard]{glossaries}
 \setlength{\glsdescwidth}{0.7\linewidth}
@@ -261,6 +262,9 @@ The application is prepared to work with OpenNebula orchestrator.
 
 	\chapter{Conclusion}
 		\subimport{./}{conclusion}
+
+% zalomení v toc
+%\addtocontents{toc}{\protect\newpage}
 
 %seznam zkratek
 \printglossary[type=acronym,title=List of Abbreviations,toctitle=List of Abbreviations]
