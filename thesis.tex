@@ -89,7 +89,8 @@
 
 \def \Titulkadesky {
     \begin{center}
-    {\LARGE \School}\\[2ex]
+    {\Huge \School}\\[2ex]
+    {\Large \Faculty}
 
 %    \begin{figure}[h!]
 %    \begin{center}
@@ -105,7 +106,7 @@
   \vspace{60mm}
 
     {\large \bf \Date \hfill \Authors}\\[6ex]
-
+	Vzor pro desky - nevázat do práce!
     \newpage
     \end{center}
     }
@@ -162,8 +163,6 @@
 \begin{document}
 % acronyms
 \subimport{./}{acronyms}
-
-
 \catcode`\-=12
 
 \begin{titlepage}
@@ -173,9 +172,10 @@
 % vypnout watermark
 
 % prázdná stránka
-%\newpage
-%\null
-%\clearpage
+\clearpage
+\thispagestyle{empty}
+\null
+\newpage
 
 \begin{titlepage}
 	\Titulka
@@ -188,11 +188,11 @@
 I declare that I worked out the presented thesis independently and I quoted all used sources of information accord with Methodical instructions about ethical principles for writing academical thesis.
 
 \vspace{10mm}
-In~\Place~at~\Datefull \hfill \hbox to 65mm{\tiny\dotfill}
+Date: \Datefull \hfill \hbox to 65mm{\tiny\dotfill}
 \end{spodnitext}
 
 %zadání
-%\includepdf[pages=-]{grafika/zadani.pdf}
+\includepdf[pages=-]{images/zadani.pdf}
 
 % abstrakt
 \begin{spodnitext}{Abstract}
@@ -201,6 +201,11 @@ This thesis deals with the evaluation of virtual machine migrations. Distributed
 Practical part introduced an application for testing virtual machine availability during the migration. 
 It can perform repetitive migration according migration plan and collects the results.
 The application is prepared to work with OpenNebula orchestrator.
+
+\vspace{2ex}
+
+{\bf Keywords:} \\
+virtualization, virtual machine, migration, OpenNebula, cloud, overlay network
 \end{spodnitext}
 
 
