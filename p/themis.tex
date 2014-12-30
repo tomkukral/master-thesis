@@ -3,7 +3,7 @@
 
 Themis is an application for evaluation of virtual machine migrations. It is prepared to be used for availability measurements and can be easily adjusted to perform other task during migration. 
 
-Application is modular and can be adapted for different orchestrator than OpenNebula. Architecture is depicted in figure \ref{img:themis-model}. Backend is responsible for measurement management and processing the results. Frontend provides web interface. Result can be displayed directly as table or graph in browser or exported in \Ac{CSV} format.
+Application is modular and can be adapted for different orchestrator than OpenNebula. Architecture is depicted in figure \ref{img:themis-model}. Backend is responsible for measurement management and processing the results. Frontend provides web interface. Result can be displayed in browser or exported in \Ac{CSV} format.
 
 \begin{figure}[htb]
 	\begin{center}
@@ -14,12 +14,12 @@ Application is modular and can be adapted for different orchestrator than OpenNe
 \end{figure}
 
 % languages
-Application is written in Ruby using Ruby on Rails framework. Ruby is platform independent and can run on almost every currently used operating system. Ruby on Rails (\Ac{RoR}) is framework providing database abstraction and it is strictly based on model-view-controller (\Ac{MVC}) architecture. Application defined by an object model, outputs are generated using views and controller is responsible for sending commands to models and forward results to views.
+Application is written in Ruby using Ruby on Rails framework. Ruby is platform independent and can run on almost every currently used operating system. Ruby on Rails (\Ac{RoR}) is framework providing database abstraction and it is strictly based on model-view-controller (\Ac{MVC}) architecture. Application isis  defined by an object model, outputs are generated using views and controller is responsible for sending commands to models and forward results to views.
 
-I have decided to use this framework because it provides better interaction with system services, e.g. \Ac{SSH} and \Ac{SCP}, than other web frameworks. There are public available classes for interaction with OpenNebula and OpenStack cloud \Ac{API} so it is not necessary to create \mbox{\Ac{XML}-\Ac{RPC}} parsers from scratch.
+I have decided to use this framework because it provides better interaction with system services, e.g. \Ac{SSH} and \Ac{SCP}, than other web frameworks. There are classes available for interaction with OpenNebula and OpenStack cloud \Ac{API} so it is not necessary to create \mbox{\Ac{XML}-\Ac{RPC}} parsers from scratch.
 
 \section{Measure models}
-There are three models of measurement tasks and results. It is definition, session and transfer. These models are used to describe migration tasks instructions, migration progress and results. 
+There are three models of measurement tasks and results. It is definition, session and transfer. These models are used to describe migration plans, migration progress and results. 
 Relation between models is depicted in the figure \ref{img:themis-models-brief}.
 
 All measurement models mentioned bellow are descendants of an \Name{ActiveRecord::Base} and mapping between objects and tables is handled by this build-in class. It also describes inter-model associations and performs validation. 
@@ -38,9 +38,9 @@ Definition class, formally MeasureDefinition, is used to save prescription for m
 
 \begin{description}
 	\item[vm] is virtual machine which is going to be migrated. List of \Ac{VM}s available for migration is loaded on-demand from orchestrator using OneOrchestrator class. Virtual machine must be in running state and variable \Code{THEMIS\_TYPE = 'VM'} need to be present in contextualization settings.
-	\item[source] is source host for virtual machine. \Ac{VM} need to be migrated to this host before starting measurement session. List of hosts is loaded using OneOrchestrator class and hosts status is checked for each host.
+	\item[source] is source host for virtual machine. \Ac{VM} have to be migrated to this host before starting measurement session. List of hosts is loaded using OneOrchestrator class and hosts status is checked for each host.
 	\item[destination] is destination host. \Ac{VM} is migrated to this host during measurement session.
-	\item[bandwidth] determines packet generation rate passed to the agent.
+	\item[bandwidth] determines packet generation rate (in Mbps) passed to the agent.
 	\item[cycles] set number of migration repetitions.
 	\item[supervisor] is an \Ac{IP} address of supervisor services, i.e. packet receiver and result exporter
 	\item[description] can by used to attach any note.
@@ -56,7 +56,7 @@ Definition class is the highest class in the hierarchy so it is connected with o
 Methods for manipulation with orchestrator resources are declared in definition class. \Name{Host\_source} and \Name{host\_destination} returns host object for source and destination host. Method called \Name{virtual\_machine} returns virtual machine object which is going be used for migration evaluation and control.
 
 Most important method of the definition class is \Name{start} because it executes migration evaluation. It is responsible for generation of sessions and starting all of them. One session object will be prepared for each migration cycle, so number of session objects is the same as number stored in cycles parameter. Sessions need to be started one by one so there is an loop which starts new session right after finishing the previous one. Session start is performed by calling \Name{start} of session class. This method is different from previously mentioned method with same name because this one is defined in session class.
-Finished\_at parameter is set to current timestamp right after finishing of last session, i.e. at the end of migration evaluation. 
+Finished\_at parameter is set to current timestamp right after finishing the last session, i.e. at the end of migration evaluation. 
 
 Migration evaluation is not very computation expensive, but it can take really long time to perform many migration cycles, in particular for virtual machines under load. It is not possible to run these long running tasks on request from web interface because request will timeout shortly and task would be terminated. I have decided to use Delayed::Job (\Ac{DJ}) to run these task asynchronously.
 \Ac{DJ} can run task in detached process and it can run for a long time without any timeout problems. It is also possible to run \Ac{DJ} worker on separate machine so migration evaluation is executed in completely separated environment. This approach eliminates interference with other processes or network traffic. Security is improved too, since the orchestrator interface does not need to be accessible from machine serving web interface.
@@ -103,7 +103,7 @@ There are no parameters editable by a user because all necessary information abo
 	\item[seq] is sequence number in scope of superior MeasureDefinition. Session with \mbox{$\mathrm{seq} = 1$} is going to be executed first and $\mathrm{seq} = \mathrm{measure\_definition.cycles}$ is the last one.
 	\item[status] determines status of measurement session:
 		\begin{itemize}
-			\item \B{0} - pending - session is waiting for execution, this is the default state
+			\item \B{0} - pending - session is waiting for execution, this is the default status
 			\item \B{1} - running - session is running right now
 			\item \B{2} - done - migration was finished successfully
 			\item \B{3} - failed - migration was executed and failed to finish
@@ -144,18 +144,18 @@ Migration process can be divided into 3 stages. First stage is preparation for m
 First task after loading migration information is clearing previous measurement session. Established session between packet generator and packer receiver can become stale if it was not terminated successfully after previous migration. Packet generator and receiver should be terminated after virtual machine migration, but it may stay running in case of unexpected backend error or unclean shutdown. Command in the figure \ref{cmd:killcmd} is executed on \Ac{VM} and supervisor just to be sure there are no stale sessions. This command is optimized for agent.rb and need to be adapted to work with another measurement tools.
 
 \begin{figure}[htb]
-\label{cmd:killcmd}
 \begin{verbatim}
 KILLPID=$(ps aux | grep -v grep | grep agent\.rb | grep ruby \
 | xargs | cut -d' ' -f2); if [ -n "$KILLPID" ]; then \
 kill -SIGINT "$KILLPID"; fi 
 \end{verbatim}
 \caption{Clear stale sessions command}
+\label{cmd:killcmd}
 \end{figure}
 
 Next action performed during the first stage is migration to the source host. Source and destination hosts are loaded from the measure definition and the migration must be performed exactly from the source to the destination, so the \Ac{VM} need to be running on the source host. Unmeasured migration to source host is requested during this stage if \Ac{VM} is not already running on right host.
 
-Last task in preparation stage is to run agents. It is necessary to start agents on \Ac{VM} and supervisor. Both agents must stay running after \Ac{SSH} disconnection. It is difficult to run a Ruby script on a remote machine in a subshell because normal behavior it is to terminate process after disconnection. I am using \Cmd{screen} software which is able to run detached processes. However, situation is even more complicated due to different Ruby installation methods on \Ac{VM} and supervisor. Virtual machine uses standard Ruby version installed via package manager by command \Cmd{apt-get install ruby}, so it easier to run agent.rb because it does not require interactive shell. Rbenv\footnote{\url{https://github.com/sstephenson/rbenv}} is used to install Ruby on supervisor because agent.rb in receiver mode requires newer version than provided by package manager. Rbenv is initialized in file \~/.bashrc so it is necessary to run all Ruby scripts in interactive shell. Parameters for agent.rb can be found below in the table \ref{tab:agent-parameters}.
+Last task in preparation stage is to run agents. It is necessary to start agents on \Ac{VM} and supervisor. Both agents must also stay running after \Ac{SSH} disconnection. It is difficult to run a Ruby script on a remote machine in a subshell because normal behavior it is to terminate process after disconnection. I am using \Cmd{screen} software which is able to run detached processes. However, situation is even more complicated due to different Ruby installation methods on \Ac{VM} and supervisor. Virtual machine uses standard Ruby version installed via package manager by command \Cmd{apt-get install ruby}, so it easier to run agent.rb because it does not require interactive shell. Rbenv\footnote{\url{https://github.com/sstephenson/rbenv}} is used to install Ruby on supervisor because agent.rb in receiver mode requires newer version than provided by package manager. Rbenv is initialized in file \~/.bashrc so it is necessary to run all Ruby scripts in interactive shell. Parameters for agent.rb can be found below in the table \ref{tab:agent-parameters}.
 
 \begin{figure}[htb]
 \caption{Run remote agents command}
@@ -194,7 +194,7 @@ All of these errors are caused by incorrect orchestrator behavior, so it is nece
 \subsection{Transfer}
 Class MeasureTransfer is used to store information about the transfers and it actually parses output from packet receiver. There are no user editable fields because objects are uploaded via \Ac{API}. Model parameters are described in the table \ref{tab:measuretransfer-params}.
 
-Themis application use iperf to measure packet flow, so MeasureTransfer class is tailored for output of the iperf. Adapting to another measurement software is fairly easy because just one database migration script and small model changes will do the job.
+Themis application uses iperf to measure packet flow, so MeasureTransfer class is tailored for output of the iperf. Adapting to another measurement software is fairly easy because just one database migration script and small model changes will do the job.
 
 \begin{table}[htb]
 \begin{center}
@@ -226,7 +226,7 @@ Themis application use iperf to measure packet flow, so MeasureTransfer class is
 \end{center}
 \end{table}
 
-I it necessary to provide interface for automatic uploading MeasureTransfer objects. \Ac{URL} for uploads is /measure\_transfers/:measure\_session(.:format) and it is routed to measure\_transfers\#upload. This \Ac{URL} needs to be passed to the packet generator. 
+It is necessary to provide interface for automatic uploading MeasureTransfer objects. \Ac{URL} for uploads is /measure\_transfers/:measure\_session(.:format) and it is routed to measure\_transfers\#upload. This \Ac{URL} needs to be passed to the packet generator. 
 
 First task is to load the superior MeasureSession object and check whether this object actually exists. Transfers without a session is not valid and can no be saved.
 
@@ -242,7 +242,7 @@ Virtual machine, used for migration testing, needs to be prepared first. It is p
 
 Agent.rb is expected to exist in path {\~/themis/agent.rb} and it is already saved there in prepared images. It is also necessary to install Ruby interpreter. I have used package available in distribution for \Ac{VM} under test and rbenv for supervisor.
 
-Virtual machines are save on attached CD. Both are already contextualized for OpenNebula, and agent.rb with Ruby is installed. These images can be directly imported into OpenNebula image datastore and used in templates.
+Virtual machines  are already contextualized for OpenNebula, and agent.rb with Ruby is installed. These images can be directly imported into OpenNebula image datastore and used in templates.
 
 \begin{table}[htb]
 \begin{center}
@@ -280,9 +280,9 @@ Virtual machines are save on attached CD. Both are already contextualized for Op
 
 
 \section{Agent}
-It was necessary to develop a script wrapper capable to parse iperf output and upload results to the backend module. This script is called agent.rb, it is attached on on the CD and will be published in project repository. It is written in Ruby to be compatible with the rest of the project. Agent script is executed by thby thee backend in migration\_session model in start method and \Ac{SSH} is used for remote execution.
+It was necessary to develop a script wrapper capable to parse iperf output and upload results to the backend module. This script is called agent.rb, it is attached on the CD and will be published in project repository. It is written in Ruby to be compatible with the rest of the project. Agent script is executed by the backend in migration\_session model in start method and \Ac{SSH} is used for remote execution.
 
-Agent script needs to be available in the virtual machine under test as well as in supervisor. However, distribution is fairly simple because it is just a single file (agent.rb) with a few dependencies. This file can be distributed manually, but it is not very usable for large or frequent deployment. Automatic deployment using OpenNebula's contextualization is much more efficient since orchestrator takes care of saving file into \Ac{VM}s. 
+Agent script must be available in the virtual machine under test as well as in supervisor. However, distribution is fairly simple because it is just a single file (agent.rb) with a few dependencies. This file can be distributed manually, but it is not very usable for large or frequent deployment. Automatic deployment using OpenNebula's contextualization is much more efficient since orchestrator takes care of saving file into \Ac{VM}s. 
 It is also possible to use configuration management system to upload this file and prepare environment to run migration. I am using Ansible to deploy agent.rb because it was necessary to update Ruby version. 
 
 There are two modes of running agent. Modes differ in packet generator parameters and required dependencies. Mode is determined by \Code{ARGV[0]} parameter, which is the first parameter after filename. It is necessary to select correct mode and properly configure all parameters from the table \ref{tab:agent-parameters} because measure session can not be established otherwise. 
@@ -323,9 +323,9 @@ Both modes use IO class to read pipeline output from iperf program. This class i
 % iperf crap
 Agent is using legacy iperf version developed by NLANR/DAST, but it introduces several problems which must be resolved in agent.rb and measure session routine. I am going to adapt agent.rb for iperf3\footnote{Available on \url{https://github.com/esnet/iperf}}. It is a new implementation developed by ESnet/Lawrence Berkeley National Laboratory. Iperf3 provides \Ac{JSON} output and probably will not suffer from problems presented below.
 
-First problem is automatic session reestablishment. This occurs when running session is interrupted by a client and new session is initialized with the same receiver in short interval (less than few seconds). Iperf server joins new session with previous one which is not desired solution. This it the reason why there is 5 second interval inserted before generator restart. 
+First problem is automatic session reestablishment. This occurs when running session is interrupted by a client and new session is initialized with the same receiver in short interval (less than few seconds). Iperf server joins new session with previous one which is not desired behavior. This it the reason why there is 5 second interval inserted before generator restart. 
 
-Second problem is handling INT signal by legacy iperf. SIGINT is reserved for external interrupt and this signal is, for example, sent to process when \mbox{Ctrl + C} is pressed. Iperf catches this signal preventing user to accidentally stop running measure session. I understand reason why this function was implemented but I think that is total nonsense to require two consecutive INT signals to quit program. I have solved this by trapping SIGINT and sending KILL signal to iperf before agent.rb exits. This is only one possible way to reliably stop running agent together with the iperf.
+Second problem is handling INT signal by legacy iperf. SIGINT is reserved for external interrupt and this signal is, for example, sent to process when \mbox{Ctrl + C} is pressed. Iperf catches this signal preventing user to accidentally stop running measure session. I understand reason why this function was implemented but I think that is total nonsense to require two consecutive INT signals to quit the program. I have solved this by trapping SIGINT and sending KILL signal to iperf before agent.rb exits. This is only one possible way to reliably stop running agent together with the iperf.
 
 \begin{figure}[htb]
 \caption{Example of agent.rb and iperf commands}
@@ -397,7 +397,7 @@ More information about definition can be displayed by following \Uv{view} action
 
 Progress bar represents ratio between finished, failed and pending sessions. First green part is a ratio of successfully finished sessions to all migrations, red part is a ratio of failed sessions and rest is a percentage of pending. 
 
-There is table of all sessions under the progress bar. Session is single migration from the source host to the destination host together with network measurement.
+There is a table of all sessions under the progress bar. Session is single migration from the source host to the destination host together with network measurement.
 Status, time of start end finish, id and number of rows is displayed for each session.
 
 Information about transfers during the session can be displayed as a table or a graph. Graphing library is Chart.js\footnote{\url{https://github.com/nnnick/Chart.js}} so it is necessary to use a browser with JavaScript and \Ac{HTML}5 support. It is much slower to generate graph in the browser than using MATLAB because it is not optimized to work with huge datasets. Graphing in browser is intended to be used for a quick overview and more complex visualization should be generated from \Ac{CSV} file using MATLAB or matplotlib.

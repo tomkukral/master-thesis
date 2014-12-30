@@ -10,7 +10,7 @@ Storage can be divided into layers. First layer is a physical storage and it is 
 
 Another way of providing servers with a semi-physical storage is using some sort of shared storage. There is a box stuffed with a physical storage and other servers are using this storage via some standardized protocol like \Ac{FCP} or \Ac{iSCSI}. Shared storage brings better flexibility compared to direct attached storage because physical storage is not fixed to a single server. However, shared storages are usually centralized too and it is a bottleneck and a single point of failure.
 
-The physical storage can be organized into layers called tiers. Tiers are groups of a physical storage devices usually organized by their performance, reliability or price. It is obviously better to uses only high performance and reliable devices, however these are usually the most expensive ones with low capacity/price coefficient. Tiered storage can provide high performance and capacity together but it is necessary to use different tiers and optimize data placement. Storage with 3 tiers can use following drives:
+The physical storage can be organized into layers called tiers. Tiers are groups of a physical storage devices usually organized by their performance, reliability or price. It is obviously better to uses only high performance and reliable devices, however these are usually the most expensive with low capacity/price coefficient. Tiered storage can provide high performance and capacity together but it is necessary to use different tiers and optimize data placement. Storage with 3 tiers can use following drives:
 \begin{itemize}
 	\item tier 1 - \Ac{FC} drives
 	\item tier 2 - \Ac{SATA} drives
@@ -46,7 +46,7 @@ I think that traditional approach with separate block and file storage is becomi
 	\item[inteoperabilty] between different technologies and vendors
 \end{description}
 
-Distributed storages are a solution which can fulfill all of these requirements. This kind of storage can not referred as neither block nor storage because it is necessary to use different storage element. These elements are stored on storage nodes according to storage map and rules. It is possible to define how much time should be each element saved, on how many nodes or on which type of physical storage.
+Distributed storages are a solution which can fulfill all of these requirements. This kind of storage can not be referred as neither block nor storage because it is necessary to use different storage element. These elements are stored on storage nodes according to storage map and rules. It is possible to define how much time should be each element saved, on how many nodes or on which type of physical storage.
 
 Element mentioned in the paragraph above can be easily referred as an object, so an object storage can be build in a distributed way. However, not every object storage is distributed storage because object storages can be local too.
 
