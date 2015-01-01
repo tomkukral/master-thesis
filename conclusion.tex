@@ -38,7 +38,7 @@ The application manages virtual machines via \Ac{SSH}, starts measurement sessio
 Results can be viewed in a browser or exported into a \Ac{CSV} file. Sample measurement outputs are presented in appendix \ref{appendix:measurement-samples}. I have performed various migration schemas with different parameters. 
 
 % graph comments
-Noticeable transfer degradation can be seen in bandwidth graphs (e.g. \ref{img:results-239-3d.png}). This degradation is caused by stop-and-copy phase during migration. Figure \ref{img:results-269-3d.png} depicts measurement performed during period with higher load and results are significantly affected by other traffic because switch between hosts is not reserved exclusively for the measurement. Packet jitter is presented in the figure \ref{img:results-274-all.png}. Significant peak during stop-and-copy phase can be seen in graph.
+Noticeable transfer degradation can be seen in bandwidth graphs (e.g. \ref{img:results-239-3d.png}). This degradation is caused by stop-and-copy phase during migration. Figure \ref{img:results-269-3d.png} depicts measurement performed during period with higher load and results are significantly affected by other traffic because switch between hosts is not reserved exclusively for the measurement. Packet jitter (delay variation) is presented in the figure \ref{img:results-274-all.png}. Significant peak during stop-and-copy phase can be seen in graph.
 
 The application will be used for evaluation of migration driven by orchestrator combined with network controller. Acquired data will be used to compare traditional approach with migration supported by \Ac{SDN}. 
 

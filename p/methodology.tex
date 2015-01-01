@@ -39,27 +39,27 @@ Security aspect must be taken into account because it is unacceptable to allow u
 	\label{img:methodology}
 \end{figure}
 
-\section{Results}
-Provided results depends on a traffic generator, but the application is able to save any kind of output. Current version is using Iperf in \Ac{UDP} mode as a packet generator, because jitter evaluation is available only in the \Ac{UDP} mode. 
-
-Output of Iperf is parsed and saved into the database, so accuracy depends on source data provided by the Iperf. 
-Minimal possible time interval is one second, because the Iperf is not able to segment results into smaller intervals.
-These values are currently stored and can be exported into \Ac{CSV}:
-\begin{itemize}
-	\item jitter (packet delay variation) $[\Jed{ms}]$
-	\item number of transfered and lost bits
-	\item number transfered and lost datagrams
-	\item bandwidth $[\Jed{bps}]$
-\end{itemize}
-
-The jitter is basically latency variation. It is not necessary to perform synchronization between packet generator and packet receiver because jitter is calculated as a difference between transfer time and average transfer time. However it is required to use relative stable clock source because clock drift would make jitter estimation impossible.
-
-Equation \ref{eq:jitter} describes calculation of $n^{th}$ sample jitter
-
-\begin{equation}
-x_n = \left | (t_{nR} - t_{nT}) - \sum_{i=1}^{n-1} \frac{t_{iR} - t_{iT}}{N-1} \right |
-\label{eq:jitter}
-\end{equation}
-where $t_{nR}$ is timestamp of receiving $n^{th}$ sample and $t_{nT}$ is timestamp of sending $n^{th}$ sample.
+%\section{Results}
+%Provided results depends on a traffic generator, but the application is able to save any kind of output. Current version is using Iperf in \Ac{UDP} mode as a packet generator, because jitter evaluation is available only in the \Ac{UDP} mode. 
+%
+%Output of Iperf is parsed and saved into the database, so accuracy depends on source data provided by the Iperf. 
+%Minimal possible time interval is one second, because the Iperf is not able to segment results into smaller intervals.
+%These values are currently stored and can be exported into \Ac{CSV}:
+%\begin{itemize}
+%	\item jitter (packet delay variation) $[\Jed{ms}]$
+%	\item number of transfered and lost bits
+%	\item number transfered and lost datagrams
+%	\item bandwidth $[\Jed{bps}]$
+%\end{itemize}
+%
+%The jitter is basically latency variation. It is not necessary to perform synchronization between packet generator and packet receiver because jitter is calculated as a difference between transfer time and average transfer time. However it is required to use relative stable clock source because clock drift would make jitter estimation impossible.
+%
+%Equation \ref{eq:jitter} describes calculation of $n^{th}$ sample jitter
+%
+%\begin{equation}
+%x_n = \left | (t_{nR} - t_{nT}) - \sum_{i=1}^{n-1} \frac{t_{iR} - t_{iT}}{N-1} \right |
+%\label{eq:jitter}
+%\end{equation}
+%where $t_{nR}$ is timestamp of receiving $n^{th}$ sample and $t_{nT}$ is timestamp of sending $n^{th}$ sample.
 
 
