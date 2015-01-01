@@ -1,0 +1,307 @@
+%pdflatex-this
+% vim:spell spelllang=en_us
+
+\documentclass[12pt,oneside,a4paper]{report} %pdf
+\usepackage[english]{babel}
+\usepackage[top=25mm, bottom=15mm, includefoot, left=30mm, right=30mm]{geometry}
+\usepackage[utf8]{inputenc}
+%\usepackage[draft]{graphicx}
+\usepackage{graphicx}
+\usepackage[unicode=true]{hyperref}
+\usepackage{indentfirst}
+\usepackage{import}
+\usepackage{moreverb}
+\usepackage{listings}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage{pdfpages}
+\usepackage{ifthen}
+\usepackage{cite}
+\usepackage{amssymb}
+\usepackage{placeins}
+\usepackage{caption}
+
+\usepackage{tocloft}
+%\setlength{\cftbeforesecskip}{-0.5pt}
+
+\usepackage[toc,acronym,nonumberlist,style=long,sort=standard]{glossaries}
+\setlength{\glsdescwidth}{0.7\linewidth}
+\renewcommand*{\glsgroupskip}{}
+\makeglossaries
+
+
+% level of table of content
+\setcounter{tocdepth}{1}
+
+% image numbering
+\renewcommand{\thefigure}{\thesection.\arabic{figure}}
+\renewcommand{\thetable}{\thesection.\arabic{table}}
+
+\newcommand{\Uv}[1]{"#1"}
+\newcommand{\Th}[1]{\textbf{#1}}
+
+\newcommand{\Cmd}[1]{\mbox{\texttt{#1}}}
+
+\newcommand{\Code}[1]{\texttt{#1}}
+
+\newcommand{\Name}[1]{\textit{#1}}
+
+\newcommand{\Jed}[1]{\mathrm{#1}}
+
+\newcommand{\B}[1]{\textbf{#1}}
+
+\newcommand{\Acronym}[2]{\newacronym{#1}{#1}{#2}}
+\newcommand{\Ac}[1]{\acrshort{#1}}
+
+\def \BookType {Master thesis}
+\def \Bookname {Migration of Virtual Machines in the Computing Cloud}
+\def \Keywords {Data center, overlay, underlay, OpenNebula, migration}
+\def \Authors {Bc. Tomáš Kukrál}
+\def \Supervisor {doc. Ing. Leoš Boháč, Ph.D.}
+\def \Date {2014}
+\def \Datefull {2014-12-11} % ISO8601
+\def \Place {Prague}
+\def \School {Czech Technical University in Prague}
+\def \Faculty {Faculty of Electrical Engineering}
+\def \Department {Department of Telecommunication Engineering}
+\def \Programme {Communication Networks} 
+
+\makeatletter
+\def\@makechapterhead#1{%
+  \vspace*{20\p@}%
+  {\parindent \z@ \raggedright \normalfont
+    %\ifnum \c@secnumdepth >\m@ne
+    %    \huge\bfseries \@chapapp\space \thechapter
+    %    \par\nobreak
+    %    \vskip 20\p@
+    %\fi
+    \interlinepenalty\@M
+    \Huge \bfseries #1\par\nobreak
+    \vskip 40\p@
+  }}
+
+
+\renewcommand*\l@figure{\@dottedtocline{1}{1.5em}{3em}}% 3em instead of 2.3em
+\let\l@table\l@figure
+
+\makeatother
+
+\def \Titulkadesky {
+    \begin{center}
+    {\Huge \School}\\[2ex]
+    {\Large \Faculty}
+
+%    \begin{figure}[h!]
+%    \begin{center}
+%      {\includegraphics[width=35mm]{grafika/cvut-logo-bw-600.png}}
+%    \end{center}
+%    \end{figure}
+    \vfill
+
+%    {\textbf {\Huge \Bookname \\[4ex]}
+        {\LARGE \bf \BookType}
+%	    }
+
+  \vspace{60mm}
+
+    {\large \bf \Date \hfill \Authors}\\[6ex]
+	Vzor pro desky - nevázat do práce!
+    \newpage
+    \end{center}
+    }
+
+\def \Titulka {
+    \begin{center}
+    {\Huge \School}\\[2ex]
+    {\Large \Faculty}\\[2ex]
+    {\Large \Department}\\[2ex]
+
+    \begin{figure}[h]
+    \begin{center}
+      {\includegraphics[width=4cm]{images/cvut-logo-bw-600.png}}
+    \end{center}
+    \end{figure}
+    \vfill
+
+    {\textbf {\Huge \Bookname \\[4ex]}
+        {\LARGE \bf \BookType}
+	    }
+
+    \vfill
+
+    {\large {\bf Author:} \hfill \Authors}\\[3ex]
+    {\large {\bf Supervisor:} \hfill \Supervisor}\\[3ex]
+
+    \newpage
+    \end{center}
+    }
+
+
+
+\hypersetup{
+	pdfauthor={\Authors},
+	pdftitle={\Bookname},
+	pdfsubject={\BookType},
+	pdfkeywords={\Keywords},
+	colorlinks=true,
+	linkcolor=blue,
+	hidelinks=true,
+}
+
+% environment pro abstract, poděkování a prohlášení
+\newenvironment{spodnitext}[1]{
+	\cleardoublepage
+	\null
+	\vspace{17cm}
+	\section*{#1}
+	}{
+	\vspace{10mm}
+	}
+
+
+\begin{document}
+% acronyms
+\subimport{./}{acronyms}
+\catcode`\-=12
+
+%\begin{titlepage}
+%	\Titulkadesky
+%\end{titlepage}
+%
+% vypnout watermark
+
+% prázdná stránka
+%\clearpage
+%\thispagestyle{empty}
+%\null
+%\newpage
+
+\begin{titlepage}
+	\Titulka
+\end{titlepage}
+
+\pagenumbering{Roman}
+
+% poděkování
+\begin{spodnitext}{Acknowledgement}
+I would like to thank to \Supervisor, Ing. Miloš Kozák and Ing. Tomáš Hégr for their help and useful comments.
+I would like also thank to club \href{http://tech.su.cvut.cz}{tech@SU} for providing hardware for testing and development.
+\end{spodnitext}
+
+%prohlášení
+\begin{spodnitext}{Proclamation}
+I declare that I worked out the presented thesis independently and I quoted all used sources of information accord with Methodical instructions about ethical principles for writing academical thesis.
+
+%\vspace{10mm}
+%Date: \Datefull \hfill \hbox to 65mm{\tiny\dotfill}
+\end{spodnitext}
+
+%zadání
+\includepdf[pages=-]{images/zadani_nosign.pdf}
+
+% abstrakt
+\begin{spodnitext}{Abstract}
+This thesis deals with the evaluation of virtual machine migrations. Distributed datacenter technologies are described in theoretical part with special focus on the virtual networks and the storage methods.
+
+Practical part introduced an application for testing virtual machine availability during the migration. 
+It can perform repetitive migration according migration plan and collects the results.
+The application is prepared to work with OpenNebula orchestrator.
+
+\vspace{2ex}
+
+{\bf Keywords:} \\
+virtualization, virtual machine, migration, OpenNebula, cloud, overlay network
+\end{spodnitext}
+
+
+%obsah
+\tableofcontents
+\cleardoublepage
+
+
+\pagestyle{plain}
+\pagenumbering{arabic}
+
+%\section{Introduction}
+%\subimport{./}{introduction}
+
+\part[Theoretical background]{Theoretical background}
+	\chapter{Virtualization}
+		\subimport{./t/}{t/virtualization}
+
+		\section{Types of virtualization}
+		\subimport{./t/}{t/virtualization-types}
+
+		\section{Advantages of virtualization}
+		\subimport{./t/}{t/virtualization-advantages}
+
+		\label{subsec:advantages-of-virtualization}
+
+	\chapter{Cloud computing}
+		\subimport{./t/}{t/cloud-introduction}
+
+		\section{Deployment models}
+		\subimport{./t/}{t/cloud-deployment-models}
+
+		\section{Service models}
+		\subimport{./t/}{t/cloud-service-models}
+
+		\section{Networking}
+		\subimport{./t/}{t/cloud-networking}
+
+		\section{Storage}
+		\subimport{./t/}{t/cloud-storage}
+
+		\section{Orchestration software}
+		\subimport{./t/}{t/cloud-orchestration}
+
+	%\chapter{Distributed data center}
+
+	\chapter{Migration of virtual machines}
+		\subimport{./t/}{t/migration}
+
+\part{Measurement of migration}
+	\chapter{Introduction}
+	\subimport{./p/}{p/introduction}
+
+	\chapter{Methodology overview}
+	\subimport{./p/}{p/methodology}
+
+	\chapter{Themis application}
+		\subimport{./p/}{p/themis}
+
+	\chapter{Conclusion}
+		\subimport{./}{conclusion}
+
+% zalomení v toc
+%\addtocontents{toc}{\protect\newpage}
+
+%seznam zkratek
+\printglossary[type=acronym,title=List of Abbreviations,toctitle=List of Abbreviations]
+
+%seznam obrázků
+\newpage
+\phantomsection \label{listoffig}
+\addcontentsline{toc}{chapter}{List of Figures}
+\listoffigures
+
+%seznam tabulek
+\newpage
+\phantomsection \label{listoftab}
+\addcontentsline{toc}{chapter}{List of Tables}
+\listoftables
+\cleardoublepage
+
+\bibliography{citations}{}
+\bibliographystyle{plain}
+
+%seznam pojmů
+%\printglossary[title=Acronyms,toctitle=Acronyms used]
+
+
+% přílohy
+\appendix
+\chapter{Appendix}
+\subimport{./appendix/}{appendix}
+\end{document}
